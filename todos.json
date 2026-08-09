@@ -2,7 +2,7 @@
   {
     "id": "msmf5baegyawgqw3xkp",
     "title": "fdsafa dafs d",
-    "category": "Privat",
+    "category": "Geschäftlich",
     "notes": "",
     "attachments": [
       {
@@ -13,7 +13,8 @@
     "completed": false,
     "createdAt": "2026-08-09T23:13:33.542Z",
     "updatedAt": "2026-08-09T23:13:33.542Z",
-    "completedAt": null
+    "completedAt": null,
+    "updated": "2026-08-09T23:23:00.701Z"
   },
   {
     "id": "msmewpdhdv49yheh8g",
