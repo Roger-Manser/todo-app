@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.0.0 - GitHub Sync</title>
+    <title>Todo App v1.0.1 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -57,6 +57,12 @@
             border-radius: 20px;
             font-size: 11px;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .version-badge:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         .sync-status {
@@ -227,18 +233,19 @@
             border-radius: 8px;
             padding: 1.5rem;
             margin-bottom: 2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .add-section.open {
+            max-height: 600px;
         }
 
         .add-section h3 {
             font-size: 16px;
             margin-bottom: 1rem;
             color: #333;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
         }
 
         .form-group select {
@@ -292,6 +299,14 @@
         button.primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button.toggle-add {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            margin-bottom: 1rem;
+            width: 100%;
         }
 
         .todos-list {
@@ -371,19 +386,9 @@
             color: #166534;
         }
 
-        .badge.high {
+        .badge.priority {
             background: #fee2e2;
             color: #991b1b;
-        }
-
-        .badge.medium {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .badge.low {
-            background: #f3f4f6;
-            color: #6b7280;
         }
 
         .todo-note {
@@ -411,6 +416,56 @@
             border-radius: 12px;
             font-size: 11px;
             color: #1e40af;
+        }
+
+        .todo-attachments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .attachment-item {
+            position: relative;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        .attachment-item img,
+        .attachment-item video {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .attachment-item.document {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .attachment-delete {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            font-size: 12px;
+            border-radius: 3px;
+            display: none;
+        }
+
+        .attachment-item:hover .attachment-delete {
+            display: block;
         }
 
         .todo-actions {
@@ -583,18 +638,80 @@
             to { transform: rotate(360deg); }
         }
 
+        .attachment-upload {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .attachment-upload button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+        }
+
+        .attachment-upload button:hover {
+            background: #e5e7eb;
+        }
+
+        .image-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .image-viewer.show {
+            display: flex;
+        }
+
+        .image-viewer img,
+        .image-viewer video {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .image-viewer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .todo-priority-indicator {
+            display: inline-block;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            margin-right: 6px;
+            background: #667eea;
+        }
+
         @media (max-width: 640px) {
             .header {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
             .header-actions {
                 flex-wrap: wrap;
+            }
+
+            .add-section.open {
+                max-height: 800px;
             }
         }
     </style>
@@ -605,10 +722,9 @@
     <div class="header">
         <div class="header-left">
             <h1>📝 Meine To-Dos</h1>
-            <div class="version-badge" id="version-display">v1.0.0</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.0.1</div>
         </div>
         <div class="header-actions">
-            <button onclick="openVersionHistory()">📋 Version</button>
             <button onclick="openSettings()">⚙️ Einstellungen</button>
             <div class="sync-status synced" id="sync-status">GitHub Sync</div>
         </div>
@@ -630,15 +746,15 @@
 
                 <div class="form-group">
                     <label for="github-repo">Repository Name *</label>
-                    <input type="text" id="github-repo" placeholder="todo-app-data" value="todo-app-data">
-                    <div class="form-help">Wird automatisch erstellt</div>
+                    <input type="text" id="github-repo" placeholder="todo-app">
+                    <div class="form-help">Dein bestehendes Repository</div>
                 </div>
 
                 <div class="form-group">
                     <label for="github-token">GitHub Token *</label>
                     <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
                     <div class="form-help">
-                        <a href="https://github.com/settings/tokens/new?scopes=repo,gist" target="_blank">
+                        <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank">
                             Token erstellen ↗
                         </a>
                     </div>
@@ -678,7 +794,9 @@
                 <button class="tab" data-filter="active">Aktive</button>
             </div>
 
-            <div class="add-section">
+            <button class="toggle-add" id="toggle-add-btn" onclick="toggleAddSection()">✏️ Neue Aufgabe</button>
+
+            <div class="add-section" id="add-section">
                 <h3>✏️ Neue Aufgabe</h3>
                 <form id="add-form">
                     <div class="form-group">
@@ -686,28 +804,13 @@
                         <input type="text" id="title" required placeholder="Was muss getan werden?">
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="category">Kategorie *</label>
-                            <select id="category" required>
-                                <option value="">Wählen Sie...</option>
-                                <option value="work">Geschäftlich</option>
-                                <option value="personal">Privat</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="priority">Priorität</label>
-                            <select id="priority">
-                                <option value="low">Niedrig</option>
-                                <option value="medium" selected>Mittel</option>
-                                <option value="high">Hoch</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label for="duedate">Fälligkeitsdatum</label>
-                        <input type="date" id="duedate">
+                        <label for="category">Kategorie *</label>
+                        <select id="category" required>
+                            <option value="">Wählen Sie...</option>
+                            <option value="work">Geschäftlich</option>
+                            <option value="personal">Privat</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -722,7 +825,7 @@
 
                     <div class="button-group">
                         <button type="submit" class="primary">Aufgabe hinzufügen</button>
-                        <button type="reset">Zurücksetzen</button>
+                        <button type="button" onclick="toggleAddSection()">Abbrechen</button>
                     </div>
                 </form>
             </div>
@@ -759,9 +862,27 @@
     </div>
 </div>
 
+<!-- Image Viewer Modal -->
+<div id="imageViewer" class="image-viewer">
+    <button class="image-viewer-close" onclick="closeImageViewer()">&times;</button>
+    <img id="imageViewerContent" alt="">
+</div>
+
 <script>
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 const VERSION_HISTORY = [
+    {
+        version: '1.0.1',
+        releaseDate: '2024-12-18',
+        name: 'UX & Media Update',
+        features: [
+            'Versionshistorie durch Klick auf Versionsnummer',
+            'Foto-/Dokument-Upload pro Todo (Kamera, Galerie, Datei)',
+            'Formular nicht dauerhaft offen (Toggle-Button)',
+            'Priorität durch Position/Erfassungsreihenfolge',
+            'Datum & Priorität entfernt'
+        ]
+    },
     {
         version: '1.0.0',
         releaseDate: '2024-12-18',
@@ -771,8 +892,7 @@ const VERSION_HISTORY = [
             'GitHub-Synchronisierung',
             'Cloud-Speicherung',
             'Kategorien: Privat & Geschäftlich',
-            'Prioritäten & Tags',
-            'Fälligkeitsdaten',
+            'Tags & Notizen',
             'Versionshistorie in der App',
             'Statistiken & Filterung'
         ]
@@ -799,28 +919,6 @@ class GitHubSync {
             });
             return response.ok;
         } catch {
-            return false;
-        }
-    }
-
-    async createRepo() {
-        try {
-            const response = await fetch('https://api.github.com/user/repos', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `token ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: this.repo,
-                    description: 'Todo App Data',
-                    private: true,
-                    auto_init: true
-                })
-            });
-            return response.ok;
-        } catch (error) {
-            console.error('Repo erstellen fehlgeschlagen:', error);
             return false;
         }
     }
@@ -899,15 +997,8 @@ async function connectGitHub() {
     let repoExists = await sync.checkRepo();
     
     if (!repoExists) {
-        showSetupMessage('Erstelle Repository...', 'info');
-        repoExists = await sync.createRepo();
-        
-        if (!repoExists) {
-            showSetupMessage('Fehler beim Erstellen des Repositories', 'error');
-            return;
-        }
-        
-        await new Promise(r => setTimeout(r, 2000));
+        showSetupMessage('Repository nicht gefunden', 'error');
+        return;
     }
 
     githubConfig = { username, token, repo };
@@ -1000,20 +1091,19 @@ function renderTodos() {
 
     container.innerHTML = `
         <div class="todos-list">
-            ${filtered.map(todo => `
+            ${filtered.map((todo, index) => `
                 <div class="todo-item ${todo.completed ? 'completed' : ''}">
-                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
-                           onchange="toggleTodo('${todo.id}')">
-                    <div class="todo-content">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="todo-priority-indicator"></span>
+                        <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
+                               onchange="toggleTodo('${todo.id}')">
+                    </div>
+                    <div class="todo-content" style="flex: 1;">
                         <div class="todo-title">${escapeHtml(todo.title)}</div>
                         <div class="todo-meta">
                             <span class="badge ${todo.category}">
                                 ${todo.category === 'work' ? '💼 Geschäftlich' : '🏠 Privat'}
                             </span>
-                            <span class="badge ${todo.priority}">
-                                ${getPriorityText(todo.priority)}
-                            </span>
-                            ${todo.duedate ? `<span>📅 ${formatDate(todo.duedate)}</span>` : ''}
                         </div>
                         ${todo.tags && todo.tags.length > 0 ? `
                             <div class="todo-tags">
@@ -1021,6 +1111,27 @@ function renderTodos() {
                             </div>
                         ` : ''}
                         ${todo.notes ? `<div class="todo-note">📝 ${escapeHtml(todo.notes)}</div>` : ''}
+                        ${todo.attachments && todo.attachments.length > 0 ? `
+                            <div class="todo-attachments">
+                                ${todo.attachments.map((att, idx) => `
+                                    <div class="attachment-item ${att.type}">
+                                        ${att.type === 'image' ? `
+                                            <img src="${att.data}" onclick="viewImage('${todo.id}', ${idx})">
+                                        ` : att.type === 'video' ? `
+                                            <video src="${att.data}"></video>
+                                        ` : `
+                                            <div>📄</div>
+                                        `}
+                                        <button class="attachment-delete" onclick="deleteAttachment('${todo.id}', ${idx})">✕</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="attachment-upload">
+                            <button type="button" onclick="attachFile('${todo.id}', 'camera')">📷 Kamera</button>
+                            <button type="button" onclick="attachFile('${todo.id}', 'gallery')">🖼️ Galerie</button>
+                            <button type="button" onclick="attachFile('${todo.id}', 'file')">📄 Datei</button>
+                        </div>
                     </div>
                     <div class="todo-actions">
                         <button onclick="deleteTodo('${todo.id}')">🗑️ Löschen</button>
@@ -1029,6 +1140,14 @@ function renderTodos() {
             `).join('')}
         </div>
     `;
+}
+
+function toggleAddSection() {
+    const section = document.getElementById('add-section');
+    section.classList.toggle('open');
+    if (section.classList.contains('open')) {
+        document.getElementById('title').focus();
+    }
 }
 
 function toggleTodo(id) {
@@ -1051,14 +1170,14 @@ function deleteTodo(id) {
     }
 }
 
-function getPriorityText(priority) {
-    return {high: '🔴 Hoch', medium: '🟡 Mittel', low: '🟢 Niedrig'}[priority] || priority;
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString('de-CH', { month: 'short', day: 'numeric' });
+function deleteAttachment(todoId, attachmentIdx) {
+    const todo = allTodos.find(t => t.id === todoId);
+    if (todo && todo.attachments) {
+        todo.attachments.splice(attachmentIdx, 1);
+        todo.updated = new Date().toISOString();
+        renderTodos();
+        saveTodos();
+    }
 }
 
 function escapeHtml(text) {
@@ -1071,13 +1190,69 @@ function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
+function attachFile(todoId, source) {
+    const input = document.createElement('input');
+    
+    if (source === 'camera') {
+        input.type = 'file';
+        input.accept = 'image/*,video/*';
+        input.capture = 'environment';
+    } else if (source === 'gallery') {
+        input.type = 'file';
+        input.accept = 'image/*,video/*';
+    } else {
+        input.type = 'file';
+    }
+
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const todo = allTodos.find(t => t.id === todoId);
+                if (todo) {
+                    if (!todo.attachments) todo.attachments = [];
+                    
+                    const type = file.type.startsWith('image/') ? 'image' : 
+                                 file.type.startsWith('video/') ? 'video' : 'document';
+                    
+                    todo.attachments.push({
+                        type,
+                        name: file.name,
+                        data: event.target.result
+                    });
+                    
+                    todo.updated = new Date().toISOString();
+                    renderTodos();
+                    saveTodos();
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    input.click();
+}
+
+function viewImage(todoId, attachmentIdx) {
+    const todo = allTodos.find(t => t.id === todoId);
+    if (todo && todo.attachments && todo.attachments[attachmentIdx]) {
+        const viewer = document.getElementById('imageViewer');
+        const content = document.getElementById('imageViewerContent');
+        content.src = todo.attachments[attachmentIdx].data;
+        viewer.classList.add('show');
+    }
+}
+
+function closeImageViewer() {
+    document.getElementById('imageViewer').classList.remove('show');
+}
+
 document.getElementById('add-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
-    const priority = document.getElementById('priority').value;
-    const duedate = document.getElementById('duedate').value;
     const tagsStr = document.getElementById('tags').value.trim();
     const notes = document.getElementById('notes').value.trim();
 
@@ -1090,16 +1265,16 @@ document.getElementById('add-form').addEventListener('submit', (e) => {
         id: generateId(),
         title,
         category,
-        priority,
-        duedate: duedate || null,
         tags,
         notes,
+        attachments: [],
         completed: false,
         created: now,
         updated: now
     });
 
     document.getElementById('add-form').reset();
+    toggleAddSection();
     updateStats();
     renderTodos();
     saveTodos();
@@ -1200,6 +1375,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeVersionHistory();
         closeSettings();
+        closeImageViewer();
     }
 });
 
