@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App v1.0.0 - GitHub Sync</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .version-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .sync-status {
+            font-size: 12px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sync-status.synced::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-actions button {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .header-actions button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .setup-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .setup-screen h2 {
+            font-size: 24px;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .setup-screen p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .setup-form {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .form-help a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .form-help a:hover {
+            text-decoration: underline;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #9ca3af;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .add-section {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .add-section h3 {
+            font-size: 16px;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #333;
+        }
+
+        button:hover {
+            background: #f3f4f6;
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .todos-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .todo-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+
+        .todo-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .todo-item.completed {
+            opacity: 0.7;
+            background: #f9fafb;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #667eea;
+        }
+
+        .todo-content {
+            flex: 1;
+        }
+
+        .todo-title {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+
+        .todo-item.completed .todo-title {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge.work {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge.personal {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.low {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .todo-note {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 8px 0;
+            padding: 8px;
+            background: #f9fafb;
+            border-left: 3px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .todo-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #1e40af;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+
+        .todo-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #9ca3af;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #9ca3af;
+        }
+
+        .version-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #f9fafb;
+        }
+
+        .version-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .version-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .version-item-date {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .version-item-name {
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .features-list li {
+            font-size: 13px;
+            color: #555;
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .features-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .success-msg {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 14px;
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 14px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <h1>📝 Meine To-Dos</h1>
+            <div class="version-badge" id="version-display">v1.0.0</div>
+        </div>
+        <div class="header-actions">
+            <button onclick="openVersionHistory()">📋 Version</button>
+            <button onclick="openSettings()">⚙️ Einstellungen</button>
+            <div class="sync-status synced" id="sync-status">GitHub Sync</div>
+        </div>
+    </div>
+
+    <div class="content" id="main-content">
+        <div class="setup-screen" id="setup-screen">
+            <h2>🚀 GitHub Synchronisierung</h2>
+            <p>Speichere deine To-Dos sicher in GitHub!</p>
+            
+            <div class="setup-form">
+                <div id="setup-message"></div>
+                
+                <div class="form-group">
+                    <label for="github-username">GitHub Benutzername *</label>
+                    <input type="text" id="github-username" placeholder="dein-benutzername">
+                    <div class="form-help">Dein GitHub-Profilname</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="github-repo">Repository Name *</label>
+                    <input type="text" id="github-repo" placeholder="todo-app-data" value="todo-app-data">
+                    <div class="form-help">Wird automatisch erstellt</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="github-token">GitHub Token *</label>
+                    <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                    <div class="form-help">
+                        <a href="https://github.com/settings/tokens/new?scopes=repo,gist" target="_blank">
+                            Token erstellen ↗
+                        </a>
+                    </div>
+                </div>
+
+                <button class="primary" style="width: 100%; margin-top: 1rem;" onclick="connectGitHub()">
+                    Verbinden
+                </button>
+
+                <p style="font-size: 12px; color: #9ca3af; margin-top: 1rem;">
+                    ✓ Deine Daten sind sicher in deinem GitHub-Konto<br>
+                    ✓ Token wird nur lokal gespeichert
+                </p>
+            </div>
+        </div>
+
+        <div id="app-container" style="display: none;">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-count">0</div>
+                    <div class="stat-label">Gesamt</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completed-count">0</div>
+                    <div class="stat-label">Erledigt</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="active-count">0</div>
+                    <div class="stat-label">Aktiv</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-filter="all">Alle</button>
+                <button class="tab" data-filter="work">Geschäftlich</button>
+                <button class="tab" data-filter="personal">Privat</button>
+                <button class="tab" data-filter="active">Aktive</button>
+            </div>
+
+            <div class="add-section">
+                <h3>✏️ Neue Aufgabe</h3>
+                <form id="add-form">
+                    <div class="form-group">
+                        <label for="title">Titel *</label>
+                        <input type="text" id="title" required placeholder="Was muss getan werden?">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">Kategorie *</label>
+                            <select id="category" required>
+                                <option value="">Wählen Sie...</option>
+                                <option value="work">Geschäftlich</option>
+                                <option value="personal">Privat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priorität</label>
+                            <select id="priority">
+                                <option value="low">Niedrig</option>
+                                <option value="medium" selected>Mittel</option>
+                                <option value="high">Hoch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duedate">Fälligkeitsdatum</label>
+                        <input type="date" id="duedate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Tags (Komma trennen)</label>
+                        <input type="text" id="tags" placeholder="z.B. dringend, wichtig">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notizen</label>
+                        <textarea id="notes" placeholder="Zusätzliche Informationen..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="primary">Aufgabe hinzufügen</button>
+                        <button type="reset">Zurücksetzen</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="todos-container">
+                <div class="empty-state">
+                    <p><i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 1rem; display: block;"></i></p>
+                    <p>Keine Aufgaben. Erstellen Sie eine neue!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Version History Modal -->
+<div id="versionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📋 Versionshistorie</h2>
+            <button class="close-btn" onclick="closeVersionHistory()">&times;</button>
+        </div>
+        <div id="versionList"></div>
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>⚙️ Einstellungen</h2>
+            <button class="close-btn" onclick="closeSettings()">&times;</button>
+        </div>
+        <div id="settings-content"></div>
+    </div>
+</div>
+
+<script>
+const APP_VERSION = '1.0.0';
+const VERSION_HISTORY = [
+    {
+        version: '1.0.0',
+        releaseDate: '2024-12-18',
+        name: 'Initial Release',
+        features: [
+            'Alles in einer HTML-Datei',
+            'GitHub-Synchronisierung',
+            'Cloud-Speicherung',
+            'Kategorien: Privat & Geschäftlich',
+            'Prioritäten & Tags',
+            'Fälligkeitsdaten',
+            'Versionshistorie in der App',
+            'Statistiken & Filterung'
+        ]
+    }
+];
+
+let allTodos = [];
+let currentFilter = 'all';
+let githubConfig = null;
+
+class GitHubSync {
+    constructor(username, token, repo) {
+        this.username = username;
+        this.token = token;
+        this.repo = repo;
+        this.apiBase = `https://api.github.com/repos/${username}/${repo}`;
+        this.dataFile = 'todos.json';
+    }
+
+    async checkRepo() {
+        try {
+            const response = await fetch(`${this.apiBase}`, {
+                headers: { 'Authorization': `token ${this.token}` }
+            });
+            return response.ok;
+        } catch {
+            return false;
+        }
+    }
+
+    async createRepo() {
+        try {
+            const response = await fetch('https://api.github.com/user/repos', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `token ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: this.repo,
+                    description: 'Todo App Data',
+                    private: true,
+                    auto_init: true
+                })
+            });
+            return response.ok;
+        } catch (error) {
+            console.error('Repo erstellen fehlgeschlagen:', error);
+            return false;
+        }
+    }
+
+    async getTodos() {
+        try {
+            const response = await fetch(
+                `${this.apiBase}/contents/${this.dataFile}`,
+                { headers: { 'Authorization': `token ${this.token}` } }
+            );
+            
+            if (!response.ok) return [];
+
+            const data = await response.json();
+            const content = atob(data.content);
+            return JSON.parse(content);
+        } catch {
+            return [];
+        }
+    }
+
+    async saveTodos(todos) {
+        try {
+            const content = btoa(JSON.stringify(todos, null, 2));
+            
+            let sha = null;
+            try {
+                const getResponse = await fetch(
+                    `${this.apiBase}/contents/${this.dataFile}`,
+                    { headers: { 'Authorization': `token ${this.token}` } }
+                );
+                if (getResponse.ok) {
+                    const data = await getResponse.json();
+                    sha = data.sha;
+                }
+            } catch {}
+
+            const response = await fetch(
+                `${this.apiBase}/contents/${this.dataFile}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${this.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Update todos - ${new Date().toISOString()}`,
+                        content: content,
+                        ...(sha && { sha })
+                    })
+                }
+            );
+
+            return response.ok;
+        } catch (error) {
+            console.error('Fehler beim Speichern:', error);
+            return false;
+        }
+    }
+}
+
+async function connectGitHub() {
+    const username = document.getElementById('github-username').value.trim();
+    const token = document.getElementById('github-token').value.trim();
+    const repo = document.getElementById('github-repo').value.trim();
+
+    if (!username || !token || !repo) {
+        showSetupMessage('Bitte alle Felder ausfüllen', 'error');
+        return;
+    }
+
+    const sync = new GitHubSync(username, token, repo);
+    
+    showSetupMessage('Verbinde mit GitHub...', 'info');
+
+    let repoExists = await sync.checkRepo();
+    
+    if (!repoExists) {
+        showSetupMessage('Erstelle Repository...', 'info');
+        repoExists = await sync.createRepo();
+        
+        if (!repoExists) {
+            showSetupMessage('Fehler beim Erstellen des Repositories', 'error');
+            return;
+        }
+        
+        await new Promise(r => setTimeout(r, 2000));
+    }
+
+    githubConfig = { username, token, repo };
+    localStorage.setItem('githubConfig', JSON.stringify(githubConfig));
+    
+    showSetupMessage('✅ Mit GitHub verbunden!', 'success');
+    
+    setTimeout(() => { initializeApp(); }, 1500);
+}
+
+function showSetupMessage(msg, type) {
+    const el = document.getElementById('setup-message');
+    if (type === 'error') {
+        el.innerHTML = `<div class="error-msg">${msg}</div>`;
+    } else if (type === 'success') {
+        el.innerHTML = `<div class="success-msg">${msg}</div>`;
+    } else {
+        el.innerHTML = `<div style="color: #667eea; padding: 12px; text-align: center;">
+            <span class="loading" style="margin-right: 8px;"></span> ${msg}
+        </div>`;
+    }
+}
+
+async function initializeApp() {
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('app-container').style.display = 'block';
+    
+    const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
+    updateSyncStatus('Lade Daten...');
+    allTodos = await sync.getTodos();
+    
+    updateStats();
+    renderTodos();
+    updateSyncStatus('GitHub Sync');
+}
+
+async function saveTodos() {
+    if (!githubConfig) return;
+    
+    const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
+    updateSyncStatus('Speichert...');
+    
+    const success = await sync.saveTodos(allTodos);
+    
+    if (success) {
+        updateSyncStatus('GitHub Sync');
+    } else {
+        updateSyncStatus('Fehler!');
+    }
+}
+
+function updateSyncStatus(text) {
+    const el = document.getElementById('sync-status');
+    el.textContent = text;
+    if (text.includes('GitHub')) {
+        el.classList.add('synced');
+    } else {
+        el.classList.remove('synced');
+    }
+}
+
+function updateStats() {
+    const total = allTodos.length;
+    const completed = allTodos.filter(t => t.completed).length;
+    const active = total - completed;
+
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('completed-count').textContent = completed;
+    document.getElementById('active-count').textContent = active;
+}
+
+function renderTodos() {
+    const filtered = allTodos.filter(todo => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'active') return !todo.completed;
+        return todo.category === currentFilter;
+    });
+
+    const container = document.getElementById('todos-container');
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <p><i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 1rem; display: block;"></i></p>
+                <p>Keine Aufgaben in dieser Kategorie</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="todos-list">
+            ${filtered.map(todo => `
+                <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
+                           onchange="toggleTodo('${todo.id}')">
+                    <div class="todo-content">
+                        <div class="todo-title">${escapeHtml(todo.title)}</div>
+                        <div class="todo-meta">
+                            <span class="badge ${todo.category}">
+                                ${todo.category === 'work' ? '💼 Geschäftlich' : '🏠 Privat'}
+                            </span>
+                            <span class="badge ${todo.priority}">
+                                ${getPriorityText(todo.priority)}
+                            </span>
+                            ${todo.duedate ? `<span>📅 ${formatDate(todo.duedate)}</span>` : ''}
+                        </div>
+                        ${todo.tags && todo.tags.length > 0 ? `
+                            <div class="todo-tags">
+                                ${todo.tags.map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        ${todo.notes ? `<div class="todo-note">📝 ${escapeHtml(todo.notes)}</div>` : ''}
+                    </div>
+                    <div class="todo-actions">
+                        <button onclick="deleteTodo('${todo.id}')">🗑️ Löschen</button>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function toggleTodo(id) {
+    const todo = allTodos.find(t => t.id === id);
+    if (todo) {
+        todo.completed = !todo.completed;
+        todo.updated = new Date().toISOString();
+        updateStats();
+        renderTodos();
+        saveTodos();
+    }
+}
+
+function deleteTodo(id) {
+    if (confirm('Aufgabe wirklich löschen?')) {
+        allTodos = allTodos.filter(t => t.id !== id);
+        updateStats();
+        renderTodos();
+        saveTodos();
+    }
+}
+
+function getPriorityText(priority) {
+    return {high: '🔴 Hoch', medium: '🟡 Mittel', low: '🟢 Niedrig'}[priority] || priority;
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr + 'T00:00:00');
+    return date.toLocaleDateString('de-CH', { month: 'short', day: 'numeric' });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+document.getElementById('add-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value.trim();
+    const category = document.getElementById('category').value;
+    const priority = document.getElementById('priority').value;
+    const duedate = document.getElementById('duedate').value;
+    const tagsStr = document.getElementById('tags').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+
+    if (!title || !category) return;
+
+    const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t) : [];
+    const now = new Date().toISOString();
+
+    allTodos.unshift({
+        id: generateId(),
+        title,
+        category,
+        priority,
+        duedate: duedate || null,
+        tags,
+        notes,
+        completed: false,
+        created: now,
+        updated: now
+    });
+
+    document.getElementById('add-form').reset();
+    updateStats();
+    renderTodos();
+    saveTodos();
+});
+
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderTodos();
+    });
+});
+
+function openVersionHistory() {
+    const modal = document.getElementById('versionModal');
+    const list = document.getElementById('versionList');
+
+    list.innerHTML = VERSION_HISTORY.map(v => `
+        <div class="version-item">
+            <div class="version-item-header">
+                <span class="version-item-title">Version ${v.version}</span>
+                <span class="version-item-date">${v.releaseDate}</span>
+            </div>
+            <div class="version-item-name">${v.name}</div>
+            ${v.features && v.features.length > 0 ? `
+                <div style="margin-top: 0.5rem; font-weight: 600; font-size: 12px; color: #667eea;">✨ Features:</div>
+                <ul class="features-list">
+                    ${v.features.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+            ` : ''}
+        </div>
+    `).join('');
+
+    modal.classList.add('show');
+}
+
+function closeVersionHistory() {
+    document.getElementById('versionModal').classList.remove('show');
+}
+
+function openSettings() {
+    const modal = document.getElementById('settingsModal');
+    const content = document.getElementById('settings-content');
+
+    if (!githubConfig) {
+        content.innerHTML = '<p>Keine Einstellungen verfügbar</p>';
+    } else {
+        content.innerHTML = `
+            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <p style="margin: 0; color: #667eea; font-weight: 600;">GitHub Verbindung</p>
+                <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 14px;">
+                    Benutzer: <code>${githubConfig.username}</code><br>
+                    Repository: <code>${githubConfig.repo}</code>
+                </p>
+            </div>
+
+            <button class="primary" style="width: 100%; margin-bottom: 0.5rem;" onclick="exportData()">
+                📥 Daten exportieren
+            </button>
+
+            <button style="width: 100%; margin-bottom: 0.5rem;" onclick="disconnectGitHub()">
+                ❌ Disconnect
+            </button>
+
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af;">
+                <p style="margin: 0;">Todo App v${APP_VERSION}</p>
+            </div>
+        `;
+    }
+
+    modal.classList.add('show');
+}
+
+function closeSettings() {
+    document.getElementById('settingsModal').classList.remove('show');
+}
+
+function disconnectGitHub() {
+    if (confirm('Wirklich trennen? Deine Daten bleiben in GitHub.')) {
+        githubConfig = null;
+        localStorage.removeItem('githubConfig');
+        location.reload();
+    }
+}
+
+function exportData() {
+    const dataStr = JSON.stringify(allTodos, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `todos-export-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeVersionHistory();
+        closeSettings();
+    }
+});
+
+const savedConfig = localStorage.getItem('githubConfig');
+if (savedConfig) {
+    githubConfig = JSON.parse(savedConfig);
+    initializeApp();
+}
+</script>
+
+</body>
+</html>
