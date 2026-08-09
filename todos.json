@@ -3,7 +3,7 @@
     "id": "msluoq1jssef3jsbt3a",
     "title": "dfadfd a",
     "category": "Privat",
-    "notes": "",
+    "notes": "dfa adf adfd",
     "attachments": [
       {
         "type": "image",
@@ -14,6 +14,7 @@
     "completed": false,
     "createdAt": "2026-08-09T13:40:47.190Z",
     "updatedAt": "2026-08-09T13:40:47.190Z",
-    "completedAt": null
+    "completedAt": null,
+    "updated": "2026-08-09T13:41:04.046Z"
   }
 ]
