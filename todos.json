@@ -1,5 +1,19 @@
 [
   {
+    "id": "msmxy73484qfrg56pog",
+    "title": "Schlafzimmer Bettwäsche reinigen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T07:59:54.208Z",
+    "updatedAt": "2026-08-10T07:59:54.208Z",
+    "completedAt": null,
+    "recurring": true,
+    "recurringInterval": 45,
+    "nextDueDate": "2026-09-23"
+  },
+  {
     "id": "msmxxbo8wzxzfcdf1z",
     "title": "Laugenzopf",
     "category": "Privat",
