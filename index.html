@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.4.6 - GitHub Sync</title>
+    <title>Todo App v1.4.7 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -444,7 +444,7 @@
         .todos-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;  /* v1.4.6: Erhöht von 1px auf 8px für besseres Dragging */
+            gap: 8px;  /* v1.4.7: Erhöht von 1px auf 8px für besseres Dragging */
         }
 
         /* v1.0.39: Accordion-Style Todos */
@@ -1235,13 +1235,25 @@
 </div>
 
 <script>
-const APP_VERSION = '1.4.6';
+const APP_VERSION = '1.4.7';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.4.7',
+        releaseDate: '2026-08-10',
+        name: 'Icon vor Todos + Fixes',
+        features: [
+            '📝 App-Icon prominent vor jedem Todo angezeigt',
+            '✨ Visuell klarer und professioneller',
+            '🎯 Bessere visuelle Identität',
+            '👁️ Positionsnummern Toggle in Einstellungen',
+            '💾 Alle Einstellungen in localStorage gespeichert'
+        ]
+    },
     {
         version: '1.4.6',
         releaseDate: '2026-08-10',
@@ -1492,7 +1504,7 @@ let currentEditingTodo = null;
 let formAttachments = [];
 let editAttachments = [];
 let githubConfig = null;
-let showOrderNumbers = true;  // v1.4.6: Positionsnummern anzeigen
+let showOrderNumbers = true;  // v1.4.7: Positionsnummern anzeigen
 
 // Safe localStorage Speicherung mit Quota-Handling und Prioritäten
 // v1.0.16: Test ob localStorage funktioniert
@@ -1989,7 +2001,7 @@ async function initializeApp() {
     const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
     updateSyncStatus('Lade Daten...');
     console.log(`[DEBUG] Lade Daten von GitHub: ${githubConfig.username}/${githubConfig.repo}`);
-// ===== v1.4.6: NORMALISIERUNG ÄLTERER TODOS =====
+// ===== v1.4.7: NORMALISIERUNG ÄLTERER TODOS =====
 function normalizeTodos() {
     // Stelle sicher dass alle Todos einen order Wert haben
     let maxOrder = 0;
@@ -2016,7 +2028,7 @@ function normalizeTodos() {
     
     // v1.0.24: Ordner wurde bereits beim Verbinden erstellt
     allTodos = await sync.getTodos();
-    normalizeTodos();  // v1.4.6: Normalisiere order Werte
+    normalizeTodos();  // v1.4.7: Normalisiere order Werte
     allCategories = await sync.getCategories();
     // v1.0.70: Initialisiere Defaults SOFORT, dann lade vom GitHub
     initializeDefaultColors();
@@ -2029,7 +2041,7 @@ function normalizeTodos() {
     // v1.0.10: Nicht mehr in localStorage speichern!
     // Daten kommen von GitHub, nicht von Cache
     
-    // v1.4.6: Lade Anzeigeeinstellungen
+    // v1.4.7: Lade Anzeigeeinstellungen
     const savedShowOrderNumbers = localStorage.getItem('showOrderNumbers');
     if (savedShowOrderNumbers !== null) {
         showOrderNumbers = savedShowOrderNumbers === 'true';
@@ -2355,9 +2367,9 @@ function renderTodos() {
         return false;
     });
 
-    // v1.4.6: Sortiere nach createdAt (älteste zuerst)
+    // v1.4.7: Sortiere nach createdAt (älteste zuerst)
     const sorted = filtered.sort((a, b) => {
-        // v1.4.6: Sortiere nach order (nicht createdAt)
+        // v1.4.7: Sortiere nach order (nicht createdAt)
         const orderA = a.order || 999999;  // Fallback für alte Todos
         const orderB = b.order || 999999;
         return orderA - orderB;  // Aufsteigend: kleinste order zuerst
@@ -2382,6 +2394,8 @@ function renderTodos() {
                     <!-- Header: Nur Titel + Checkbox -->
                     <div class="todo-header" onclick="toggleTodoExpand('${todo.id}')">
                         <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                            <!-- v1.4.7: Prominentes Icon vor Todo -->
+                            <img src="todo-icon.png" alt="Todo" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;">
                             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
                                    onchange="event.stopPropagation(); toggleTodo('${todo.id}')" title="Abhaken">
                             ${showOrderNumbers && todo.order ? `<span style="font-size: 11px; font-weight: 600; color: #d32f2f; min-width: 35px;">📍 ${todo.order.toFixed(1)}</span>` : ''}
@@ -2586,7 +2600,7 @@ function setupDragAndDrop() {
             const targetTodo = allTodos.find(t => t.id === todoEl.id.replace('todo-', ''));
             
             if (draggedTodo && targetTodo) {
-                // v1.4.6: Ändere order statt Array-Position zu tauschen
+                // v1.4.7: Ändere order statt Array-Position zu tauschen
                 const newOrder = targetTodo.order - 0.5;
                 draggedTodo.order = newOrder;
                 draggedTodo.updatedAt = new Date().toISOString();
@@ -2609,7 +2623,7 @@ function setupDragAndDrop() {
     });
 }
 
-// ===== v1.4.6: TOGGLE ORDER NUMBERS =====
+// ===== v1.4.7: TOGGLE ORDER NUMBERS =====
 function toggleOrderNumbers() {
     const checkbox = document.getElementById('show-order-numbers');
     showOrderNumbers = checkbox.checked;
@@ -2943,7 +2957,7 @@ function toggleTodo(id) {
             // Wenn wieder aktiviert: completedAt zurücksetzen
             todo.completedAt = null;
             
-            // v1.4.6: Wiederkehrend Todo reaktiviert → order = 1.0
+            // v1.4.7: Wiederkehrend Todo reaktiviert → order = 1.0
             if (todo.recurring) {
                 todo.order = 1.0;
                 console.log('[DEBUG] 🔄 Wiederkehrend reaktiviert: order = 1.0');
@@ -3257,7 +3271,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
         return;
     }
 
-// ===== v1.4.6: ORDER/PRIORITY SYSTEM =====
+// ===== v1.4.7: ORDER/PRIORITY SYSTEM =====
 function calculateNewOrder() {
     // Finde alle aktiven (nicht-erledigten) Todos
     const activeTodos = allTodos.filter(todo => !todo.completed);
@@ -3293,7 +3307,7 @@ function calculateNewOrder() {
         recurring: document.getElementById('recurring').checked,
         recurringInterval: getRecurringInterval(),
         nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null,
-        // v1.4.6: Order für Sortierung
+        // v1.4.7: Order für Sortierung
         order: calculateNewOrder()
     });
 
