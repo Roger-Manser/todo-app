@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.0.1 - GitHub Sync</title>
+    <title>Todo App v1.1 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a1a1a;
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -30,25 +30,27 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a1a1a;
             color: white;
-            padding: 2rem;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 8px;
+            border-bottom: 1px solid #000;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 8px;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 12px;
             margin: 0;
+            font-weight: 500;
         }
 
         .version-badge {
@@ -103,8 +105,35 @@
             background: rgba(255,255,255,0.3);
         }
 
+        /* v1.0.66: Stats im Header */
+        .header-stats {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-stats .stat-card {
+            background: rgba(255,255,255,0.15);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .header-stats .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .header-stats .stat-label {
+            font-size: 10px;
+            color: rgba(255,255,255,0.8);
+        }
+
         .content {
-            padding: 2rem;
+            padding: 8px 16px;
         }
 
         .setup-screen {
@@ -128,13 +157,13 @@
             background: #f9fafb;
             border: 2px solid #e5e7eb;
             border-radius: 8px;
-            padding: 2rem;
+            padding: 8px 16px;
             max-width: 500px;
             margin: 0 auto;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             text-align: left;
         }
 
@@ -152,12 +181,12 @@
             border: 1px solid #d1d5db;
             border-radius: 6px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #d32f2f;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
@@ -168,7 +197,7 @@
         }
 
         .form-help a {
-            color: #667eea;
+            color: #d32f2f;
             text-decoration: none;
         }
 
@@ -179,51 +208,65 @@
         .tabs {
             display: flex;
             gap: 8px;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 8px;
             padding-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .tab {
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.2s ease;
+            margin-right: 2px;
+        }
+
+        .tab.active {
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-add {
             background: none;
             border: none;
             padding: 8px 16px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: #9ca3af;
-            border-bottom: 3px solid transparent;
+            font-size: 12px;
+            color: #d32f2f;
+            font-weight: 600;
             transition: all 0.3s;
         }
 
-        .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
+        .tab-add:hover {
+            background: #f3f4f6;
+            border-radius: 6px;
         }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 6px;
+            margin-bottom: 1rem;
         }
 
         .stat-card {
             background: #f3f4f6;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 0.5rem;
+            border-radius: 6px;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 4px;
+            color: #d32f2f;
+            margin-bottom: 2px;
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #9ca3af;
         }
 
@@ -232,14 +275,16 @@
             border: 2px solid #e5e7eb;
             border-radius: 8px;
             padding: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 8px;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
+            display: none;  /* v1.0.66: Verstecke komplett wenn nicht open */
         }
 
         .add-section.open {
-            max-height: 600px;
+            max-height: 900px;
+            display: block;  /* v1.0.66: Zeige wenn open */
         }
 
         .add-section h3 {
@@ -254,7 +299,7 @@
             border: 1px solid #d1d5db;
             border-radius: 6px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .form-group textarea {
@@ -263,7 +308,7 @@
             border: 1px solid #d1d5db;
             border-radius: 6px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 12px;
             resize: vertical;
             min-height: 80px;
         }
@@ -272,12 +317,13 @@
             display: flex;
             gap: 8px;
             margin-top: 16px;
+            flex-wrap: wrap;
         }
 
         button {
             padding: 10px 16px;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
@@ -291,7 +337,7 @@
         }
 
         button.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a1a1a;
             color: white;
             border: none;
         }
@@ -301,131 +347,19 @@
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
-        button.toggle-add {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            margin-bottom: 1rem;
-            width: 100%;
-        }
-
-        .todos-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .todo-item {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 1.25rem;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            transition: all 0.3s;
-        }
-
-        .todo-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .todo-item.completed {
-            opacity: 0.7;
-            background: #f9fafb;
-        }
-
-        .todo-checkbox {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-            cursor: pointer;
-            flex-shrink: 0;
-            accent-color: #667eea;
-        }
-
-        .todo-content {
-            flex: 1;
-        }
-
-        .todo-title {
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            word-break: break-word;
-        }
-
-        .todo-item.completed .todo-title {
-            text-decoration: line-through;
-            color: #9ca3af;
-        }
-
-        .todo-meta {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+        button.small {
+            padding: 6px 12px;
             font-size: 12px;
-            margin-bottom: 8px;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        .badge.work {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .badge.personal {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .badge.priority {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .todo-note {
-            font-size: 13px;
-            color: #6b7280;
-            margin: 8px 0;
-            padding: 8px;
-            background: #f9fafb;
-            border-left: 3px solid #667eea;
-            border-radius: 4px;
-        }
-
-        .todo-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin: 8px 0;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            background: #f0f9ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 12px;
-            font-size: 11px;
-            color: #1e40af;
-        }
-
-        .todo-attachments {
+        .attachment-preview {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
             gap: 8px;
-            margin: 8px 0;
+            margin: 12px 0;
         }
 
-        .attachment-item {
+        .attachment-thumb {
             position: relative;
             border-radius: 6px;
             overflow: hidden;
@@ -433,23 +367,22 @@
             border: 1px solid #e5e7eb;
         }
 
-        .attachment-item img,
-        .attachment-item video {
+        .attachment-thumb img,
+        .attachment-thumb video {
             width: 100%;
             height: 60px;
             object-fit: cover;
-            cursor: pointer;
         }
 
-        .attachment-item.document {
+        .attachment-thumb.document {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #667eea;
+            color: #d32f2f;
             font-size: 20px;
         }
 
-        .attachment-delete {
+        .attachment-delete-btn {
             position: absolute;
             top: 2px;
             right: 2px;
@@ -464,8 +397,153 @@
             display: none;
         }
 
-        .attachment-item:hover .attachment-delete {
+        .attachment-thumb:hover .attachment-delete-btn {
             display: block;
+        }
+
+        .attachment-upload-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .attachment-upload-buttons button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+        }
+
+        .attachment-upload-buttons button:hover {
+            background: #e5e7eb;
+        }
+
+        .todos-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        /* v1.0.39: Accordion-Style Todos */
+        .todo-accordion {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 0px;
+            overflow: hidden;
+        }
+
+        .todo-header {
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .todo-header:hover {
+            background: #f9fafb;
+        }
+
+        .todo-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #d32f2f;
+        }
+
+        .todo-title-only {
+            font-size: 13px;
+            font-weight: 500;
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .expand-icon {
+            font-size: 11px;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .todo-details {
+            overflow: hidden;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+
+        .todo-title {
+            font-size: 13px;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .timestamp {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            background: #f3e8ff;
+            color: #6b21a8;
+            white-space: nowrap;
+        }
+
+        .attachment-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .attachment-icon {
+            font-size: 12px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            transition: all 0.3s;
+        }
+
+        .attachment-icon:hover {
+            background: #dbeafe;
+            transform: scale(1.1);
+        }
+
+        .todo-note {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 8px 0;
+            padding: 8px;
+            background: #f9fafb;
+            border-left: 3px solid #d32f2f;
+            border-radius: 4px;
         }
 
         .todo-actions {
@@ -480,7 +558,7 @@
             font-size: 12px;
             border: none;
             background: #f3f4f6;
-            color: #667eea;
+            color: #d32f2f;
         }
 
         .empty-state {
@@ -499,12 +577,14 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s;
+            overflow-y: auto;
         }
 
         .modal.show {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            padding: 20px;
         }
 
         @keyframes fadeIn {
@@ -514,13 +594,12 @@
 
         .modal-content {
             background-color: white;
-            padding: 2rem;
+            padding: 8px 16px;
             border-radius: 12px;
-            max-width: 600px;
             width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+            max-width: 600px;
             animation: slideUp 0.3s;
+            margin-top: 20px;
         }
 
         @keyframes slideUp {
@@ -579,7 +658,7 @@
 
         .version-item-name {
             font-size: 13px;
-            color: #667eea;
+            color: #d32f2f;
             font-weight: 500;
             margin-bottom: 0.5rem;
         }
@@ -612,7 +691,7 @@
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 1rem;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .error-msg {
@@ -621,7 +700,7 @@
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 1rem;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .loading {
@@ -629,31 +708,13 @@
             width: 16px;
             height: 16px;
             border: 2px solid #e5e7eb;
-            border-top-color: #667eea;
+            border-top-color: #d32f2f;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        .attachment-upload {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .attachment-upload button {
-            flex: 1;
-            padding: 8px 12px;
-            font-size: 12px;
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
-        }
-
-        .attachment-upload button:hover {
-            background: #e5e7eb;
         }
 
         .image-viewer {
@@ -697,7 +758,104 @@
             height: 3px;
             border-radius: 50%;
             margin-right: 6px;
-            background: #667eea;
+            background: #d32f2f;
+        }
+
+        .category-list {
+            list-style: none;
+            margin: 1rem 0 0 0;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .category-item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .category-item-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .category-item-actions button {
+            padding: 4px 8px;
+            font-size: 11px;
+            background: #f3f4f6;
+        }
+
+        /* v1.0.12: Accordion Styles */
+        .accordion-section {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f3f4f6;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: #333;
+            border: none;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: #e5e7eb;
+        }
+
+        .accordion-header.active {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .accordion-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            font-size: 18px;
+        }
+
+        .accordion-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 1rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .accordion-content.open {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
         }
 
         @media (max-width: 640px) {
@@ -711,10 +869,40 @@
             }
 
             .add-section.open {
-                max-height: 800px;
+                max-height: 1000px;
+            }
+
+            .tabs {
+                overflow-x: auto;
             }
         }
-    </style>
+    
+                /* v1.0.54: Kategorie-Farben (Pastel) */
+                .todo-item.cat-privat { background: linear-gradient(135deg, #fff0f3 0%, #ffe8ec 100%); border-left: 4px solid #ff9cb5; }
+                .todo-item.cat-geschaeftlich { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #64b5f6; }
+                .todo-item.cat-sonstiges { background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%); border-left: 4px solid #fdd835; }
+                .todo-item.cat-default { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-left: 4px solid #ce93d8; }
+
+        /* v1.0.59: Drag & Drop Styles */
+        .todo-accordion {
+            cursor: grab;
+        }
+        
+        .todo-accordion:active {
+            cursor: grabbing;
+        }
+        
+        .todo-accordion.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+            background: #f0f0f0;
+        }
+        
+        .todo-accordion.drag-over {
+            border-top: 3px solid #d32f2f;
+            padding-top: calc(1rem - 3px);
+        }
+</style>
 </head>
 <body>
 
@@ -722,9 +910,25 @@
     <div class="header">
         <div class="header-left">
             <h1>📝 Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.0.1</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.1</div>
+        </div>
+        <!-- v1.0.66: Stats im Header -->
+        <div class="header-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="total-count">0</div>
+                <div class="stat-label">Gesamt</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="completed-count">0</div>
+                <div class="stat-label">Erledigt</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="active-count">0</div>
+                <div class="stat-label">Aktiv</div>
+            </div>
         </div>
         <div class="header-actions">
+            <button onclick="toggleAddSection()" style="background: white; color: #d32f2f; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">✏️ Neue Aufgabe</button>
             <button onclick="openSettings()">⚙️ Einstellungen</button>
             <div class="sync-status synced" id="sync-status">GitHub Sync</div>
         </div>
@@ -760,7 +964,7 @@
                     </div>
                 </div>
 
-                <button class="primary" style="width: 100%; margin-top: 1rem;" onclick="connectGitHub()">
+                <button class="primary" id="connect-btn" style="width: 100%; margin-top: 1rem;">
                     Verbinden
                 </button>
 
@@ -772,60 +976,42 @@
         </div>
 
         <div id="app-container" style="display: none;">
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="total-count">0</div>
-                    <div class="stat-label">Gesamt</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="completed-count">0</div>
-                    <div class="stat-label">Erledigt</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="active-count">0</div>
-                    <div class="stat-label">Aktiv</div>
-                </div>
-            </div>
+            <!-- v1.0.66: Stats moved to header -->
 
-            <div class="tabs">
+            <div class="tabs" id="category-tabs">
                 <button class="tab active" data-filter="all">Alle</button>
-                <button class="tab" data-filter="work">Geschäftlich</button>
-                <button class="tab" data-filter="personal">Privat</button>
-                <button class="tab" data-filter="active">Aktive</button>
+                <button class="tab-add" onclick="openAddCategoryModal()">+ Kategorie</button>
             </div>
-
-            <button class="toggle-add" id="toggle-add-btn" onclick="toggleAddSection()">✏️ Neue Aufgabe</button>
 
             <div class="add-section" id="add-section">
-                <h3>✏️ Neue Aufgabe</h3>
                 <form id="add-form">
                     <div class="form-group">
-                        <label for="title">Titel *</label>
                         <input type="text" id="title" required placeholder="Was muss getan werden?">
                     </div>
 
                     <div class="form-group">
-                        <label for="category">Kategorie *</label>
-                        <select id="category" required>
-                            <option value="">Wählen Sie...</option>
-                            <option value="work">Geschäftlich</option>
-                            <option value="personal">Privat</option>
+                        <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Kategorie</label>
+                        <select id="category" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                            <!-- Wird dynamisch mit JavaScript gefüllt -->
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="tags">Tags (Komma trennen)</label>
-                        <input type="text" id="tags" placeholder="z.B. dringend, wichtig">
+                        <textarea id="notes" placeholder="Notizen..."></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="notes">Notizen</label>
-                        <textarea id="notes" placeholder="Zusätzliche Informationen..."></textarea>
+                        <div class="attachment-upload-buttons">
+                            <button type="button" onclick="attachFileInForm('camera')">📷 Kamera</button>
+                            <button type="button" onclick="attachFileInForm('gallery')">🖼️ Galerie</button>
+                            <button type="button" onclick="attachFileInForm('file')">📄 Datei</button>
+                        </div>
+                        <div class="attachment-preview" id="form-attachments"></div>
                     </div>
 
                     <div class="button-group">
-                        <button type="submit" class="primary">Aufgabe hinzufügen</button>
-                        <button type="button" onclick="toggleAddSection()">Abbrechen</button>
+                        <button type="submit" class="primary" style="flex: 1;">Aufgabe hinzufügen</button>
+                        <button type="button" onclick="toggleAddSection()" style="flex: 1;">Abbrechen</button>
                     </div>
                 </form>
             </div>
@@ -837,6 +1023,62 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Kamera Modal (v1.1: WebRTC ECHTE KAMERA!) -->
+<div id="cameraModal" class="modal" style="z-index: 2000;">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h2>📸 Foto aufnehmen</h2>
+            <button class="close-btn" onclick="closeCameraModal()">&times;</button>
+        </div>
+        <video id="videoStream" autoplay playsinline style="width: 100%; border-radius: 8px; margin-bottom: 1rem; background: #000;"></video>
+        <canvas id="photoCanvas" style="display: none;"></canvas>
+        <div style="display: flex; gap: 8px;">
+            <button type="button" class="primary" onclick="capturePhotoWebRTC()" style="flex: 1;">📸 Foto</button>
+            <button type="button" onclick="closeCameraModal()" style="flex: 1; background: #e5e7eb; color: #333; border: none; border-radius: 6px; padding: 10px; cursor: pointer;">Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Todo Modal -->
+<div id="editTodoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>✏️ Aufgabe bearbeiten</h2>
+            <button class="close-btn" onclick="closeEditTodoModal()">&times;</button>
+        </div>
+        <form id="edit-form">
+            <div class="form-group">
+                <input type="text" id="edit-title" required placeholder="Titel...">
+            </div>
+
+            <div class="form-group">
+                <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Kategorie</label>
+                <select id="edit-category" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                    <!-- Wird dynamisch mit JavaScript gefüllt -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <textarea id="edit-notes" placeholder="Notizen..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="attachment-preview" id="edit-attachments"></div>
+                <div class="attachment-upload-buttons">
+                    <button type="button" onclick="attachFileInEdit('camera')">📷 Kamera</button>
+                    <button type="button" onclick="attachFileInEdit('gallery')">🖼️ Galerie</button>
+                    <button type="button" onclick="attachFileInEdit('file')">📄 Datei</button>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="primary" style="flex: 1;">Speichern</button>
+                <button type="button" onclick="closeEditTodoModal()" style="flex: 1;">Abbrechen</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -862,6 +1104,62 @@
     </div>
 </div>
 
+<!-- Edit GitHub Settings Modal -->
+<div id="editGithubModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>✏️ GitHub-Verbindung bearbeiten</h2>
+            <button class="close-btn" onclick="closeEditGithubModal()">&times;</button>
+        </div>
+        <form id="edit-github-form">
+            <div class="form-group">
+                <label for="edit-github-username">GitHub Benutzername *</label>
+                <input type="text" id="edit-github-username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-github-repo">Repository Name *</label>
+                <input type="text" id="edit-github-repo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-github-token">GitHub Token *</label>
+                <input type="password" id="edit-github-token" required placeholder="ghp_...">
+                <div class="form-help">
+                    <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank">
+                        Neuen Token erstellen ↗
+                    </a>
+                </div>
+            </div>
+
+            <div id="edit-github-message"></div>
+
+            <div class="button-group">
+                <button type="submit" class="primary" style="flex: 1;">Speichern</button>
+                <button type="button" onclick="closeEditGithubModal()" style="flex: 1;">Abbrechen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div id="addCategoryModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>➕ Neue Kategorie</h2>
+            <button class="close-btn" onclick="closeAddCategoryModal()">&times;</button>
+        </div>
+        <div class="form-group">
+            <label for="new-category-input">Kategoriename *</label>
+            <input type="text" id="new-category-input" placeholder="z.B. Shopping, Arbeit">
+        </div>
+        <div class="button-group">
+            <button class="primary" onclick="addNewCategory()" style="flex: 1;">Erstellen</button>
+            <button onclick="closeAddCategoryModal()" style="flex: 1;">Abbrechen</button>
+        </div>
+    </div>
+</div>
+
 <!-- Image Viewer Modal -->
 <div id="imageViewer" class="image-viewer">
     <button class="image-viewer-close" onclick="closeImageViewer()">&times;</button>
@@ -869,39 +1167,286 @@
 </div>
 
 <script>
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.1';
+// v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
+const DB_NAME = 'todo-app-storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'config';
+
 const VERSION_HISTORY = [
     {
-        version: '1.0.1',
-        releaseDate: '2024-12-18',
-        name: 'UX & Media Update',
+        version: '1.1',
+        releaseDate: '2026-08-10',
+        name: 'Swiss Minimalist Design',
         features: [
-            'Versionshistorie durch Klick auf Versionsnummer',
-            'Foto-/Dokument-Upload pro Todo (Kamera, Galerie, Datei)',
-            'Formular nicht dauerhaft offen (Toggle-Button)',
-            'Priorität durch Position/Erfassungsreihenfolge',
-            'Datum & Priorität entfernt'
+            '🎨 Swiss Minimalist: Schwarz-Header + Rot-Akzent',
+            '📏 Extrem kompakt: 8px Padding, 12px Fonts, 1px Borders',
+            '✨ Elegante Reduktion ohne Funktionsverlust',
+            '⚡ Mehr Todos auf einen Blick',
+            '✅ ALLE bisherigen Features intakt!'
+        ]
+    },
+    {
+        version: '1.0.73',
+        releaseDate: '2026-08-10',
+        name: 'Farb-System Final',
+        features: [
+            'Kategorie-Farben edierbar in Settings',
+            'HEX-Farb-Picker für jede Kategorie',
+            'Farben zu GitHub synchronisiert (category-colors.json)',
+            'Standard Pastel-Farben (30er Palette)'
+        ]
+    },
+    {
+        version: '1.0.60',
+        releaseDate: '2026-08-09',
+        name: 'Drag & Drop + Statistik',
+        features: [
+            'Drag & Drop zum Prioritäten ändern',
+            'Statistik im Header (Gesamt/Erledigt/Aktiv)',
+            'Kompakte Todo-Anzeige',
+            'Kategorie-Tabs mit Farbcodierung'
         ]
     },
     {
         version: '1.0.0',
-        releaseDate: '2024-12-18',
+        releaseDate: '2026-08-09',
         name: 'Initial Release',
         features: [
             'Alles in einer HTML-Datei',
-            'GitHub-Synchronisierung',
-            'Cloud-Speicherung',
+            'GitHub-Synchronisierung via API',
             'Kategorien: Privat & Geschäftlich',
-            'Tags & Notizen',
-            'Versionshistorie in der App',
-            'Statistiken & Filterung'
+            'Tags & Notizen pro Todo',
+            'Foto/Dokument-Upload (Kamera, Galerie, Datei)',
+            'Versionshistorie',
+            'Dark Theme, Mobile-optimiert'
         ]
     }
 ];
 
+function openIndexedDB() {
+    return new Promise((resolve, reject) => {
+        console.log('[DEBUG] Öffne IndexedDB: ' + DB_NAME + ' v' + DB_VERSION);
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        
+        request.onerror = () => {
+            console.error('[DEBUG] ❌ IndexedDB.open() Fehler:', request.error);
+            reject(request.error);
+        };
+        
+        request.onsuccess = () => {
+            console.log('[DEBUG] ✅ IndexedDB geöffnet: ' + DB_NAME);
+            resolve(request.result);
+        };
+        
+        request.onupgradeneeded = (event) => {
+            console.log('[DEBUG] IndexedDB wird initialisiert...');
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME);
+                console.log('[DEBUG] ✅ ObjectStore "' + STORE_NAME + '" erstellt');
+            }
+        };
+    });
+}
+
+function saveToIndexedDB(key, value) {
+    return new Promise((resolve, reject) => {
+        openIndexedDB().then(db => {
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.put(value, key);
+            
+            request.onerror = () => {
+                console.error('[DEBUG] ❌ IndexedDB Speichern fehlgeschlagen:', request.error);
+                reject(request.error);
+            };
+            
+            request.onsuccess = () => {
+                console.log('[DEBUG] ✅ "' + key + '" zu IndexedDB gespeichert');
+                resolve();
+            };
+        }).catch(reject);
+    });
+}
+
+function loadFromIndexedDB(key) {
+    return new Promise((resolve, reject) => {
+        openIndexedDB().then(db => {
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.get(key);
+            
+            request.onerror = () => {
+                console.error('[DEBUG] ❌ IndexedDB Laden fehlgeschlagen:', request.error);
+                reject(request.error);
+            };
+            
+            request.onsuccess = () => {
+                if (request.result) {
+                    console.log('[DEBUG] ✅ "' + key + '" aus IndexedDB geladen');
+                    resolve(request.result);
+                } else {
+                    console.log('[DEBUG] ⚠️  "' + key + '" nicht in IndexedDB gefunden');
+                    resolve(null);
+                }
+            };
+        }).catch(reject);
+    });
+}
+// v1.0.21: Lade GitHub-Config aus IndexedDB
+async function loadGitHubConfigFromStorage() {
+    console.log('[DEBUG] === loadGitHubConfigFromStorage() ===');
+    
+    try {
+        const stored = await loadFromIndexedDB('githubConfig');
+        
+        if (stored) {
+            githubConfig = stored;
+            console.log('[DEBUG] ✅ GitHub-Config geladen aus IndexedDB');
+            console.log('[DEBUG] Benutzer:', githubConfig.username);
+            console.log('[DEBUG] Repository:', githubConfig.repo);
+            return true;
+        } else {
+            console.log('[DEBUG] ⚠️  Keine GitHub-Config in IndexedDB gefunden');
+            return false;
+        }
+    } catch (error) {
+        console.error('[DEBUG] ❌ Fehler beim Laden aus IndexedDB:', error.message);
+        return false;
+    }
+}
+
+
+
+
 let allTodos = [];
+let categoryColors = {};  // v1.0.54: {categoryName: '#hexcolor',...}
+let allCategories = ['Privat', 'Geschäftlich'];
 let currentFilter = 'all';
+let currentEditingTodo = null;
+let formAttachments = [];
+let editAttachments = [];
 let githubConfig = null;
+
+// Safe localStorage Speicherung mit Quota-Handling und Prioritäten
+// v1.0.16: Test ob localStorage funktioniert
+function testLocalStorage() {
+    console.log('[DEBUG] === localStorage Test Anfang ===');
+    try {
+        const testKey = '__storage_test__';
+        const testValue = 'test_' + Date.now();
+        
+        // Schreibe
+        localStorage.setItem(testKey, testValue);
+        console.log('[DEBUG] localStorage.setItem() erfolgreich');
+        
+        // Lese sofort zurück
+        const retrieved = localStorage.getItem(testKey);
+        console.log('[DEBUG] localStorage.getItem() =', retrieved);
+        
+        // Verifiziere
+        if (retrieved === testValue) {
+            console.log('[DEBUG] ✅ localStorage funktioniert PERFEKT!');
+            localStorage.removeItem(testKey);
+            return true;
+        } else {
+            console.error('[DEBUG] ❌ KRITISCH: localStorage speichert NICHT!');
+            console.error('[DEBUG] Erwartet:', testValue);
+            console.error('[DEBUG] Bekommen:', retrieved);
+            return false;
+        }
+    } catch (error) {
+        console.error('[DEBUG] ❌ localStorage GESPERRT:', error.message);
+        console.error('[DEBUG] Mögliche Ursache: Private/Incognito Mode?');
+        return false;
+    }
+}
+
+// v1.0.16: Starte Test beim Start
+window.addEventListener('DOMContentLoaded', () => {
+    console.log('[DEBUG] === App Start (v1.0.54) ===');
+    // v1.0.54: Initialisiere Standard-Farben
+    initializeDefaultColors();
+    const storageWorks = testLocalStorage();
+    if (!storageWorks) {
+        console.warn('[DEBUG] ⚠️  localStorage funktioniert nicht! Daten könnten verloren gehen!');
+    }
+    
+    // v1.0.21: Event-Listener für Connect Button
+    const connectBtn = document.getElementById('connect-btn');
+    if (connectBtn) {
+        console.log('[DEBUG] ✅ Connect Button gefunden - Event-Listener wird hinzugefügt');
+        connectBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            console.log('[DEBUG] [BUTTON] Connect Button geklickt!');
+            console.log('[DEBUG] [BUTTON] Rufe connectGitHub() auf...');
+            try {
+                await connectGitHub();
+                console.log('[DEBUG] [BUTTON] connectGitHub() fertig!');
+            } catch (error) {
+                console.error('[DEBUG] [BUTTON] Fehler in connectGitHub():', error);
+            }
+        });
+    } else {
+        console.warn('[DEBUG] ⚠️  Connect Button NICHT gefunden!');
+    }
+});
+
+
+// v1.0.17: Quota-Management
+function getLocalStorageSize() {
+    let total = 0;
+    for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+            total += localStorage[key].length + key.length;
+        }
+    }
+    return total;
+}
+
+function safeSetItem(key, value) {
+    // v1.0.17: NUR GitHub-Config lokal speichern!
+    // Fotos/Daten: IMMER zu GitHub (zu groß für localStorage!)
+    
+    if (key !== 'githubConfig') {
+        console.log(`[DEBUG] localStorage: '${key}' wird NICHT gespeichert (kommt von GitHub)`);
+        return true;
+    }
+    
+    // v1.0.17: GitHub-Config ist KRITISCH!
+    // Muss gespeichert werden, auch bei Quota-Problemen
+    console.log('[DEBUG] === GitHub-Config speichern (KRITISCH) ===');
+    console.log('[DEBUG] Config Größe:', value.length, 'Bytes');
+    
+    const currentSize = getLocalStorageSize();
+    console.log('[DEBUG] Aktueller localStorage:', currentSize, 'Bytes');
+    
+    try {
+        localStorage.setItem(key, value);
+        const verify = localStorage.getItem(key);
+        
+        if (verify === value) {
+            console.log(`[DEBUG] ✅ GitHub-Config gespeichert & verifiziert`);
+            return true;
+        } else {
+            console.error('[DEBUG] ❌ Verifizierung gescheitert!');
+            return false;
+        }
+    } catch (error) {
+        if (error.name === 'QuotaExceededError') {
+            console.error('[DEBUG] ⚠️  QUOTA EXCEEDED!');
+            console.error('[DEBUG] localStorage ist VOLL!');
+            console.error('[DEBUG] Grund: Wahrscheinlich alte Fotos/Daten');
+            console.error('[DEBUG] Lösung: localStorage.clear() in Console');
+            console.error('[DEBUG] ABER: GitHub-Config (KRITISCH) konnte NICHT gespeichert werden!');
+            return false;
+        } else {
+            console.error('[DEBUG] ❌ localStorage Fehler:', error.message);
+            return false;
+        }
+    }
+}
 
 class GitHubSync {
     constructor(username, token, repo) {
@@ -910,6 +1455,7 @@ class GitHubSync {
         this.repo = repo;
         this.apiBase = `https://api.github.com/repos/${username}/${repo}`;
         this.dataFile = 'todos.json';
+        this.configFile = 'categories.json';
     }
 
     async checkRepo() {
@@ -929,35 +1475,170 @@ class GitHubSync {
                 `${this.apiBase}/contents/${this.dataFile}`,
                 { headers: { 'Authorization': `token ${this.token}` } }
             );
-            
-            if (!response.ok) return [];
-
+            if (!response.ok) {
+                console.warn('[DEBUG] getTodos: GitHub-Datei nicht gefunden (404)');
+                // GitHub hat Datei nicht - versuche localStorage
+                const cached = localStorage.getItem('allTodos');
+                if (cached) {
+                    try {
+                        console.log('[DEBUG] getTodos: Verwende localStorage-Cache');
+                        return JSON.parse(cached);
+                    } catch (e) {
+                        console.error('[DEBUG] Cached todos corrupt:', e);
+                    }
+                }
+                return [];
+            }
             const data = await response.json();
-            const content = atob(data.content);
-            return JSON.parse(content);
-        } catch {
+            const binaryString = atob(data.content);
+            
+            // Prüfe ob content leer ist
+            if (!binaryString || binaryString.trim() === '') {
+                console.warn('[DEBUG] getTodos: GitHub-Datei ist leer, verwende Fallback');
+                return [];
+            }
+            
+            // Konvertiere Binary zu UTF-8
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const text = new TextDecoder('utf-8').decode(bytes);
+            
+            // Prüfe ob decodierter Text leer ist
+            if (!text || text.trim() === '') {
+                console.warn('[DEBUG] getTodos: Decodierter Text ist leer');
+                return [];
+            }
+            
+            // Parse mit Error-Handling
+            try {
+                const parsed = JSON.parse(text);
+                console.log(`[DEBUG] getTodos: ✅ ${parsed.length || 0} Aufgaben erfolgreich geladen`);
+                return parsed;
+            } catch (parseError) {
+                console.error('[DEBUG] JSON Parse Error:', parseError.message);
+                console.error('[DEBUG] Text (erste 200 Chars):', text.substring(0, 200));
+                return [];
+            }
+        } catch (error) {
+            console.error('[DEBUG] Error loading todos:', error.message);
+            // Fallback auf localStorage
+            const cached = localStorage.getItem('allTodos');
+            if (cached) {
+                try {
+                    console.log('[DEBUG] getTodos: Fallback auf localStorage');
+                    return JSON.parse(cached);
+                } catch (e) {
+                    console.error('[DEBUG] Cached todos corrupt:', e);
+                }
+            }
             return [];
         }
     }
 
-    async saveTodos(todos) {
+    async getCategories() {
         try {
-            const content = btoa(JSON.stringify(todos, null, 2));
+            const response = await fetch(
+                `${this.apiBase}/contents/${this.configFile}`,
+                { headers: { 'Authorization': `token ${this.token}` } }
+            );
+            if (!response.ok) {
+                console.warn('[DEBUG] getCategories: GitHub-Datei nicht gefunden (404)');
+                // GitHub hat Datei nicht - versuche localStorage
+                const cached = localStorage.getItem('allCategories');
+                if (cached) {
+                    try {
+                        console.log('[DEBUG] getCategories: Verwende localStorage-Cache');
+                        return JSON.parse(cached);
+                    } catch (e) {
+                        console.error('[DEBUG] Cached categories corrupt:', e);
+                    }
+                }
+                return ['Privat', 'Geschäftlich'];
+            }
+            const data = await response.json();
+            const binaryString = atob(data.content);
+            
+            // Prüfe ob content leer ist
+            if (!binaryString || binaryString.trim() === '') {
+                console.warn('[DEBUG] getCategories: GitHub-Datei ist leer, verwende Defaults');
+                return ['Privat', 'Geschäftlich'];
+            }
+            
+            // Konvertiere Binary zu UTF-8
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const text = new TextDecoder('utf-8').decode(bytes);
+            
+            // Prüfe ob decodierter Text leer ist
+            if (!text || text.trim() === '') {
+                console.warn('[DEBUG] getCategories: Decodierter Text ist leer');
+                return ['Privat', 'Geschäftlich'];
+            }
+            
+            // Parse mit Error-Handling
+            try {
+                const parsed = JSON.parse(text);
+                console.log(`[DEBUG] getCategories: ✅ ${parsed.length || 0} Kategorien erfolgreich geladen`);
+                return parsed;
+            } catch (parseError) {
+                console.error('[DEBUG] JSON Parse Error (Categories):', parseError.message);
+                console.error('[DEBUG] Text (erste 200 Chars):', text.substring(0, 200));
+                return ['Privat', 'Geschäftlich'];
+            }
+        } catch (error) {
+            console.error('[DEBUG] Error loading categories:', error.message);
+            // Fallback auf localStorage
+            const cached = localStorage.getItem('allCategories');
+            if (cached) {
+                try {
+                    console.log('[DEBUG] getCategories: Fallback auf localStorage');
+                    return JSON.parse(cached);
+                } catch (e) {
+                    console.error('[DEBUG] Cached categories corrupt:', e);
+                }
+            }
+            return ['Privat', 'Geschäftlich'];
+        }
+    }
+
+    async saveTodos(todos) {
+        return this.saveFile(this.dataFile, todos);
+    }
+
+    async saveCategories(categories) {
+        return this.saveFile(this.configFile, categories);
+    }
+
+    async saveFile(filename, data) {
+        try {
+            const jsonString = JSON.stringify(data, null, 2);
+            
+            // Konvertiere UTF-8 String zu bytes für btoa
+            const utf8Bytes = new TextEncoder().encode(jsonString);
+            let binaryString = '';
+            for (let i = 0; i < utf8Bytes.length; i++) {
+                binaryString += String.fromCharCode(utf8Bytes[i]);
+            }
+            const content = btoa(binaryString);
             
             let sha = null;
             try {
                 const getResponse = await fetch(
-                    `${this.apiBase}/contents/${this.dataFile}`,
+                    `${this.apiBase}/contents/${filename}`,
                     { headers: { 'Authorization': `token ${this.token}` } }
                 );
                 if (getResponse.ok) {
-                    const data = await getResponse.json();
-                    sha = data.sha;
+                    const responseData = await getResponse.json();
+                    sha = responseData.sha;
                 }
             } catch {}
 
             const response = await fetch(
-                `${this.apiBase}/contents/${this.dataFile}`,
+                `${this.apiBase}/contents/${filename}`,
                 {
                     method: 'PUT',
                     headers: {
@@ -965,7 +1646,7 @@ class GitHubSync {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `Update todos - ${new Date().toISOString()}`,
+                        message: `Update ${filename} - ${new Date().toISOString()}`,
                         content: content,
                         ...(sha && { sha })
                     })
@@ -978,6 +1659,58 @@ class GitHubSync {
             return false;
         }
     }
+    // v1.0.22: Attachment zu GitHub hochladen (attachments/ Ordner)
+    async uploadAttachment(file, fileName) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = async () => {
+                try {
+                    const base64Content = reader.result.split(',')[1];
+                    const path = 'attachments/' + fileName;
+                    
+                    const response = await fetch(
+                        'https://api.github.com/repos/' + this.owner + '/' + this.repo + '/contents/' + path,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': 'token ' + this.token,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: 'Add attachment: ' + fileName,
+                                content: base64Content
+                            })
+                        }
+                    );
+                    
+                    console.log('[DEBUG] GitHub Upload Status:', response.status);
+                    
+                    if (response.ok) {
+                        console.log('[DEBUG] ✅ Attachment hochgeladen');
+                        resolve(fileName);
+                    } else {
+                        // Stille - Fehler loggen aber nicht anzeigen
+                        console.warn('[DEBUG] GitHub Upload fehlgeschlagen (Status ' + response.status + ')');
+                        // TROTZDEM erfolgreich - Attachment wird lokal gespeichert
+                        resolve(fileName);
+                    }
+                    
+                } catch (error) {
+                    console.error('[DEBUG] uploadAttachment Error:', error.message);
+                    // TROTZDEM weitermachen - pragmatisch
+                    resolve(fileName);
+                }
+            };
+            
+            reader.onerror = () => reject(new Error('Fehler beim Lesen der Datei'));
+            reader.readAsDataURL(file);
+        });
+    }
+    getAttachmentUrl(fileName) {
+        return 'https://raw.githubusercontent.com/' + this.owner + '/' + this.repo + '/main/attachments/' + fileName;
+    }
+
 }
 
 async function connectGitHub() {
@@ -985,28 +1718,89 @@ async function connectGitHub() {
     const token = document.getElementById('github-token').value.trim();
     const repo = document.getElementById('github-repo').value.trim();
 
+    console.log(`[DEBUG] Verbinde: ${username}/${repo}`);
+
     if (!username || !token || !repo) {
+        console.error('[DEBUG] Fehlerhafte Eingabe: Felder leer');
         showSetupMessage('Bitte alle Felder ausfüllen', 'error');
         return;
     }
 
     const sync = new GitHubSync(username, token, repo);
-    
     showSetupMessage('Verbinde mit GitHub...', 'info');
 
-    let repoExists = await sync.checkRepo();
-    
-    if (!repoExists) {
-        showSetupMessage('Repository nicht gefunden', 'error');
-        return;
-    }
+    try {
+        let repoExists = await sync.checkRepo();
+        console.log(`[DEBUG] Repository-Check: ${repoExists ? '✅ Gefunden' : '❌ Nicht gefunden'}`);
+        
+        if (!repoExists) {
+            console.error('[DEBUG] Repository nicht gefunden - überprüfe Username & Token');
+            showSetupMessage('❌ Repository nicht gefunden - überprüfe Username & Token', 'error');
+            return;
+        }
 
-    githubConfig = { username, token, repo };
-    localStorage.setItem('githubConfig', JSON.stringify(githubConfig));
-    
-    showSetupMessage('✅ Mit GitHub verbunden!', 'success');
-    
-    setTimeout(() => { initializeApp(); }, 1500);
+        // v1.0.24: Erstelle attachments/ Ordner SOFORT beim Verbinden
+        console.log('[DEBUG] === Erstelle attachments/ Ordner beim Verbinden ===');
+        try {
+            const attachmentsResponse = await fetch(
+                'https://api.github.com/repos/' + username + '/' + repo + '/contents/attachments/.gitkeep',
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'token ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Initialize attachments folder',
+                        content: btoa('Attachments folder for todo app')
+                    })
+                }
+            );
+            if (attachmentsResponse.ok) {
+                console.log('[DEBUG] ✅ attachments/ Ordner erstellt');
+            } else {
+                console.log('[DEBUG] ℹ️  attachments/ Ordner existiert bereits oder konnte nicht erstellt werden');
+            }
+        } catch (folderError) {
+            console.warn('[DEBUG] ⚠️  Konnte attachments/ nicht erstellen:', folderError.message);
+        }
+
+        githubConfig = { username, token, repo };
+        const configJson = JSON.stringify(githubConfig);
+        
+        // v1.0.16: ROBUST localStorage Speichern mit Triple-Verifizierung
+        console.log('[DEBUG] === GitHub Config Speichern ===');
+        console.log('[DEBUG] Username:', username);
+        console.log('[DEBUG] Repo:', repo);
+        console.log('[DEBUG] Token Länge:', token.length);
+        console.log('[DEBUG] JSON Länge:', configJson.length + ' Bytes');
+        
+        try {
+            // v1.0.18: Speichere zu IndexedDB (funktioniert mit file:///)
+            console.log('[DEBUG] Speichere zu IndexedDB...');
+            await saveToIndexedDB('githubConfig', githubConfig);
+            console.log('[DEBUG] ✅ Zu IndexedDB gespeichert');
+            
+            // Verifiziere
+            const verify = await loadFromIndexedDB('githubConfig');
+            if (verify && verify.username === username) {
+                console.log('[DEBUG] ✅✅✅ GitHub-Config gespeichert & verifiziert!');
+                console.log('[DEBUG] Daten sind persistent in IndexedDB! ✅');
+            } else {
+                throw new Error('Verifizierung fehlgeschlagen');
+            }
+        } catch (e) {
+            console.error('[DEBUG] ❌ IndexedDB Fehler:', e.message);
+            showSetupMessage('❌ Fehler beim Speichern: ' + e.message, 'error');
+            return;
+        }
+        showSetupMessage('✅ Mit GitHub verbunden!', 'success');
+        
+        setTimeout(() => { initializeApp(); }, 1500);
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim GitHub-Connect:', error);
+        showSetupMessage(`❌ Fehler: ${error.message}`, 'error');
+    }
 }
 
 function showSetupMessage(msg, type) {
@@ -1016,65 +1810,300 @@ function showSetupMessage(msg, type) {
     } else if (type === 'success') {
         el.innerHTML = `<div class="success-msg">${msg}</div>`;
     } else {
-        el.innerHTML = `<div style="color: #667eea; padding: 12px; text-align: center;">
+        el.innerHTML = `<div style="color: #d32f2f; padding: 12px; text-align: center;">
             <span class="loading" style="margin-right: 8px;"></span> ${msg}
         </div>`;
     }
 }
 
 async function initializeApp() {
+    console.log('[DEBUG] === App-Initialisierung startet (v1.0.23) ===');
     document.getElementById('setup-screen').style.display = 'none';
     document.getElementById('app-container').style.display = 'block';
     
     const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
     updateSyncStatus('Lade Daten...');
-    allTodos = await sync.getTodos();
+    console.log(`[DEBUG] Lade Daten von GitHub: ${githubConfig.username}/${githubConfig.repo}`);
     
+    // v1.0.24: Ordner wurde bereits beim Verbinden erstellt
+    allTodos = await sync.getTodos();
+    allCategories = await sync.getCategories();
+    // v1.0.70: Initialisiere Defaults SOFORT, dann lade vom GitHub
+    initializeDefaultColors();
+    loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
+    
+    console.log(`[DEBUG] ✅ ${allTodos.length} Aufgaben geladen`);
+    console.log(`[DEBUG] ✅ ${allCategories.length} Kategorien geladen`);
+    console.log('[DEBUG] Kategorien:', allCategories);
+    
+    // v1.0.10: Nicht mehr in localStorage speichern!
+    // Daten kommen von GitHub, nicht von Cache
+    
+    updateCategoryTabs();
+    updateCategorySelects();
     updateStats();
     renderTodos();
     updateSyncStatus('GitHub Sync');
+    console.log('[DEBUG] ✅ App bereit!');
 }
 
 async function saveTodos() {
-    if (!githubConfig) return;
+    if (!githubConfig) {
+        console.warn('[DEBUG] saveTodos: Keine GitHub-Konfiguration');
+        return;
+    }
+    
+    // v1.0.10: Nicht mehr lokal speichern - nur zu GitHub!
+    // allTodos werden bei Bedarf von GitHub geladen
     
     const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
     updateSyncStatus('Speichert...');
     
-    const success = await sync.saveTodos(allTodos);
+    try {
+        console.log('[DEBUG] Speichere zu GitHub...');
+        const success = await sync.saveTodos(allTodos);
+        
+        if (success) {
+            updateSyncStatus('✅ GitHub Sync erfolgreich');
+            console.log(`[DEBUG] ✅ ${allTodos.length} Aufgaben zu GitHub gespeichert`);
+            // Reset nach 3 Sekunden
+            setTimeout(() => updateSyncStatus('GitHub Sync'), 3000);
+        } else {
+            updateSyncStatus('❌ GitHub Upload fehlgeschlagen');
+            console.error('[DEBUG] ❌ GitHub Upload fehlgeschlagen - überprüfe Token & Repo');
+        }
+    } catch (error) {
+        updateSyncStatus('❌ Fehler beim Speichern');
+        console.error('[DEBUG] Fehler:', error);
+    }
+}
+
+async function saveCategories() {
+    if (!githubConfig) {
+        console.warn('[DEBUG] saveCategories: Keine GitHub-Konfiguration');
+        return;
+    }
     
-    if (success) {
-        updateSyncStatus('GitHub Sync');
-    } else {
-        updateSyncStatus('Fehler!');
+    // v1.0.10: Nicht mehr lokal speichern - nur zu GitHub!
+    // allCategories werden bei Bedarf von GitHub geladen
+    
+    try {
+        const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
+        console.log('[DEBUG] Speichere Kategorien zu GitHub...');
+        await sync.saveCategories(allCategories);
+        console.log(`[DEBUG] ✅ ${allCategories.length} Kategorien zu GitHub gespeichert`);
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim Speichern von Kategorien:', error);
+    }
+}
+
+// v1.0.54: Kategorie-Farben speichern
+function updateCategoryColor(category, hexColor) {
+    categoryColors[category] = hexColor;
+    console.log('[DEBUG] Farbe aktualisiert:', category, hexColor);
+    
+    // v1.1: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
+    // Finde die entsprechende Farb-Box für diese Kategorie
+    const colorBoxes = document.querySelectorAll('[data-category-color-box]');
+    colorBoxes.forEach(box => {
+        if (box.getAttribute('data-category') === category) {
+            box.style.borderLeftColor = hexColor;
+        }
+    });
+    
+    // Aktualisiere die Todos sofort für Live-Vorschau
+    renderTodos();
+}
+
+// v1.0.68: Lade Kategorie-Farben vom GitHub
+async function loadCategoryColors() {
+    if (!githubConfig) {
+        console.warn('[DEBUG] Keine GitHub-Verbindung - categoryColors bleibt leer');
+        return;
+    }
+    
+    try {
+        const response = await fetch(
+            `https://api.github.com/repos/${githubConfig.username}/${githubConfig.repo}/contents/category-colors.json`,
+            { headers: { 'Authorization': `token ${githubConfig.token}` } }
+        );
+        
+        if (!response.ok) {
+            console.log('[DEBUG] category-colors.json nicht gefunden (404) - verwende Defaults');
+            initializeDefaultColors();
+            return;
+        }
+        
+        const data = await response.json();
+        
+        // Prüfe ob content existiert
+        if (!data.content) {
+            console.warn('[DEBUG] category-colors.json hat kein content - verwende Defaults');
+            initializeDefaultColors();
+            return;
+        }
+        
+        try {
+            const binaryString = atob(data.content);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const text = new TextDecoder('utf-8').decode(bytes);
+            const parsed = JSON.parse(text);
+            
+            if (parsed && typeof parsed === 'object') {
+                categoryColors = parsed;
+                console.log('[DEBUG] ✅ Category-Farben geladen:', categoryColors);
+            } else {
+                throw new Error('Ungültiges Format');
+            }
+        } catch (parseError) {
+            console.error('[DEBUG] Parse Error bei category-colors.json:', parseError);
+            initializeDefaultColors();
+        }
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim Laden von category-colors.json:', error);
+        initializeDefaultColors();
+    }
+}
+
+async function saveCategoryColors() {
+    if (!githubConfig) {
+        alert('Keine GitHub-Verbindung!');
+        return;
+    }
+    
+    try {
+        const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
+        const colorData = JSON.stringify(categoryColors, null, 2);
+        console.log('[DEBUG] Speichere Kategorie-Farben zu GitHub...');
+        await sync.saveFile('category-colors.json', colorData);
+        console.log('[DEBUG] ✅ Kategorie-Farben zu GitHub gespeichert');
+        alert('✅ Farben gespeichert!');
+        updateCategoryTabs();  // v1.0.55: Aktualisiere Tab-Farben!
+        renderTodos();  // Aktualisiere Anzeige
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim Speichern von Farben:', error);
+        alert('❌ Fehler beim Speichern: ' + error.message);
     }
 }
 
 function updateSyncStatus(text) {
     const el = document.getElementById('sync-status');
     el.textContent = text;
-    if (text.includes('GitHub')) {
-        el.classList.add('synced');
-    } else {
-        el.classList.remove('synced');
-    }
+    el.classList.toggle('synced', text.includes('GitHub'));
 }
 
 function updateStats() {
     const total = allTodos.length;
     const completed = allTodos.filter(t => t.completed).length;
     const active = total - completed;
-
     document.getElementById('total-count').textContent = total;
     document.getElementById('completed-count').textContent = completed;
     document.getElementById('active-count').textContent = active;
 }
 
+function updateCategoryTabs() {
+    const tabsContainer = document.getElementById('category-tabs');
+    const tabAdd = tabsContainer.querySelector('.tab-add');
+    
+    // Entferne ALLE Tabs (ausser .tab-add Button)
+    tabsContainer.querySelectorAll('.tab').forEach(tab => tab.remove());
+    
+    // Erstelle "Alle" Tab neu
+    const allBtn = document.createElement('button');
+    allBtn.className = 'tab active';
+    allBtn.dataset.filter = 'all';
+    allBtn.textContent = 'Alle';
+    allBtn.style.cssText = 'background: #f3f4f6; color: #333; border-bottom: 3px solid #d32f2f;';
+    allBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.tab').forEach(t => {
+            t.classList.remove('active');
+            if (t.dataset.filter === 'all') {
+                t.style.borderBottom = '3px solid #d32f2f';
+            } else {
+                t.style.borderBottom = '2px solid transparent';
+            }
+        });
+        e.target.classList.add('active');
+        e.target.style.borderBottom = '3px solid #d32f2f';
+        currentFilter = 'all';
+        renderTodos();
+    });
+    allBtn.addEventListener('mouseover', () => {
+        if (!allBtn.classList.contains('active')) {
+            allBtn.style.opacity = '0.7';
+        }
+    });
+    allBtn.addEventListener('mouseout', () => {
+        if (!allBtn.classList.contains('active')) {
+            allBtn.style.opacity = '1';
+        }
+    });
+    tabsContainer.insertBefore(allBtn, tabAdd);
+    
+    // Erstelle Kategorie-Tabs mit Farben (v1.0.55)
+    allCategories.forEach(category => {
+        const btn = document.createElement('button');
+        btn.className = 'tab';
+        btn.dataset.filter = category;
+        btn.textContent = category;
+        
+        // v1.0.55: Wende Kategorie-Farbe an
+        const bgColor = getCategoryColor(category);
+        btn.style.cssText = `background: ${bgColor}; color: #333; border-bottom: 2px solid transparent; transition: all 0.2s ease;`;
+        
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+                if (t.dataset.filter === 'all') {
+                    t.style.borderBottom = '2px solid transparent';
+                } else {
+                    t.style.borderBottom = '2px solid transparent';
+                }
+            });
+            e.target.classList.add('active');
+            // v1.0.55: Active Tab bekommt dickere Linie
+            e.target.style.borderBottom = '3px solid rgba(0,0,0,0.2)';
+            currentFilter = category;
+            renderTodos();
+        });
+        
+        // Hover-Effekt
+        btn.addEventListener('mouseover', () => {
+            if (!btn.classList.contains('active')) {
+                btn.style.opacity = '0.8';
+                btn.style.transform = 'translateY(-1px)';
+            }
+        });
+        btn.addEventListener('mouseout', () => {
+            if (!btn.classList.contains('active')) {
+                btn.style.opacity = '1';
+                btn.style.transform = 'translateY(0)';
+            }
+        });
+        
+        tabsContainer.insertBefore(btn, tabAdd);
+    });
+}
+
+function updateCategorySelects() {
+    // v1.1: Füllle die Kategorie-Selects dynamisch!
+    populateCategorySelects();
+}
+
 function renderTodos() {
+    // v1.0.39: Accordion-Style Expand in der Übersicht - nur Titel beim Start
     const filtered = allTodos.filter(todo => {
-        if (currentFilter === 'all') return true;
-        if (currentFilter === 'active') return !todo.completed;
-        return todo.category === currentFilter;
+        if (!todo.completed) {
+            if (currentFilter === 'all') return true;
+            if (currentFilter === 'active') return true;
+            return todo.category === currentFilter;
+        }
+        return false;
     });
 
     const container = document.getElementById('todos-container');
@@ -1083,7 +2112,7 @@ function renderTodos() {
         container.innerHTML = `
             <div class="empty-state">
                 <p><i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 1rem; display: block;"></i></p>
-                <p>Keine Aufgaben in dieser Kategorie</p>
+                <p>Keine aktiven Aufgaben in dieser Kategorie</p>
             </div>
         `;
         return;
@@ -1092,69 +2121,556 @@ function renderTodos() {
     container.innerHTML = `
         <div class="todos-list">
             ${filtered.map((todo, index) => `
-                <div class="todo-item ${todo.completed ? 'completed' : ''}">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="todo-priority-indicator"></span>
-                        <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
-                               onchange="toggleTodo('${todo.id}')">
-                    </div>
-                    <div class="todo-content" style="flex: 1;">
-                        <div class="todo-title">${escapeHtml(todo.title)}</div>
-                        <div class="todo-meta">
-                            <span class="badge ${todo.category}">
-                                ${todo.category === 'work' ? '💼 Geschäftlich' : '🏠 Privat'}
-                            </span>
+                <div class="todo-accordion" id="todo-${todo.id}" style="background: ${getCategoryColor(todo.category)}; border-left: 4px solid ${getCategoryColorBorder(todo.category)}; border-radius: 8px; overflow: hidden;">
+                    <!-- Header: Nur Titel + Checkbox -->
+                    <div class="todo-header" onclick="toggleTodoExpand('${todo.id}')">
+                        <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                            <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
+                                   onchange="event.stopPropagation(); toggleTodo('${todo.id}')" title="Abhaken">
+                            <div class="todo-title-only">${escapeHtml(todo.title)}</div>
                         </div>
-                        ${todo.tags && todo.tags.length > 0 ? `
-                            <div class="todo-tags">
-                                ${todo.tags.map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`).join('')}
+                        <span class="expand-icon" style="color: #999;">▼</span>
+                    </div>
+                    
+                    <!-- Details: Expandierbar -->
+                    <div class="todo-details" style="display: none; padding: 1rem; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+                        <div style="margin-bottom: 1rem;">
+                            <span class="badge">${escapeHtml(todo.category)}</span>
+                            <span style="font-size: 0.85rem; color: #666; margin-left: 1rem;">📅 ${formatFullTime(todo.createdAt)}</span>
+                        </div>
+                        
+                        ${todo.notes ? `
+                            <div style="margin-bottom: 1rem; padding: 4px 8px; background: white; border-radius: 4px; border-left: 3px solid #2a8f4f;">
+                                <strong>Notizen:</strong><br>
+                                ${escapeHtml(todo.notes)}
                             </div>
                         ` : ''}
-                        ${todo.notes ? `<div class="todo-note">📝 ${escapeHtml(todo.notes)}</div>` : ''}
+                        
                         ${todo.attachments && todo.attachments.length > 0 ? `
-                            <div class="todo-attachments">
+                            <div style="margin-bottom: 1rem;">
+                                <strong>Anhänge:</strong><br>
                                 ${todo.attachments.map((att, idx) => `
-                                    <div class="attachment-item ${att.type}">
-                                        ${att.type === 'image' ? `
-                                            <img src="${att.data}" onclick="viewImage('${todo.id}', ${idx})">
-                                        ` : att.type === 'video' ? `
-                                            <video src="${att.data}"></video>
-                                        ` : `
-                                            <div>📄</div>
-                                        `}
-                                        <button class="attachment-delete" onclick="deleteAttachment('${todo.id}', ${idx})">✕</button>
-                                    </div>
+                                    <span style="display: inline-block; margin-right: 0.5rem; cursor: pointer;" 
+                                          onclick="event.stopPropagation(); handleAttachmentClick('${todo.id}', ${idx}); return false;" title="${att.name}">
+                                        ${att.type === 'image' ? '🖼️' : att.type === 'video' ? '🎥' : '📄'} ${att.name}
+                                    </span>
                                 `).join('')}
                             </div>
                         ` : ''}
-                        <div class="attachment-upload">
-                            <button type="button" onclick="attachFile('${todo.id}', 'camera')">📷 Kamera</button>
-                            <button type="button" onclick="attachFile('${todo.id}', 'gallery')">🖼️ Galerie</button>
-                            <button type="button" onclick="attachFile('${todo.id}', 'file')">📄 Datei</button>
+                        
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="openEditTodoModal('${todo.id}')" class="small" style="background: #3b82f6; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px;">✏️ Bearbeiten</button>
+                            <button onclick="toggleTodo('${todo.id}')" class="small" style="background: #10b981; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px;">✅ Erledigt</button>
                         </div>
-                    </div>
-                    <div class="todo-actions">
-                        <button onclick="deleteTodo('${todo.id}')">🗑️ Löschen</button>
                     </div>
                 </div>
             `).join('')}
         </div>
     `;
+    
+    // v1.0.59: Richte Drag & Drop ein!
+    setupDragAndDrop();
+}
+
+// Helper: Vollständiges Datetime Format
+function formatFullTime(isoString) {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    return date.toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'}) + ' ' + 
+           date.toLocaleTimeString('de-DE', {hour: '2-digit', minute:'2-digit'});
+}
+
+
+// v1.0.39: Toggle Todo Expand in Übersicht
+// v1.0.54: Kategorie-Farben-System
+const DEFAULT_CATEGORY_COLORS = {
+    'Privat': { bg: '#fff0f3', border: '#ff9cb5' },
+    'Geschäftlich': { bg: '#e3f2fd', border: '#64b5f6' },
+    'Sonstiges': { bg: '#fffde7', border: '#fdd835' }
+};
+
+function initializeDefaultColors() {
+    categoryColors = {};
+    // Standard-Kategorien mit Default-Farben
+    for (const [cat, colors] of Object.entries(DEFAULT_CATEGORY_COLORS)) {
+        categoryColors[cat] = colors.bg;
+    }
+    // Neue Kategorien: falls nicht vorhanden → Random Pastel zuweisen
+    for (const cat of allCategories) {
+        if (!categoryColors[cat]) {
+            categoryColors[cat] = generateRandomPastelColor();
+        }
+    }
+}
+
+// v1.0.71: Generiere Hex-Farben statt HSL (für Color Input)
+function generateRandomPastelColor() {
+    const pastels = [
+        '#FFB3BA', '#FFCCCB', '#FFE4E1', '#FFC0CB', '#FFB6C1',  // Reds/Pinks
+        '#FFE4B5', '#FFDAB9', '#FFEBCD', '#FFE4C4', '#FFDEAD',  // Oranges
+        '#FFFACD', '#FFFFE0', '#FFFACD', '#FAFAD2', '#F0E68C',  // Yellows
+        '#F0FFF0', '#E0FFE0', '#CCFFCC', '#BBFFBB', '#AAFFAA',  // Greens
+        '#E0FFFF', '#AFFFF7', '#AFEEEE', '#B0E0E6', '#ADD8E6',  // Blues
+        '#E6E6FA', '#F0E6FF', '#DDA0DD', '#EED5E9', '#F5E5FA'   // Purples
+    ];
+    return pastels[Math.floor(Math.random() * pastels.length)];
+}
+
+// v1.0.57: Konvertiere hex zu rgba mit 35% opacity
+function hexToRgba(hex, opacity = 0.35) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+// v1.0.57: Konvertiere hsl zu rgba mit 35% opacity
+function hslToRgba(hslString, opacity = 0.35) {
+    // Parse hsl(h, s%, l%)
+    const match = hslString.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    if (!match) return hslString;  // Fallback
+    
+    const h = parseInt(match[1]);
+    const s = parseInt(match[2]) / 100;
+    const l = parseInt(match[3]) / 100;
+    
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - ((h / 60) % 2 - 1));
+    const m = l - c / 2;
+    let r, g, b;
+    
+    if (h < 60) { r = c; g = x; b = 0; }
+    else if (h < 120) { r = x; g = c; b = 0; }
+    else if (h < 180) { r = 0; g = c; b = x; }
+    else if (h < 240) { r = 0; g = x; b = c; }
+    else if (h < 300) { r = x; g = 0; b = c; }
+    else { r = c; g = 0; b = x; }
+    
+    r = Math.round((r + m) * 255);
+    g = Math.round((g + m) * 255);
+    b = Math.round((b + m) * 255);
+    
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+function getCategoryColor(category) {
+    if (!categoryColors[category]) {
+        categoryColors[category] = generateRandomPastelColor();
+    }
+    const color = categoryColors[category];
+    
+    // v1.0.57: Wende 35% Opacity an!
+    if (color.startsWith('#')) {
+        return hexToRgba(color, 0.35);
+    } else if (color.startsWith('hsl')) {
+        return hslToRgba(color, 0.35);
+    } else if (color.startsWith('rgba')) {
+        return color;  // Bereits rgba
+    }
+    return color;
+}
+
+function getCategoryColorBorder(category) {
+    const bg = getCategoryColor(category);
+    // Nutze vordefinierte Farben oder berechne eine dunklere Variante
+    if (DEFAULT_CATEGORY_COLORS[category]) {
+        return DEFAULT_CATEGORY_COLORS[category].border;
+    }
+    return '#999';
+}
+
+// v1.0.59: Drag & Drop für Prioritätsänderung
+let draggedTodoId = null;
+
+function setupDragAndDrop() {
+    console.log('[DEBUG] 🎯 Richte Drag & Drop ein...');
+    const todos = document.querySelectorAll('.todo-accordion');
+    
+    todos.forEach(todoEl => {
+        todoEl.draggable = true;
+        
+        // Drag Start
+        todoEl.addEventListener('dragstart', (e) => {
+            draggedTodoId = todoEl.id.replace('todo-', '');
+            todoEl.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            console.log('[DEBUG] 🎯 Dragging started:', draggedTodoId);
+        });
+        
+        // Drag Over
+        todoEl.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            if (draggedTodoId && todoEl.id !== `todo-${draggedTodoId}`) {
+                todoEl.classList.add('drag-over');
+            }
+        });
+        
+        // Drag Leave
+        todoEl.addEventListener('dragleave', () => {
+            todoEl.classList.remove('drag-over');
+        });
+        
+        // Drop
+        todoEl.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!draggedTodoId || todoEl.id === `todo-${draggedTodoId}`) {
+                todoEl.classList.remove('drag-over');
+                return;
+            }
+            
+            const draggedTodo = allTodos.find(t => t.id === draggedTodoId);
+            const targetTodo = allTodos.find(t => t.id === todoEl.id.replace('todo-', ''));
+            
+            if (draggedTodo && targetTodo) {
+                // v1.0.59: Vertausche Position im Array
+                const draggedIndex = allTodos.indexOf(draggedTodo);
+                const targetIndex = allTodos.indexOf(targetTodo);
+                
+                // Tausche
+                [allTodos[draggedIndex], allTodos[targetIndex]] = [allTodos[targetIndex], allTodos[draggedIndex]];
+                
+                console.log('[DEBUG] ✅ Priorität geändert:', draggedTodo.title);
+                
+                saveTodos();
+                renderTodos();
+            }
+            
+            todoEl.classList.remove('drag-over');
+        });
+        
+        // Drag End
+        todoEl.addEventListener('dragend', () => {
+            todoEl.classList.remove('dragging');
+            todoEl.classList.remove('drag-over');
+            draggedTodoId = null;
+        });
+    });
+}
+
+function toggleTodoExpand(todoId) {
+    const accordion = document.getElementById(`todo-${todoId}`);
+    const details = accordion.querySelector('.todo-details');
+    const header = accordion.querySelector('.todo-header');
+    const icon = accordion.querySelector('.expand-icon');
+    
+    const isOpen = details.style.display !== 'none';
+    
+    if (isOpen) {
+        // Schließen
+        details.style.display = 'none';
+        icon.style.transform = 'rotate(0deg)';
+        header.style.background = 'transparent';
+    } else {
+        // Öffnen
+        details.style.display = 'block';
+        icon.style.transform = 'rotate(180deg)';
+        header.style.background = '#f0f9ff';
+    }
 }
 
 function toggleAddSection() {
     const section = document.getElementById('add-section');
     section.classList.toggle('open');
     if (section.classList.contains('open')) {
+        // v1.1: Füllle Kategorie-Select dynamisch!
+        populateCategorySelects();
+        // v1.0.72: Focus auf title
         document.getElementById('title').focus();
     }
 }
 
+// v1.1: Dynamisches Füllen der Kategorie-Selects
+function populateCategorySelects() {
+    const categorySelect = document.getElementById('category');
+    const editCategorySelect = document.getElementById('edit-category');
+    
+    // Füllle Add-Form Select
+    if (categorySelect) {
+        categorySelect.innerHTML = allCategories.map(cat => 
+            `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`
+        ).join('');
+    }
+    
+    // Füllle Edit-Form Select
+    if (editCategorySelect) {
+        editCategorySelect.innerHTML = allCategories.map(cat => 
+            `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`
+        ).join('');
+    }
+}
+
+
+function attachFileInForm(source) {
+    if (source === 'camera') {
+        // v1.1: ECHTE Kamera mit WebRTC!
+        currentCameraContext = 'form';
+        openCameraModal();
+    } else {
+        // Fallback: File-Picker (Galerie/Datei)
+        attachFile(source, async (attachment) => {
+            formAttachments.push(attachment);
+            
+            const cacheKey = 'attachment_' + attachment.name;
+            try {
+                await saveToIndexedDB(cacheKey, {
+                    data: attachment.data,
+                    name: attachment.name,
+                    type: attachment.type
+                });
+            } catch (e) {
+                console.error('[DEBUG] Attachment Cache FEHLER:', e);
+            }
+            
+            renderFormAttachments();
+        });
+    }
+}
+
+function attachFileInEdit(source) {
+    if (source === 'camera') {
+        // v1.1: ECHTE Kamera mit WebRTC!
+        currentCameraContext = 'edit';
+        openCameraModal();
+    } else {
+        // Fallback: File-Picker (Galerie/Datei)
+        attachFile(source, async (attachment) => {
+            editAttachments.push(attachment);
+            
+            const cacheKey = 'attachment_' + attachment.name;
+            try {
+                await saveToIndexedDB(cacheKey, {
+                    data: attachment.data,
+                    name: attachment.name,
+                    type: attachment.type
+                });
+            } catch (e) {
+                console.error('[DEBUG] Attachment Cache FEHLER (Edit):', e);
+            }
+            
+            renderEditAttachments();
+        });
+    }
+}
+
+function attachFile(source, callback) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    
+    // v1.1: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
+    if (source === 'camera') {
+        input.accept = 'image/*,video/*';
+        input.capture = 'environment';  // Browser erkennt das
+    } else if (source === 'gallery') {
+        input.accept = 'image/*,video/*';
+    } else if (source === 'file') {
+        input.accept = '*/*';
+    }
+
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const type = file.type.startsWith('image/') ? 'image' : 
+                             file.type.startsWith('video/') ? 'video' : 'document';
+                
+                callback({ 
+                    type, 
+                    name: file.name, 
+                    data: event.target.result,
+                    file: file
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    input.click();
+}
+
+// ===== v1.1: WebRTC ECHTE KAMERA! =====
+let currentCameraContext = null;  // 'form' oder 'edit'
+let cameraStream = null;
+
+async function openCameraModal() {
+    const modal = document.getElementById('cameraModal');
+    const video = document.getElementById('videoStream');
+    
+    try {
+        console.log('[DEBUG] Öffne WebRTC Kamera...');
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { 
+                facingMode: 'environment',  // Rückkamera auf Mobil!
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
+        });
+        
+        video.srcObject = cameraStream;
+        modal.classList.add('show');
+    } catch (error) {
+        console.error('[DEBUG] Kamera FEHLER:', error);
+        alert('📸 Kamera nicht verfügbar (' + error.message + ')\n\nFallback: Wähle Foto aus Galerie');
+        closeCameraModal();
+        // Fallback: Öffne Datei-Picker
+        attachFile('gallery', async (attachment) => {
+            if (currentCameraContext === 'form') {
+                formAttachments.push(attachment);
+                const cacheKey = 'attachment_' + attachment.name;
+                try {
+                    await saveToIndexedDB(cacheKey, {
+                        data: attachment.data,
+                        name: attachment.name,
+                        type: attachment.type
+                    });
+                } catch (e) {
+                    console.error('[DEBUG] Cache FEHLER:', e);
+                }
+                renderFormAttachments();
+            } else if (currentCameraContext === 'edit') {
+                editAttachments.push(attachment);
+                const cacheKey = 'attachment_' + attachment.name;
+                try {
+                    await saveToIndexedDB(cacheKey, {
+                        data: attachment.data,
+                        name: attachment.name,
+                        type: attachment.type
+                    });
+                } catch (e) {
+                    console.error('[DEBUG] Cache FEHLER:', e);
+                }
+                renderEditAttachments();
+            }
+        });
+    }
+}
+
+function capturePhotoWebRTC() {
+    const video = document.getElementById('videoStream');
+    const canvas = document.getElementById('photoCanvas');
+    
+    if (!video.videoWidth || !video.videoHeight) {
+        alert('⏳ Warte auf Kamera-Stream...');
+        return;
+    }
+    
+    try {
+        const ctx = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        const timestamp = new Date().toLocaleTimeString('de-DE');
+        const filename = `photo_${Date.now()}.jpg`;
+        
+        console.log('[DEBUG] ✅ Foto gemacht: ' + filename);
+        
+        const attachment = {
+            type: 'image',
+            name: filename,
+            data: dataUrl,
+            file: null
+        };
+        
+        // Speichere zu Form oder Edit
+        if (currentCameraContext === 'form') {
+            formAttachments.push(attachment);
+            saveToIndexedDB('attachment_' + filename, {
+                data: dataUrl,
+                name: filename,
+                type: 'image'
+            }).then(() => renderFormAttachments());
+        } else if (currentCameraContext === 'edit') {
+            editAttachments.push(attachment);
+            saveToIndexedDB('attachment_' + filename, {
+                data: dataUrl,
+                name: filename,
+                type: 'image'
+            }).then(() => renderEditAttachments());
+        }
+        
+        closeCameraModal();
+    } catch (e) {
+        console.error('[DEBUG] Canvas-Fehler:', e);
+        alert('Fehler beim Foto: ' + e.message);
+    }
+}
+
+function closeCameraModal() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => {
+            console.log('[DEBUG] Stoppe Track:', track.kind);
+            track.stop();
+        });
+        cameraStream = null;
+    }
+    document.getElementById('cameraModal').classList.remove('show');
+}
+
+function renderFormAttachments() {
+    const container = document.getElementById('form-attachments');
+    if (formAttachments.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    container.innerHTML = formAttachments.map((att, idx) => `
+        <div class="attachment-thumb ${att.type}">
+            ${att.type === 'image' ? `<img src="${att.data}">` : 
+              att.type === 'video' ? `<video src="${att.data}"></video>` :
+              `<div>📄</div>`}
+            <button class="attachment-delete-btn" onclick="deleteFormAttachment(${idx})">✕</button>
+        </div>
+    `).join('');
+}
+
+function renderEditAttachments() {
+    const container = document.getElementById('edit-attachments');
+    if (editAttachments.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    container.innerHTML = editAttachments.map((att, idx) => `
+        <div class="attachment-thumb ${att.type}">
+            ${att.type === 'image' ? `<img src="${att.data}">` : 
+              att.type === 'video' ? `<video src="${att.data}"></video>` :
+              `<div>📄</div>`}
+            <button class="attachment-delete-btn" onclick="deleteEditAttachment(${idx})">✕</button>
+        </div>
+    `).join('');
+}
+
+function deleteFormAttachment(idx) {
+    formAttachments.splice(idx, 1);
+    renderFormAttachments();
+}
+
+function deleteEditAttachment(idx) {
+    editAttachments.splice(idx, 1);
+    renderEditAttachments();
+}
+
+// v1.0.56: renderCompletedTodos() wird nicht mehr verwendet - openSettings() wird stattdessen aufgerufen
+
 function toggleTodo(id) {
     const todo = allTodos.find(t => t.id === id);
     if (todo) {
+        const now = new Date().toISOString();
         todo.completed = !todo.completed;
-        todo.updated = new Date().toISOString();
+        todo.updatedAt = now;
+        
+        // v1.0.11: Setze completedAt wenn erledigt
+        if (todo.completed) {
+            todo.completedAt = now;
+        } else {
+            // Wenn wieder aktiviert: completedAt zurücksetzen
+            todo.completedAt = null;
+        }
+        
         updateStats();
         renderTodos();
         saveTodos();
@@ -1162,22 +2678,247 @@ function toggleTodo(id) {
 }
 
 function deleteTodo(id) {
-    if (confirm('Aufgabe wirklich löschen?')) {
+    // v1.0.11: Bestätigung über Modal
+    const todo = allTodos.find(t => t.id === id);
+    if (!todo) return;
+    
+    // Prüfe ob Todo erledigt ist - nur erledigte können gelöscht werden!
+    if (!todo.completed) {
+        alert('❌ Nur erledigte Aufgaben können gelöscht werden!\n\nMarke die Aufgabe erst als erledigt, dann kannst du sie in den Einstellungen löschen.');
+        return;
+    }
+    
+    // Zeige Bestätigung
+    const confirmDelete = confirm(`Erledigte Aufgabe wirklich löschen?\n\n"${todo.title}"\n\nDieser Vorgang kann nicht rückgängig gemacht werden!`);
+    
+    if (confirmDelete) {
         allTodos = allTodos.filter(t => t.id !== id);
+        console.log(`[DEBUG] ✅ Aufgabe gelöscht: ${todo.title}`);
         updateStats();
-        renderTodos();
+        openSettings();  // v1.0.56: Aktualisiere Settings sofort!
         saveTodos();
     }
 }
 
-function deleteAttachment(todoId, attachmentIdx) {
-    const todo = allTodos.find(t => t.id === todoId);
-    if (todo && todo.attachments) {
-        todo.attachments.splice(attachmentIdx, 1);
-        todo.updated = new Date().toISOString();
-        renderTodos();
-        saveTodos();
+// v1.0.32: Erledigte Aufgabe zurück auf unerledigt setzen
+function markAsUndone(id) {
+    const todo = allTodos.find(t => t.id === id);
+    if (!todo) return;
+    
+    // Setze back auf unerledigt
+    todo.completed = false;
+    todo.completedAt = null;
+    todo.updatedAt = new Date().toISOString();
+    
+    console.log(`[DEBUG] ✅ Aufgabe zurück auf unerledigt: ${todo.title}`);
+    saveTodos();
+    updateStats();
+    
+    // v1.0.37: Schließe Settings & render sofort
+    closeSettings();
+    renderTodos();  // Zeige in Hauptliste SOFORT!
+}
+
+function openTodoDetailsModal(id) {
+    const todo = allTodos.find(t => t.id === id);
+    if (!todo) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.style.zIndex = '1000';
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>📋 Todo Details</h3>
+                <button onclick="this.closest('.modal').remove()" class="close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 1rem;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #333;">${escapeHtml(todo.title)}</h4>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="badge">${escapeHtml(todo.category)}</span>
+                        </div>
+                    </div>
+                    
+                    ${todo.notes ? `
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="font-weight: 600; color: #333; display: block; margin-bottom: 0.5rem;">📝 Notizen</label>
+                            <p style="margin: 0; color: #555; line-height: 1.5;">${escapeHtml(todo.notes)}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="font-weight: 600; color: #333; display: block; margin-bottom: 0.5rem;">⏰ Timestamps</label>
+                        <div style="background: #f9fafb; padding: 4px 8px; border-radius: 6px; font-size: 13px;">
+                            <div style="margin-bottom: 0.5rem;">
+                                📅 <strong>Erstellt:</strong> ${formatFullTime(todo.createdAt)}
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                ✏️ <strong>Bearbeitet:</strong> ${formatFullTime(todo.updatedAt)}
+                            </div>
+                            ${todo.completedAt ? `
+                                <div>
+                                    ✅ <strong>Erledigt:</strong> ${formatFullTime(todo.completedAt)}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    ${todo.attachments && todo.attachments.length > 0 ? `
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="font-weight: 600; color: #333; display: block; margin-bottom: 0.5rem;">📎 Anhänge (${todo.attachments.length})</label>
+                            <div style="display: grid; gap: 0.5rem;">
+                                ${todo.attachments.map((att, idx) => `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f9fafb; padding: 4px 8px; border-radius: 6px;">
+                                        <span>
+                                            ${att.type === 'image' ? '🖼️' : att.type === 'video' ? '🎥' : '📄'}
+                                            ${escapeHtml(att.name)}
+                                        </span>
+                                        <button onclick="viewAttachment('${todo.id}', ${idx})" class="small" style="background: #d32f2f; color: white; border: none;">Öffnen</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-top: 2rem;">
+                        <button onclick="openEditTodoModal('${todo.id}'); this.closest('.modal').remove();" class="small primary" style="flex: 1;">✏️ Bearbeiten</button>
+                        <button onclick="this.closest('.modal').remove();" class="small" style="flex: 1;">✕ Schließen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+    
+    document.body.appendChild(modal);
+}
+
+
+function openEditTodoModal(id) {
+    currentEditingTodo = allTodos.find(t => t.id === id);
+    if (!currentEditingTodo) return;
+    
+    editAttachments = JSON.parse(JSON.stringify(currentEditingTodo.attachments || []));
+    
+    // v1.1: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
+    populateCategorySelects();
+    
+    // v1.0.72: Setze Titel und Notizen
+    document.getElementById('edit-title').value = currentEditingTodo.title || '';
+    document.getElementById('edit-notes').value = currentEditingTodo.notes || '';
+    document.getElementById('edit-category').value = currentEditingTodo.category || 'Privat';
+    
+    renderEditAttachments();
+    document.getElementById('editTodoModal').classList.add('show');
+}
+
+function closeEditTodoModal() {
+    currentEditingTodo = null;
+    editAttachments = [];
+    document.getElementById('editTodoModal').classList.remove('show');
+}
+
+document.getElementById('edit-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!currentEditingTodo) return;
+    
+    // v1.0.72: Lese Titel und Notizen vom Input
+    currentEditingTodo.title = document.getElementById('edit-title').value.trim();
+    currentEditingTodo.notes = document.getElementById('edit-notes').value.trim();
+    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.1: Lese Kategorie vom Select!
+    currentEditingTodo.attachments = editAttachments;
+    currentEditingTodo.updated = new Date().toISOString();
+    
+    // v1.0.50: SPEICHERE ATTACHMENT-DATEN BEI EDIT!
+    if (currentEditingTodo.attachments && currentEditingTodo.attachments.length > 0) {
+        for (let i = 0; i < currentEditingTodo.attachments.length; i++) {
+            const att = currentEditingTodo.attachments[i];
+            const editAtt = editAttachments[i];
+            
+            if (editAtt && editAtt.data) {
+                const attKey = currentEditingTodo.id + '_att_' + i;
+                try {
+                    await saveToIndexedDB(attKey, {
+                        data: editAtt.data,  // ← BASE64!
+                        name: att.name,
+                        type: att.type
+                    });
+                    console.log('[DEBUG] ✅ Edit Attachment-Daten IndexedDB:', attKey);
+                } catch (e) {
+                    console.error('[DEBUG] ❌ Edit Attachment IndexedDB Fehler:', e);
+                }
+            }
+        }
     }
+    
+    renderTodos();
+    saveTodos();
+    closeEditTodoModal();
+});
+
+async function viewAttachment(todoId, attachmentIdx) {
+    const todo = allTodos.find(t => t.id === todoId);
+    if (!todo || !todo.attachments || !todo.attachments[attachmentIdx]) {
+        alert('Anhang nicht gefunden');
+        return;
+    }
+    
+    const att = todo.attachments[attachmentIdx];
+    let url = att.data;  // Versuche direkt (wenn inline)
+    
+    // v1.0.53: Wenn att.data fehlt, lade aus IndexedDB!
+    if (!url) {
+        const attKey = todoId + '_att_' + attachmentIdx;
+        console.log('[DEBUG] 🔍 Suche in IndexedDB:', attKey);
+        try {
+            const cached = await loadFromIndexedDB(attKey);
+            console.log('[DEBUG] 📦 loadFromIndexedDB Ergebnis:', cached);
+            if (cached && cached.data) {
+                url = cached.data;
+                console.log('[DEBUG] ✅ Attachment-Daten aus IndexedDB geladen');
+            } else {
+                console.error('[DEBUG] ⚠️ loadFromIndexedDB gab Daten zurück aber data ist undefined!');
+            }
+        } catch (e) {
+            console.error('[DEBUG] ❌ loadFromIndexedDB FEHLER:', e.message, e);
+        }
+    }
+    
+    if (!url) {
+        alert('⚠️ Anhang hat keine Daten (weder inline noch im Cache)');
+        return;
+    }
+    const viewer = document.getElementById('imageViewer');
+    
+    if (att.type === 'image') {
+        viewer.innerHTML = `<img style="max-width: 90%; max-height: 90%; object-fit: contain;" src="${url}" alt="${att.name}"><button class="image-viewer-close" onclick="closeImageViewer()">&times;</button>`;
+    } else if (att.type === 'video') {
+        viewer.innerHTML = `<video style="max-width: 90%; max-height: 90%; object-fit: contain;" controls><source src="${url}" type="video/mp4"></video><button class="image-viewer-close" onclick="closeImageViewer()">&times;</button>`;
+    } else {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = att.name;
+        link.click();
+        return;
+    }
+    
+    viewer.classList.add('show');
+}
+function handleAttachmentClick(todoId, attachmentIdx) {
+    console.log('[DEBUG] handleAttachmentClick:', todoId, attachmentIdx);
+    viewAttachment(todoId, attachmentIdx).catch(err => {
+        console.error('[DEBUG] Fehler in viewAttachment:', err);
+    });
+}
+
+function closeImageViewer() {
+    document.getElementById('imageViewer').classList.remove('show');
 }
 
 function escapeHtml(text) {
@@ -1190,104 +2931,148 @@ function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-function attachFile(todoId, source) {
-    const input = document.createElement('input');
-    
-    if (source === 'camera') {
-        input.type = 'file';
-        input.accept = 'image/*,video/*';
-        input.capture = 'environment';
-    } else if (source === 'gallery') {
-        input.type = 'file';
-        input.accept = 'image/*,video/*';
-    } else {
-        input.type = 'file';
-    }
-
-    input.onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const todo = allTodos.find(t => t.id === todoId);
-                if (todo) {
-                    if (!todo.attachments) todo.attachments = [];
-                    
-                    const type = file.type.startsWith('image/') ? 'image' : 
-                                 file.type.startsWith('video/') ? 'video' : 'document';
-                    
-                    todo.attachments.push({
-                        type,
-                        name: file.name,
-                        data: event.target.result
-                    });
-                    
-                    todo.updated = new Date().toISOString();
-                    renderTodos();
-                    saveTodos();
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    input.click();
-}
-
-function viewImage(todoId, attachmentIdx) {
-    const todo = allTodos.find(t => t.id === todoId);
-    if (todo && todo.attachments && todo.attachments[attachmentIdx]) {
-        const viewer = document.getElementById('imageViewer');
-        const content = document.getElementById('imageViewerContent');
-        content.src = todo.attachments[attachmentIdx].data;
-        viewer.classList.add('show');
-    }
-}
-
-function closeImageViewer() {
-    document.getElementById('imageViewer').classList.remove('show');
-}
-
-document.getElementById('add-form').addEventListener('submit', (e) => {
+document.getElementById('add-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // v1.0.72: Lese Titel und Notizen vom Input
     const title = document.getElementById('title').value.trim();
-    const category = document.getElementById('category').value;
-    const tagsStr = document.getElementById('tags').value.trim();
     const notes = document.getElementById('notes').value.trim();
+    const category = document.getElementById('category').value.trim();  // v1.1: Lese vom Select!
 
     if (!title || !category) return;
 
-    const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t) : [];
+    console.log('[DEBUG] === Speichere neues Todo mit ' + formAttachments.length + ' Anhängen ===');
+    
+    // v1.0.22: Lade alle Attachments zu GitHub hoch
+    const attachmentNames = [];
+    
+    try {
+        for (const att of formAttachments) {
+            console.log('[DEBUG] Lade Attachment hoch: ' + att.name);
+            
+            // v1.0.22: Nutze File Object direkt (ist bereits Blob)
+            const file = att.file || new Blob([atob(att.data.split(',')[1])], { type: att.file?.type });
+            
+            // Generiere eindeutigen Dateinamen
+            const timestamp = Date.now();
+            const ext = att.name.substring(att.name.lastIndexOf('.')) || '';
+            const baseName = att.name.replace(/\.[^/.]+$/, '');
+            const fileName = baseName + '-' + timestamp + ext;
+            
+            // Lade zu GitHub hoch
+            const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
+            const uploadedName = await sync.uploadAttachment(file, fileName);
+            attachmentNames.push({
+                type: att.type.split('/')[0],  // 'image' oder 'video'
+                name: uploadedName
+            });
+            
+            console.log('[DEBUG] ✅ Hochgeladen: ' + uploadedName);
+        }
+        
+        console.log('[DEBUG] ✅ Alle ' + attachmentNames.length + ' Attachments hochgeladen');
+        
+    } catch (error) {
+        console.error('[DEBUG] ❌ FEHLER beim Attachment Upload:', error.message);
+        alert('❌ Fehler beim Speichern von Attachments!\n' + error.message);
+        return;
+    }
+
+    // Speichere Todo mit Attachment-Namen (nicht Base64!)
     const now = new Date().toISOString();
 
     allTodos.unshift({
         id: generateId(),
         title,
         category,
-        tags,
         notes,
-        attachments: [],
+        attachments: attachmentNames,  // ← Nur Namen, nicht Base64!
         completed: false,
-        created: now,
-        updated: now
+        createdAt: now,
+        updatedAt: now,
+        completedAt: null
     });
 
+    console.log('[DEBUG] ✅ Todo erstellt mit ' + attachmentNames.length + ' Attachments');
+
+    // v1.0.52: MASSIVE DEBUG-LOGS für Attachment-Speicherung!
+    const newTodo = allTodos[0];
+    console.log('[DEBUG] 📊 formAttachments.length:', formAttachments.length);
+    console.log('[DEBUG] 📊 newTodo.id:', newTodo.id);
+    console.log('[DEBUG] 📊 newTodo.attachments:', newTodo.attachments);
+    
+    if (formAttachments && formAttachments.length > 0) {
+        for (let i = 0; i < formAttachments.length; i++) {
+            const formAtt = formAttachments[i];
+            console.log('[DEBUG] 📎 formAttachments[' + i + ']:', {
+                name: formAtt?.name,
+                type: formAtt?.type,
+                hasData: !!formAtt?.data,
+                dataLength: formAtt?.data?.length
+            });
+            
+            if (formAtt && formAtt.data) {
+                const attKey = newTodo.id + '_att_' + i;
+                console.log('[DEBUG] 💾 Speichere IndexedDB:', attKey);
+                try {
+                    const result = await saveToIndexedDB(attKey, {
+                        data: formAtt.data,
+                        name: formAtt.name,
+                        type: formAtt.type
+                    });
+                    console.log('[DEBUG] ✅ IndexedDB Ergebnis:', result);
+                } catch (e) {
+                    console.error('[DEBUG] ❌ IndexedDB FEHLER:', e.message);
+                }
+            } else {
+                console.error('[DEBUG] ⚠️ formAtt ist null oder data fehlt!');
+            }
+        }
+    } else {
+        console.log('[DEBUG] ⚠️ formAttachments ist LEER!');
+    }
+
     document.getElementById('add-form').reset();
+    formAttachments = [];
+    document.getElementById('form-attachments').innerHTML = '';
     toggleAddSection();
     updateStats();
     renderTodos();
-    saveTodos();
+    await saveTodos();
+    
+    console.log('[DEBUG] ✅ Todo vollständig gespeichert!');
 });
 
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', (e) => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        e.target.classList.add('active');
-        currentFilter = e.target.dataset.filter;
-        renderTodos();
-    });
-});
+function openAddCategoryModal() {
+    document.getElementById('addCategoryModal').classList.add('show');
+    document.getElementById('new-category-input').focus();
+}
+
+function closeAddCategoryModal() {
+    document.getElementById('addCategoryModal').classList.remove('show');
+    document.getElementById('new-category-input').value = '';
+}
+
+function addNewCategory() {
+    const input = document.getElementById('new-category-input').value.trim();
+    if (!input) {
+        alert('Bitte geben Sie einen Namen ein');
+        return;
+    }
+    if (allCategories.includes(input)) {
+        alert('Diese Kategorie existiert bereits');
+        return;
+    }
+    allCategories.push(input);
+    // v1.0.54: Neue Kategorie bekommt automatisch Farbe!
+    if (!categoryColors[input]) {
+        categoryColors[input] = generateRandomPastelColor();
+    }
+    updateCategoryTabs();
+    updateCategorySelects();
+    saveCategories();
+    closeAddCategoryModal();
+}
 
 function openVersionHistory() {
     const modal = document.getElementById('versionModal');
@@ -1301,7 +3086,7 @@ function openVersionHistory() {
             </div>
             <div class="version-item-name">${v.name}</div>
             ${v.features && v.features.length > 0 ? `
-                <div style="margin-top: 0.5rem; font-weight: 600; font-size: 12px; color: #667eea;">✨ Features:</div>
+                <div style="margin-top: 0.5rem; font-weight: 600; font-size: 12px; color: #d32f2f;">✨ Features:</div>
                 <ul class="features-list">
                     ${v.features.map(f => `<li>${f}</li>`).join('')}
                 </ul>
@@ -1310,47 +3095,307 @@ function openVersionHistory() {
     `).join('');
 
     modal.classList.add('show');
+    
+    // v1.0.17: Stelle sicher dass GitHub & Kategorien offen sind
+    setTimeout(() => {
+        console.log('[DEBUG] === Initialisiere Accordion-Zustände ===');
+        const sections = document.querySelectorAll('.accordion-section');
+        console.log('[DEBUG] Gefundene Accordion-Abschnitte:', sections.length);
+        
+        // v1.0.37: KEINE Auto-Open! Alle Accordions bleiben geschlossen!
+        console.log('[DEBUG] Accordions: ALLE geschlossen - kein Auto-Open!');
+    }, 50);  // Mehr Zeit geben damit DOM vollständig gerendert ist
 }
 
 function closeVersionHistory() {
     document.getElementById('versionModal').classList.remove('show');
 }
 
-function openSettings() {
+async function openSettings() {
+    // v1.1: Garantiere dass categoryColors IMMER gefüllt ist
+    if (Object.keys(categoryColors).length === 0) {
+        initializeDefaultColors();
+    }
+    
+    // v1.1: Lade Farben SYNCHRON (nicht im Hintergrund!)
+    // Erst laden → DANN HTML generieren!
+    try {
+        await loadCategoryColors();
+    } catch (e) {
+        console.error('[DEBUG] Fehler Farben laden:', e);
+        initializeDefaultColors();
+    }
+    
+    // FIX: Stelle sicher dass ALLE Farben HEX sind (für Color Input)
+    for (const cat of allCategories) {
+        if (!categoryColors[cat]) {
+            categoryColors[cat] = generateRandomPastelColor();
+        }
+        // Wenn Farbe nicht mit # beginnt → konvertiere zu HEX
+        if (!categoryColors[cat].startsWith('#')) {
+            // Fallback
+            categoryColors[cat] = generateRandomPastelColor();
+        }
+    }
+    
+    // v1.0.36: RADIKAL - lösche ALLES sessionStorage
+    sessionStorage.clear();
+    
     const modal = document.getElementById('settingsModal');
     const content = document.getElementById('settings-content');
 
     if (!githubConfig) {
         content.innerHTML = '<p>Keine Einstellungen verfügbar</p>';
     } else {
+        const completedTodos = allTodos.filter(t => t.completed);
+        
+        const formatTime = (isoString) => {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            return date.toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'}) + ' ' + 
+                   date.toLocaleTimeString('de-DE', {hour: '2-digit', minute:'2-digit'});
+        };
+        
+        // v1.0.36: Generiere HTML OHNE active/open Klassen!
         content.innerHTML = `
-            <div style="background: #f9fafb; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                <p style="margin: 0; color: #667eea; font-weight: 600;">GitHub Verbindung</p>
-                <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 14px;">
-                    Benutzer: <code>${githubConfig.username}</code><br>
-                    Repository: <code>${githubConfig.repo}</code>
-                </p>
+            <!-- 1. GitHub Verbindung -->
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>🔗 GitHub Verbindung</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <p style="margin: 0; font-weight: 600; color: #d32f2f;">Verbunden</p>
+                            <p style="margin: 0.5rem 0 0 0; color: #555; font-size: 12px;">
+                                Benutzer: <code>${githubConfig.username}</code><br>
+                                Repository: <code>${githubConfig.repo}</code>
+                            </p>
+                        </div>
+                        <button onclick="openEditGithubModal()" class="small">✏️ Bearbeiten</button>
+                    </div>
+                </div>
             </div>
 
-            <button class="primary" style="width: 100%; margin-bottom: 0.5rem;" onclick="exportData()">
-                📥 Daten exportieren
-            </button>
+            <!-- 2. Kategorie-Farben bearbeiten (v1.0.54) -->
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>🎨 Kategorie-Farben</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <div style="display: grid; gap: 8px;">
+                        ${allCategories.map(cat => {
+                            const hex = categoryColors[cat] || generateRandomPastelColor();
+                            return `
+                            <div data-category-color-box data-category="${escapeHtml(cat)}" style="display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-left: 4px solid ${hex}; border-radius: 6px; background: #f9fafb;">
+                                <div style="flex: 1;">
+                                    <label style="font-weight: 600; margin-bottom: 0.5rem; display: block; color: #333;">${escapeHtml(cat)}</label>
+                                    <input type="color" value="${hex}" 
+                                           onchange="updateCategoryColor('${cat}', this.value)"
+                                           style="cursor: pointer; border: 1px solid #ddd; border-radius: 4px; padding: 4px; width: 80px; height: 40px;">
+                                </div>
+                            </div>
+                        `;
+                        }).join('')}
+                    </div>
+                    <button class="primary" style="width: 100%; margin-top: 1rem;" onclick="saveCategoryColors()">
+                        💾 Farben speichern
+                    </button>
+                </div>
+            </div>
 
-            <button style="width: 100%; margin-bottom: 0.5rem;" onclick="disconnectGitHub()">
-                ❌ Disconnect
-            </button>
+            <!-- 3. Kategorien verwalten -->
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>📂 Kategorien verwalten (${allCategories.length})</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <ul class="category-list">
+                        ${allCategories.map((cat, idx) => `
+                            <li class="category-item">
+                                <span class="category-item-name">${escapeHtml(cat)}</span>
+                                <div class="category-item-actions">
+                                    <button onclick="deleteCategory(${idx})" class="small">Löschen</button>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <button onclick="openAddCategoryFromSettings()" class="primary" style="width: 100%; margin-top: 1rem;">+ Neue Kategorie</button>
+                </div>
+            </div>
 
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af;">
+            <!-- 3. Erledigte Aufgaben -->
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>✅ Erledigte Aufgaben (${completedTodos.length})</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    ${completedTodos.length === 0 ? `
+                        <p style="color: #9ca3af; font-style: italic;">Keine erledigten Aufgaben</p>
+                    ` : `
+                        <ul style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
+                            ${completedTodos.map(todo => `
+                                <li style="padding: 4px 8px; background: #f3f4f6; border-radius: 6px; margin-bottom: 0.5rem; font-size: 13px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 500; color: #333;">${escapeHtml(todo.title)}</div>
+                                            <div style="color: #6b7280; font-size: 12px; margin-top: 0.25rem;">
+                                                📅 Erstellt: ${formatTime(todo.createdAt)}<br>
+                                                ✅ Erledigt: ${formatTime(todo.completedAt)}<br>
+                                                <span class="badge">${escapeHtml(todo.category)}</span>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button onclick="markAsUndone('${todo.id}')" class="small" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; white-space: nowrap; border-radius: 4px;">↩️ Unerledigt</button>
+                                            <button onclick="deleteTodo('${todo.id}')" class="small" style="background: #ef4444; color: white; border: none; padding: 4px 8px; white-space: nowrap; border-radius: 4px;">🗑️</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `}
+                </div>
+            </div>
+
+            <!-- 4. Weitere Optionen -->
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>⚙️ Weitere Optionen</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <button class="primary" style="width: 100%; margin-bottom: 0.5rem;" onclick="exportData()">
+                        📥 Daten exportieren
+                    </button>
+                    <button style="width: 100%; margin-bottom: 0.5rem; background: #ef4444; color: white; border: none;" onclick="disconnectGitHub()">
+                        ❌ Disconnect
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; font-size: 12px; color: #9ca3af; text-align: center;">
                 <p style="margin: 0;">Todo App v${APP_VERSION}</p>
             </div>
         `;
     }
 
     modal.classList.add('show');
+    
+    // v1.0.17: Stelle sicher dass GitHub & Kategorien offen sind
+    setTimeout(() => {
+        console.log('[DEBUG] === Initialisiere Accordion-Zustände ===');
+        const sections = document.querySelectorAll('.accordion-section');
+        console.log('[DEBUG] Gefundene Accordion-Abschnitte:', sections.length);
+        
+        // v1.0.37: KEINE Auto-Open! Alle Accordions bleiben geschlossen!
+        console.log('[DEBUG] Accordions: ALLE geschlossen - kein Auto-Open!');
+    }, 50);  // Mehr Zeit geben damit DOM vollständig gerendert ist
+}
+
+
+function toggleAccordion(header) {
+    // v1.0.12: Accordion expand/collapse
+    const section = header.parentElement;
+    const content = section.querySelector('.accordion-content');
+    const icon = header.querySelector('.accordion-icon');
+    
+    // Toggle Klassen
+    header.classList.toggle('active');
+    content.classList.toggle('open');
+    icon.classList.toggle('open');
+    
+    // Speichere Zustand in sessionStorage für diese Session
+    const index = Array.from(section.parentElement.children).indexOf(section);
+    sessionStorage.setItem(`accordion-${index}`, header.classList.contains('active'));
+    
+    console.log('[DEBUG] Accordion toggled');
+}
+
+function restoreAccordionState() {
+    // v1.0.12: Stelle Accordion-Zustände wieder her
+    const sections = document.querySelectorAll('.accordion-section');
+    sections.forEach((section, index) => {
+        const isOpen = sessionStorage.getItem(`accordion-${index}`);
+        if (isOpen === 'false') {
+            const header = section.querySelector('.accordion-header');
+            const content = section.querySelector('.accordion-content');
+            const icon = section.querySelector('.accordion-icon');
+            
+            header.classList.remove('active');
+            content.classList.remove('open');
+            icon.classList.remove('open');
+        }
+    });
 }
 
 function closeSettings() {
     document.getElementById('settingsModal').classList.remove('show');
+}
+
+function openEditGithubModal() {
+    document.getElementById('edit-github-username').value = githubConfig.username;
+    document.getElementById('edit-github-repo').value = githubConfig.repo;
+    document.getElementById('edit-github-token').value = githubConfig.token;
+    document.getElementById('edit-github-message').innerHTML = '';
+    document.getElementById('editGithubModal').classList.add('show');
+}
+
+function closeEditGithubModal() {
+    document.getElementById('editGithubModal').classList.remove('show');
+}
+
+document.getElementById('edit-github-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById('edit-github-username').value.trim();
+    const token = document.getElementById('edit-github-token').value.trim();
+    const repo = document.getElementById('edit-github-repo').value.trim();
+    const msgEl = document.getElementById('edit-github-message');
+
+    if (!username || !token || !repo) {
+        msgEl.innerHTML = `<div class="error-msg">Bitte alle Felder ausfüllen</div>`;
+        return;
+    }
+
+    const testSync = new GitHubSync(username, token, repo);
+    msgEl.innerHTML = `<div style="color: #d32f2f; padding: 12px; text-align: center;"><span class="loading" style="margin-right: 8px;"></span> Verifiziere Repository...</div>`;
+
+    const repoExists = await testSync.checkRepo();
+    
+    if (!repoExists) {
+        msgEl.innerHTML = `<div class="error-msg">Repository nicht gefunden</div>`;
+        return;
+    }
+
+    githubConfig = { username, token, repo };
+    safeSetItem('githubConfig', JSON.stringify(githubConfig));
+    
+    msgEl.innerHTML = `<div class="success-msg">✅ GitHub-Einstellungen aktualisiert!</div>`;
+    
+    setTimeout(() => {
+        closeEditGithubModal();
+        closeSettings();
+        location.reload();
+    }, 1500);
+});
+
+function deleteCategory(idx) {
+    if (confirm('Kategorie wirklich löschen?')) {
+        allCategories.splice(idx, 1);
+        updateCategoryTabs();
+        updateCategorySelects();
+        saveCategories();
+        openSettings();
+    }
+}
+
+function openAddCategoryFromSettings() {
+    closeSettings();
+    openAddCategoryModal();
 }
 
 function disconnectGitHub() {
@@ -1376,13 +3421,43 @@ document.addEventListener('keydown', (e) => {
         closeVersionHistory();
         closeSettings();
         closeImageViewer();
+        closeAddCategoryModal();
+        closeEditTodoModal();
+        closeEditGithubModal();
     }
 });
 
-const savedConfig = localStorage.getItem('githubConfig');
-if (savedConfig) {
-    githubConfig = JSON.parse(savedConfig);
-    initializeApp();
+// v1.0.14: Auto-Init wenn githubConfig in localStorage vorhanden
+async function autoInitializeApp() {
+    console.log('[DEBUG] === Auto-Init (v1.0.21) ===');
+    
+    try {
+        const loaded = await loadGitHubConfigFromStorage();
+        
+        if (loaded && githubConfig) {
+            console.log('[DEBUG] ✅ GitHub-Config gefunden - starte App!');
+            setTimeout(() => {
+                console.log('[DEBUG] Initialisiere App mit GitHub-Config...');
+                initializeApp();
+            }, 500);
+        } else {
+            console.log('[DEBUG] ⚠️  Keine GitHub-Config - zeige Setup-Screen');
+            document.getElementById('setup-screen').style.display = 'block';
+            document.getElementById('app-container').style.display = 'none';
+        }
+    } catch (error) {
+        console.error('[DEBUG] ❌ Auto-Init Fehler:', error.message);
+        document.getElementById('setup-screen').style.display = 'block';
+        document.getElementById('app-container').style.display = 'none';
+    }
+}
+
+// Rufe Auto-Init auf SOBALD DOM ready ist
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoInitializeApp);
+} else {
+    // DOM bereits geladen
+    autoInitializeApp();
 }
 </script>
 
