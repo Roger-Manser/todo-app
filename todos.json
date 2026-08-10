@@ -23,10 +23,10 @@
         "file": null
       }
     ],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-08-10T04:51:37.932Z",
-    "updatedAt": "2026-08-10T04:51:37.932Z",
-    "completedAt": null,
+    "updatedAt": "2026-08-10T05:01:28.073Z",
+    "completedAt": "2026-08-10T05:01:28.073Z",
     "updated": "2026-08-10T04:59:05.754Z"
   },
   {
@@ -46,9 +46,9 @@
     "category": "Geschäftlich",
     "notes": "d ada fda d",
     "attachments": [],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-08-09T23:32:46.132Z",
-    "updatedAt": "2026-08-09T23:32:46.132Z",
-    "completedAt": null
+    "updatedAt": "2026-08-10T05:00:37.865Z",
+    "completedAt": "2026-08-10T05:00:37.865Z"
   }
 ]
