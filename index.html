@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.4 - GitHub Sync</title>
+    <title>Todo App v1.4.4 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1.4a1a;
+            background: #1a1a1a;
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -30,37 +30,41 @@
         }
 
         .header {
-            background: #1.4a1a;
+            background: #1a1a1a;
             color: white;
-            padding: 10px 16px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             border-bottom: 1px solid #000;
+            min-height: auto;
         }
 
         .header-left {
             display: flex;
             align-items: center;
             gap: 8px;
+            min-width: 0;  /* Erlaubt Wrapping */
         }
 
         .header h1 {
             font-size: 12px;
             margin: 0;
             font-weight: 500;
+            white-space: nowrap;
         }
 
         .version-badge {
             background: rgba(255,255,255,0.2);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            white-space: nowrap;
         }
 
         .version-badge:hover {
@@ -68,41 +72,59 @@
         }
 
         .sync-status {
-            font-size: 12px;
-            padding: 6px 12px;
+            font-size: 11px;
+            padding: 4px 10px;
             background: rgba(255,255,255,0.2);
-            border-radius: 20px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
+            white-space: nowrap;
         }
 
         .sync-status.synced::before {
             content: '';
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: #4ade80;
             border-radius: 50%;
         }
 
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 6px;
+            flex-shrink: 0;  /* Verhindert Stauchung */
         }
 
         .header-actions button {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 6px;
+            padding: 8px 12px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
             transition: all 0.3s;
+            border: none;
+            white-space: nowrap;
         }
 
-        .header-actions button:hover {
-            background: rgba(255,255,255,0.3);
+        .header-actions button:first-child {
+            background: #d32f2f;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(211, 47, 47, 0.3);
+        }
+
+        .header-actions button:first-child:hover {
+            background: #b71c1c;
+        }
+
+        .header-actions button:nth-child(2) {
+            background: #f0f0f0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .header-actions button:nth-child(2):hover {
+            background: #e0e0e0;
         }
 
         /* v1.0.66: Stats im Header */
@@ -187,7 +209,7 @@
         .form-group input:focus {
             outline: none;
             border-color: #d32f2f;
-            box-shadow: 0 0 0 3px rgba(1.4, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(1.4.1, 126, 234, 0.1);
         }
 
         .form-help {
@@ -337,14 +359,14 @@
         }
 
         button.primary {
-            background: #1.4a1a;
+            background: #1a1a1a;
             color: white;
             border: none;
         }
 
         button.primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(1.4, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(1.4.1, 126, 234, 0.3);
         }
 
         button.small {
@@ -501,7 +523,7 @@
             font-size: 11px;
             font-weight: 500;
             background: #dbeafe;
-            color: #1e40af;
+            color: #1.4.10af;
         }
 
         .timestamp {
@@ -527,13 +549,13 @@
             border-radius: 4px;
             background: #f0f9ff;
             border: 1px solid #bfdbfe;
-            color: #1e40af;
+            color: #1.4.10af;
             transition: all 0.3s;
         }
 
         .attachment-icon:hover {
             background: #dbeafe;
-            transform: scale(1.4);
+            transform: scale(1.4.1);
         }
 
         .todo-note {
@@ -696,7 +718,7 @@
 
         .error-msg {
             background: #fee2e2;
-            color: #991.4b;
+            color: #991.4.1b;
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 1rem;
@@ -903,11 +925,11 @@
             padding-top: calc(1rem - 3px);
         }
 </style>
-<!-- v1.4: App Icons & Manifest -->
+<!-- v1.4.1: App Icons & Manifest -->
 <link rel="icon" type="image/png" href="todo-icon.png">
 <link rel="apple-touch-icon" href="todo-icon.png">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1.4a1a">
+<meta name="theme-color" content="#1a1a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Todo">
@@ -918,7 +940,7 @@
     <div class="header">
         <div class="header-left">
             <h1>📝 Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.4</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.4.1</div>
         </div>
         <!-- v1.0.66: Stats im Header -->
         <div class="header-stats">
@@ -936,8 +958,8 @@
             </div>
         </div>
         <div class="header-actions">
-            <button onclick="toggleAddSection()" style="background: white; color: #d32f2f; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">✏️ Neue Aufgabe</button>
-            <button onclick="openSettings()">⚙️ Einstellungen</button>
+            <button onclick="toggleAddSection()" style="background: #d32f2f; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);">✏️ Neue Aufgabe</button>
+            <button onclick="openSettings()" style="background: #f0f0f0; color: #333; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px;">⚙️ Einstellungen</button>
             <div class="sync-status synced" id="sync-status">GitHub Sync</div>
         </div>
     </div>
@@ -1008,7 +1030,7 @@
                         </select>
                     </div>
 
-                    <!-- v1.4: Wiederkehrende Todos -->
+                    <!-- v1.4.1: Wiederkehrende Todos -->
                     <div class="form-group">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <input type="checkbox" id="recurring" style="width: 16px; height: 16px; cursor: pointer;">
@@ -1064,7 +1086,7 @@
     </div>
 </div>
 
-<!-- Kamera Modal (v1.4: WebRTC ECHTE KAMERA!) -->
+<!-- Kamera Modal (v1.4.1: WebRTC ECHTE KAMERA!) -->
 <div id="cameraModal" class="modal" style="z-index: 2000;">
     <div class="modal-content" style="max-width: 500px;">
         <div class="modal-header">
@@ -1213,13 +1235,49 @@
 </div>
 
 <script>
-const APP_VERSION = '1.4';
+const APP_VERSION = '1.4.4';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.4.4',
+        releaseDate: '2026-08-10',
+        name: 'Order/Priority System 🎯',
+        features: [
+            '🔢 Jedes Todo bekommt eindeutige Order-Nummer',
+            '⬆️ Neue Todos: max(order) + 1 (oben wenn keine aktiven Todos)',
+            '🔄 Wiederkehrend reaktiviert: order = 1.0 (oben)',
+            '📍 Drag & Drop: Neue Order = (nächstesTodo - 0.5)',
+            '♻️ Nach Completion: Reset auf 1.0 wenn keine Todos mehr'
+        ]
+    },
+    {
+        version: '1.4.2',
+        releaseDate: '2026-08-10',
+        name: 'Responsive Header',
+        features: [
+            '📱 Header ist jetzt responsive und kompakt',
+            '🔴 Add-Button prominent in Rot/Weiß',
+            '⚙️ Settings-Button grau (sekundär)',
+            '✨ Alle Elemente bleiben sichtbar',
+            '📊 Stats, Version, Sync-Status im Header'
+        ]
+    },
+    {
+        version: '1.4.1',
+        releaseDate: '2026-08-10',
+        name: 'Sichtbarer Add-Button',
+        features: [
+            '✏️ Add-Button in Rot mit White Text',
+            '💪 Box-Shadow für Hervorhebung',
+            '🎯 Call-to-Action Design',
+            '📱 Große Padding und Font-Size',
+            '👁️ Deutlich sichtbar im Header'
+        ]
+    },
     {
         version: '1.4',
         releaseDate: '2026-08-10',
@@ -1230,6 +1288,42 @@ const VERSION_HISTORY = [
             '✅ Nach Abhaken: nächstes Datum berechnet, verschwindet bis dahin',
             '📍 Automatische Rückkehr: Todo erscheint wieder oben',
             '🎯 Perfekt für regelmäßige Aufgaben (Pflanzen, Putzen, etc.)'
+        ]
+    },
+    {
+        version: '1.3',
+        releaseDate: '2026-08-10',
+        name: 'Spracheingabe für Notizen',
+        features: [
+            '🎤 Mikrofon-Button für Titel + Notizen',
+            '🗣️ Deutsch-Spracherkennung überall',
+            '✍️ Notizen-Text wird angefügt (nicht überschrieben)',
+            '✨ Live Recording-Status für beide Felder',
+            '📝 Titel ersetzen, Notizen ergänzen'
+        ]
+    },
+    {
+        version: '1.2',
+        releaseDate: '2026-08-10',
+        name: 'Web Speech API - Spracherkennung',
+        features: [
+            '🎤 Spracherkennung mit Mikrofon-Button',
+            '🗣️ Deutsch-Sprache unterstützt',
+            '✨ Automatischer Text im Titel-Feld',
+            '📱 Funktioniert auf Desktop + Mobile',
+            '⚡ Live Recording-Status anzeigen'
+        ]
+    },
+    {
+        version: '1.1',
+        releaseDate: '2026-08-10',
+        name: 'Swiss Minimalist Design + PWA',
+        features: [
+            '🎨 Swiss Minimalist: Schwarz-Header + Rot-Akzent',
+            '📏 Extrem kompakt: 8px Padding, 12px Fonts',
+            '✨ Elegante Reduktion ohne Funktionsverlust',
+            '📱 PWA Icon + Manifest',
+            '✅ Installierbar auf Desktop + Mobile'
         ]
     },
     {
@@ -1893,7 +1987,7 @@ async function initializeApp() {
     console.log('[DEBUG] ✅ App bereit!');
 }
 
-// ===== v1.4: WIEDERKEHRENDE TODOS =====
+// ===== v1.4.1: WIEDERKEHRENDE TODOS =====
 document.addEventListener('DOMContentLoaded', () => {
     // Event Listener für Recurring Checkbox
     const recurringCheckbox = document.getElementById('recurring');
@@ -1989,7 +2083,7 @@ function updateCategoryColor(category, hexColor) {
     categoryColors[category] = hexColor;
     console.log('[DEBUG] Farbe aktualisiert:', category, hexColor);
     
-    // v1.4: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
+    // v1.4.1: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
     // Finde die entsprechende Farb-Box für diese Kategorie
     const colorBoxes = document.querySelectorAll('[data-category-color-box]');
     colorBoxes.forEach(box => {
@@ -2178,12 +2272,12 @@ function updateCategoryTabs() {
 }
 
 function updateCategorySelects() {
-    // v1.4: Füllle die Kategorie-Selects dynamisch!
+    // v1.4.1: Füllle die Kategorie-Selects dynamisch!
     populateCategorySelects();
 }
 
 function renderTodos() {
-    // v1.4: Wiederkehrende Todos berücksichtigen
+    // v1.4.1: Wiederkehrende Todos berücksichtigen
     const today = new Date().toISOString().split('T')[0];  // YYYY-MM-DD
     
     // v1.0.39: Accordion-Style Expand in der Übersicht - nur Titel beim Start
@@ -2195,7 +2289,7 @@ function renderTodos() {
             return todo.category === currentFilter;
         }
         
-        // v1.4: Wiederkehrende erledigte Todos: Zeige wieder wenn nextDueDate erreicht
+        // v1.4.1: Wiederkehrende erledigte Todos: Zeige wieder wenn nextDueDate erreicht
         if (todo.recurring && todo.nextDueDate && todo.nextDueDate <= today) {
             if (currentFilter === 'all') return true;
             if (currentFilter === 'active') return true;
@@ -2205,9 +2299,17 @@ function renderTodos() {
         return false;
     });
 
+    // v1.4.4: Sortiere nach createdAt (älteste zuerst)
+    const sorted = filtered.sort((a, b) => {
+        // v1.4.4: Sortiere nach order (nicht createdAt)
+        const orderA = a.order || 999999;  // Fallback für alte Todos
+        const orderB = b.order || 999999;
+        return orderA - orderB;  // Aufsteigend: kleinste order zuerst
+    });
+
     const container = document.getElementById('todos-container');
 
-    if (filtered.length === 0) {
+    if (sorted.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
                 <p><i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 1rem; display: block;"></i></p>
@@ -2219,7 +2321,7 @@ function renderTodos() {
 
     container.innerHTML = `
         <div class="todos-list">
-            ${filtered.map((todo, index) => `
+            ${sorted.map((todo, index) => `
                 <div class="todo-accordion" id="todo-${todo.id}" style="background: ${getCategoryColor(todo.category)}; border-left: 4px solid ${getCategoryColorBorder(todo.category)}; border-radius: 8px; overflow: hidden;">
                     <!-- Header: Nur Titel + Checkbox -->
                     <div class="todo-header" onclick="toggleTodoExpand('${todo.id}')">
@@ -2427,14 +2529,12 @@ function setupDragAndDrop() {
             const targetTodo = allTodos.find(t => t.id === todoEl.id.replace('todo-', ''));
             
             if (draggedTodo && targetTodo) {
-                // v1.0.59: Vertausche Position im Array
-                const draggedIndex = allTodos.indexOf(draggedTodo);
-                const targetIndex = allTodos.indexOf(targetTodo);
+                // v1.4.4: Ändere order statt Array-Position zu tauschen
+                const newOrder = targetTodo.order - 0.5;
+                draggedTodo.order = newOrder;
+                draggedTodo.updatedAt = new Date().toISOString();
                 
-                // Tausche
-                [allTodos[draggedIndex], allTodos[targetIndex]] = [allTodos[targetIndex], allTodos[draggedIndex]];
-                
-                console.log('[DEBUG] ✅ Priorität geändert:', draggedTodo.title);
+                console.log('[DEBUG] ✅ Order geändert: ' + draggedTodo.title + ' → ' + newOrder);
                 
                 saveTodos();
                 renderTodos();
@@ -2477,14 +2577,14 @@ function toggleAddSection() {
     const section = document.getElementById('add-section');
     section.classList.toggle('open');
     if (section.classList.contains('open')) {
-        // v1.4: Füllle Kategorie-Select dynamisch!
+        // v1.4.1: Füllle Kategorie-Select dynamisch!
         populateCategorySelects();
         // v1.0.72: Focus auf title
         document.getElementById('title').focus();
     }
 }
 
-// v1.4: Dynamisches Füllen der Kategorie-Selects
+// v1.4.1: Dynamisches Füllen der Kategorie-Selects
 function populateCategorySelects() {
     const categorySelect = document.getElementById('category');
     const editCategorySelect = document.getElementById('edit-category');
@@ -2507,7 +2607,7 @@ function populateCategorySelects() {
 
 function attachFileInForm(source) {
     if (source === 'camera') {
-        // v1.4: ECHTE Kamera mit WebRTC!
+        // v1.4.1: ECHTE Kamera mit WebRTC!
         currentCameraContext = 'form';
         openCameraModal();
     } else {
@@ -2533,7 +2633,7 @@ function attachFileInForm(source) {
 
 function attachFileInEdit(source) {
     if (source === 'camera') {
-        // v1.4: ECHTE Kamera mit WebRTC!
+        // v1.4.1: ECHTE Kamera mit WebRTC!
         currentCameraContext = 'edit';
         openCameraModal();
     } else {
@@ -2561,7 +2661,7 @@ function attachFile(source, callback) {
     const input = document.createElement('input');
     input.type = 'file';
     
-    // v1.4: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
+    // v1.4.1: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
     if (source === 'camera') {
         input.accept = 'image/*,video/*';
         input.capture = 'environment';  // Browser erkennt das
@@ -2592,7 +2692,7 @@ function attachFile(source, callback) {
     input.click();
 }
 
-// ===== v1.4: WebRTC ECHTE KAMERA! =====
+// ===== v1.4.1: WebRTC ECHTE KAMERA! =====
 let currentCameraContext = null;  // 'form' oder 'edit'
 let cameraStream = null;
 
@@ -2768,7 +2868,7 @@ function toggleTodo(id) {
         if (todo.completed) {
             todo.completedAt = now;
             
-            // v1.4: Wiederkehrende Todos: Berechne nächstes DueDate
+            // v1.4.1: Wiederkehrende Todos: Berechne nächstes DueDate
             if (todo.recurring && todo.recurringInterval) {
                 todo.nextDueDate = calculateNextDueDate(todo.recurringInterval);
                 console.log('[DEBUG] 🔄 Wiederkehrend: Nächstes Datum:', todo.nextDueDate);
@@ -2776,6 +2876,12 @@ function toggleTodo(id) {
         } else {
             // Wenn wieder aktiviert: completedAt zurücksetzen
             todo.completedAt = null;
+            
+            // v1.4.4: Wiederkehrend Todo reaktiviert → order = 1.0
+            if (todo.recurring) {
+                todo.order = 1.0;
+                console.log('[DEBUG] 🔄 Wiederkehrend reaktiviert: order = 1.0');
+            }
         }
         
         updateStats();
@@ -2912,7 +3018,7 @@ function openEditTodoModal(id) {
     
     editAttachments = JSON.parse(JSON.stringify(currentEditingTodo.attachments || []));
     
-    // v1.4: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
+    // v1.4.1: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
     populateCategorySelects();
     
     // v1.0.72: Setze Titel und Notizen
@@ -2938,7 +3044,7 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
     // v1.0.72: Lese Titel und Notizen vom Input
     currentEditingTodo.title = document.getElementById('edit-title').value.trim();
     currentEditingTodo.notes = document.getElementById('edit-notes').value.trim();
-    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.4: Lese Kategorie vom Select!
+    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.4.1: Lese Kategorie vom Select!
     currentEditingTodo.attachments = editAttachments;
     currentEditingTodo.updated = new Date().toISOString();
     
@@ -3044,7 +3150,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     // v1.0.72: Lese Titel und Notizen vom Input
     const title = document.getElementById('title').value.trim();
     const notes = document.getElementById('notes').value.trim();
-    const category = document.getElementById('category').value.trim();  // v1.4: Lese vom Select!
+    const category = document.getElementById('category').value.trim();  // v1.4.1: Lese vom Select!
 
     if (!title || !category) return;
 
@@ -3085,10 +3191,29 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
         return;
     }
 
-    // Speichere Todo mit Attachment-Namen (nicht Base64!)
+// ===== v1.4.4: ORDER/PRIORITY SYSTEM =====
+function calculateNewOrder() {
+    // Finde alle aktiven (nicht-erledigten) Todos
+    const activeTodos = allTodos.filter(todo => !todo.completed);
+    
+    if (activeTodos.length === 0) {
+        // Keine aktiven Todos mehr → Reset auf 1.0
+        console.log('[DEBUG] 🔄 Keine aktiven Todos - Reset Order auf 1.0');
+        return 1.0;
+    }
+    
+    // Finde höchste Order
+    const maxOrder = Math.max(...activeTodos.map(t => t.order || 0));
+    const newOrder = maxOrder + 1;
+    
+    console.log('[DEBUG] 📊 Neue Order: ' + newOrder + ' (max war: ' + maxOrder + ')');
+    return newOrder;
+}
+
+// Speichere Todo mit Attachment-Namen (nicht Base64!)
     const now = new Date().toISOString();
 
-    allTodos.unshift({
+    allTodos.push({
         id: generateId(),
         title,
         category,
@@ -3098,10 +3223,12 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
         createdAt: now,
         updatedAt: now,
         completedAt: null,
-        // v1.4: Wiederkehrende Todos
+        // v1.4.1: Wiederkehrende Todos
         recurring: document.getElementById('recurring').checked,
         recurringInterval: getRecurringInterval(),
-        nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null
+        nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null,
+        // v1.4.4: Order für Sortierung
+        order: calculateNewOrder()
     });
 
     console.log('[DEBUG] ✅ Todo erstellt mit ' + attachmentNames.length + ' Attachments');
@@ -3144,7 +3271,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     }
 
     document.getElementById('add-form').reset();
-    document.getElementById('recurring-settings').style.display = 'none';  // v1.4: Reset Recurring
+    document.getElementById('recurring-settings').style.display = 'none';  // v1.4.1: Reset Recurring
     formAttachments = [];
     document.getElementById('form-attachments').innerHTML = '';
     toggleAddSection();
@@ -3224,12 +3351,12 @@ function closeVersionHistory() {
 }
 
 async function openSettings() {
-    // v1.4: Garantiere dass categoryColors IMMER gefüllt ist
+    // v1.4.1: Garantiere dass categoryColors IMMER gefüllt ist
     if (Object.keys(categoryColors).length === 0) {
         initializeDefaultColors();
     }
     
-    // v1.4: Lade Farben SYNCHRON (nicht im Hintergrund!)
+    // v1.4.1: Lade Farben SYNCHRON (nicht im Hintergrund!)
     // Erst laden → DANN HTML generieren!
     try {
         await loadCategoryColors();
@@ -3528,7 +3655,7 @@ function exportData() {
     link.click();
 }
 
-// ===== v1.4: WEB SPEECH API (Spracherkennung) =====
+// ===== v1.4.1: WEB SPEECH API (Spracherkennung) =====
 let recognition = null;
 let isListening = false;
 
@@ -3562,7 +3689,7 @@ function startSpeechRecognition(inputId) {
     
     const input = document.getElementById(inputId);
     
-    // v1.4: Automatische Status-Div Erkennung
+    // v1.4.1: Automatische Status-Div Erkennung
     let statusId;
     if (inputId === 'title') {
         statusId = 'speech-status-add';
@@ -3586,7 +3713,7 @@ function startSpeechRecognition(inputId) {
             transcript += event.results[i][0].transcript;
         }
         
-        // v1.4: Für Textareas am Ende anhängen (mit Leerzeichen)
+        // v1.4.1: Für Textareas am Ende anhängen (mit Leerzeichen)
         if (inputId.includes('notes')) {
             input.value = input.value ? input.value + ' ' + transcript : transcript;
         } else {
