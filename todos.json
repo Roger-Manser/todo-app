@@ -104,5 +104,20 @@
     "recurringInterval": 7,
     "nextDueDate": "2026-08-16",
     "order": 2.975
+  },
+  {
+    "id": "msn6j4grl79savnvtto",
+    "title": "Gitterrost in der Küche anpassen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T12:00:07.515Z",
+    "updatedAt": "2026-08-10T12:00:07.515Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 3.975
   }
 ]
