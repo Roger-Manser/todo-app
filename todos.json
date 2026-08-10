@@ -59,5 +59,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.975
+  },
+  {
+    "id": "msn47gacttl1obifad",
+    "title": "Wäsche waschen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T10:55:03.732Z",
+    "updatedAt": "2026-08-10T10:55:03.732Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 1.975
   }
 ]
