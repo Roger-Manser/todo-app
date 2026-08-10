@@ -1,5 +1,19 @@
 [
   {
+    "id": "msmxyux3fl29nz3pb26",
+    "title": "Schlafzimmer Staubsauchen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T08:00:25.095Z",
+    "updatedAt": "2026-08-10T08:00:25.095Z",
+    "completedAt": null,
+    "recurring": true,
+    "recurringInterval": 30,
+    "nextDueDate": "2026-09-08"
+  },
+  {
     "id": "msmxy73484qfrg56pog",
     "title": "Schlafzimmer Bettwäsche reinigen",
     "category": "Privat",
