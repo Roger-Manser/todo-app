@@ -164,5 +164,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 6.975
+  },
+  {
+    "id": "msn9s3rmgqx49oaejz9",
+    "title": "Haushaltshilfe Rechnung bezahlen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T13:31:05.362Z",
+    "updatedAt": "2026-08-10T13:31:05.362Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 7.975
   }
 ]
