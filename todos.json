@@ -1,5 +1,19 @@
 [
   {
+    "id": "msmxxbo8wzxzfcdf1z",
+    "title": "Laugenzopf",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T07:59:13.496Z",
+    "updatedAt": "2026-08-10T07:59:13.496Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null
+  },
+  {
     "id": "msmxwdeiixuqvkteluf",
     "title": "Hörnlisalat",
     "category": "Privat",
