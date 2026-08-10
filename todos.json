@@ -7,13 +7,13 @@
     "attachments": [],
     "completed": false,
     "createdAt": "2026-08-10T08:00:25.095Z",
-    "updatedAt": "2026-08-10T08:27:44.268Z",
+    "updatedAt": "2026-08-10T08:28:20.556Z",
     "completedAt": null,
     "recurring": true,
     "recurringInterval": 30,
     "nextDueDate": "2026-09-08",
     "updated": "2026-08-10T08:00:41.967Z",
-    "order": -0.5
+    "order": 1.5
   },
   {
     "id": "msmxy73484qfrg56pog",
@@ -28,7 +28,7 @@
     "recurring": true,
     "recurringInterval": 45,
     "nextDueDate": "2026-09-23",
-    "order": null
+    "order": 1
   },
   {
     "id": "msmxxbo8wzxzfcdf1z",
@@ -43,7 +43,7 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": null
+    "order": 2
   },
   {
     "id": "msmxwdeiixuqvkteluf",
@@ -57,6 +57,7 @@
     "completedAt": null,
     "recurring": false,
     "recurringInterval": null,
-    "nextDueDate": null
+    "nextDueDate": null,
+    "order": 3
   }
 ]
