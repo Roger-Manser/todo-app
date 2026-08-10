@@ -4,15 +4,11 @@
     "title": "Gugigigigi",
     "category": "Privat",
     "notes": "",
-    "attachments": [
-      {
-        "type": "image",
-        "name": "photo_1786339870681-1786339872947.jpg"
-      }
-    ],
+    "attachments": [],
     "completed": false,
     "createdAt": "2026-08-10T05:31:13.608Z",
     "updatedAt": "2026-08-10T05:31:13.608Z",
-    "completedAt": null
+    "completedAt": null,
+    "updated": "2026-08-10T05:31:31.897Z"
   }
 ]
