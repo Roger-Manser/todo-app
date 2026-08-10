@@ -1,7 +1,7 @@
 [
   {
     "id": "msmxyux3fl29nz3pb26",
-    "title": "Schlafzimmer Staubsauchen",
+    "title": "Schlafzimmer Staubsaugen",
     "category": "Privat",
     "notes": "",
     "attachments": [],
@@ -11,7 +11,8 @@
     "completedAt": null,
     "recurring": true,
     "recurringInterval": 30,
-    "nextDueDate": "2026-09-08"
+    "nextDueDate": "2026-09-08",
+    "updated": "2026-08-10T08:00:41.967Z"
   },
   {
     "id": "msmxy73484qfrg56pog",
