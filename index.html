@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.1 - GitHub Sync</title>
+    <title>Todo App v1.2 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a1a;
+            background: #1.2a1a;
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -30,7 +30,7 @@
         }
 
         .header {
-            background: #1a1a1a;
+            background: #1.2a1a;
             color: white;
             padding: 10px 16px;
             display: flex;
@@ -337,7 +337,7 @@
         }
 
         button.primary {
-            background: #1a1a1a;
+            background: #1.2a1a;
             color: white;
             border: none;
         }
@@ -533,7 +533,7 @@
 
         .attachment-icon:hover {
             background: #dbeafe;
-            transform: scale(1.1);
+            transform: scale(1.2);
         }
 
         .todo-note {
@@ -696,7 +696,7 @@
 
         .error-msg {
             background: #fee2e2;
-            color: #991b1b;
+            color: #991.2b;
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 1rem;
@@ -903,11 +903,11 @@
             padding-top: calc(1rem - 3px);
         }
 </style>
-<!-- v1.1: App Icons & Manifest -->
+<!-- v1.2: App Icons & Manifest -->
 <link rel="icon" type="image/png" href="todo-icon.png">
 <link rel="apple-touch-icon" href="todo-icon.png">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1a1a1a">
+<meta name="theme-color" content="#1.2a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Todo">
@@ -918,7 +918,7 @@
     <div class="header">
         <div class="header-left">
             <h1>📝 Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.1</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.2</div>
         </div>
         <!-- v1.0.66: Stats im Header -->
         <div class="header-stats">
@@ -994,7 +994,11 @@
             <div class="add-section" id="add-section">
                 <form id="add-form">
                     <div class="form-group">
-                        <input type="text" id="title" required placeholder="Was muss getan werden?">
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="title" required placeholder="Was muss getan werden?" style="flex: 1;">
+                            <button type="button" id="mic-btn-add" onclick="startSpeechRecognition('title')" style="padding: 10px 12px; background: #f0f0f0; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-size: 16px; hover: background #e5e5e5;" title="Mit Mikrofon sprechen">🎤</button>
+                        </div>
+                        <div id="speech-status-add" style="font-size: 11px; color: #d32f2f; margin-top: 4px; display: none;">🔴 Höre zu...</div>
                     </div>
 
                     <div class="form-group">
@@ -1034,7 +1038,7 @@
     </div>
 </div>
 
-<!-- Kamera Modal (v1.1: WebRTC ECHTE KAMERA!) -->
+<!-- Kamera Modal (v1.2: WebRTC ECHTE KAMERA!) -->
 <div id="cameraModal" class="modal" style="z-index: 2000;">
     <div class="modal-content" style="max-width: 500px;">
         <div class="modal-header">
@@ -1059,7 +1063,11 @@
         </div>
         <form id="edit-form">
             <div class="form-group">
-                <input type="text" id="edit-title" required placeholder="Titel...">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="edit-title" required placeholder="Titel..." style="flex: 1;">
+                    <button type="button" id="mic-btn-edit" onclick="startSpeechRecognition('edit-title')" style="padding: 10px 12px; background: #f0f0f0; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; font-size: 16px;" title="Mit Mikrofon sprechen">🎤</button>
+                </div>
+                <div id="speech-status-edit" style="font-size: 11px; color: #d32f2f; margin-top: 4px; display: none;">🔴 Höre zu...</div>
             </div>
 
             <div class="form-group">
@@ -1175,7 +1183,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.1';
+const APP_VERSION = '1.2';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1183,15 +1191,15 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.1',
+        version: '1.2',
         releaseDate: '2026-08-10',
-        name: 'Swiss Minimalist Design',
+        name: 'Web Speech API - Spracherkennung',
         features: [
-            '🎨 Swiss Minimalist: Schwarz-Header + Rot-Akzent',
-            '📏 Extrem kompakt: 8px Padding, 12px Fonts, 1px Borders',
-            '✨ Elegante Reduktion ohne Funktionsverlust',
-            '⚡ Mehr Todos auf einen Blick',
-            '✅ ALLE bisherigen Features intakt!'
+            '🎤 Spracherkennung mit Mikrofon-Button',
+            '🗣️ Deutsch-Sprache unterstützt',
+            '✨ Automatischer Text im Titel-Feld',
+            '📱 Funktioniert auf Desktop + Mobile',
+            '⚡ Live Recording-Status anzeigen'
         ]
     },
     {
@@ -1910,7 +1918,7 @@ function updateCategoryColor(category, hexColor) {
     categoryColors[category] = hexColor;
     console.log('[DEBUG] Farbe aktualisiert:', category, hexColor);
     
-    // v1.1: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
+    // v1.2: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
     // Finde die entsprechende Farb-Box für diese Kategorie
     const colorBoxes = document.querySelectorAll('[data-category-color-box]');
     colorBoxes.forEach(box => {
@@ -2099,7 +2107,7 @@ function updateCategoryTabs() {
 }
 
 function updateCategorySelects() {
-    // v1.1: Füllle die Kategorie-Selects dynamisch!
+    // v1.2: Füllle die Kategorie-Selects dynamisch!
     populateCategorySelects();
 }
 
@@ -2384,14 +2392,14 @@ function toggleAddSection() {
     const section = document.getElementById('add-section');
     section.classList.toggle('open');
     if (section.classList.contains('open')) {
-        // v1.1: Füllle Kategorie-Select dynamisch!
+        // v1.2: Füllle Kategorie-Select dynamisch!
         populateCategorySelects();
         // v1.0.72: Focus auf title
         document.getElementById('title').focus();
     }
 }
 
-// v1.1: Dynamisches Füllen der Kategorie-Selects
+// v1.2: Dynamisches Füllen der Kategorie-Selects
 function populateCategorySelects() {
     const categorySelect = document.getElementById('category');
     const editCategorySelect = document.getElementById('edit-category');
@@ -2414,7 +2422,7 @@ function populateCategorySelects() {
 
 function attachFileInForm(source) {
     if (source === 'camera') {
-        // v1.1: ECHTE Kamera mit WebRTC!
+        // v1.2: ECHTE Kamera mit WebRTC!
         currentCameraContext = 'form';
         openCameraModal();
     } else {
@@ -2440,7 +2448,7 @@ function attachFileInForm(source) {
 
 function attachFileInEdit(source) {
     if (source === 'camera') {
-        // v1.1: ECHTE Kamera mit WebRTC!
+        // v1.2: ECHTE Kamera mit WebRTC!
         currentCameraContext = 'edit';
         openCameraModal();
     } else {
@@ -2468,7 +2476,7 @@ function attachFile(source, callback) {
     const input = document.createElement('input');
     input.type = 'file';
     
-    // v1.1: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
+    // v1.2: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
     if (source === 'camera') {
         input.accept = 'image/*,video/*';
         input.capture = 'environment';  // Browser erkennt das
@@ -2499,7 +2507,7 @@ function attachFile(source, callback) {
     input.click();
 }
 
-// ===== v1.1: WebRTC ECHTE KAMERA! =====
+// ===== v1.2: WebRTC ECHTE KAMERA! =====
 let currentCameraContext = null;  // 'form' oder 'edit'
 let cameraStream = null;
 
@@ -2813,7 +2821,7 @@ function openEditTodoModal(id) {
     
     editAttachments = JSON.parse(JSON.stringify(currentEditingTodo.attachments || []));
     
-    // v1.1: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
+    // v1.2: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
     populateCategorySelects();
     
     // v1.0.72: Setze Titel und Notizen
@@ -2839,7 +2847,7 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
     // v1.0.72: Lese Titel und Notizen vom Input
     currentEditingTodo.title = document.getElementById('edit-title').value.trim();
     currentEditingTodo.notes = document.getElementById('edit-notes').value.trim();
-    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.1: Lese Kategorie vom Select!
+    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.2: Lese Kategorie vom Select!
     currentEditingTodo.attachments = editAttachments;
     currentEditingTodo.updated = new Date().toISOString();
     
@@ -2945,7 +2953,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     // v1.0.72: Lese Titel und Notizen vom Input
     const title = document.getElementById('title').value.trim();
     const notes = document.getElementById('notes').value.trim();
-    const category = document.getElementById('category').value.trim();  // v1.1: Lese vom Select!
+    const category = document.getElementById('category').value.trim();  // v1.2: Lese vom Select!
 
     if (!title || !category) return;
 
@@ -3120,12 +3128,12 @@ function closeVersionHistory() {
 }
 
 async function openSettings() {
-    // v1.1: Garantiere dass categoryColors IMMER gefüllt ist
+    // v1.2: Garantiere dass categoryColors IMMER gefüllt ist
     if (Object.keys(categoryColors).length === 0) {
         initializeDefaultColors();
     }
     
-    // v1.1: Lade Farben SYNCHRON (nicht im Hintergrund!)
+    // v1.2: Lade Farben SYNCHRON (nicht im Hintergrund!)
     // Erst laden → DANN HTML generieren!
     try {
         await loadCategoryColors();
@@ -3422,6 +3430,78 @@ function exportData() {
     link.href = url;
     link.download = `todos-export-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
+}
+
+// ===== v1.2: WEB SPEECH API (Spracherkennung) =====
+let recognition = null;
+let isListening = false;
+
+function initSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        console.log('[DEBUG] Web Speech API nicht unterstützt');
+        return false;
+    }
+    
+    recognition = new SpeechRecognition();
+    recognition.lang = 'de-DE';  // Deutsch
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    
+    return true;
+}
+
+function startSpeechRecognition(inputId) {
+    if (!recognition) {
+        if (!initSpeechRecognition()) {
+            alert('🎤 Spracherkennung nicht verfügbar in diesem Browser.\nBitte nutze Chrome, Edge oder Safari.');
+            return;
+        }
+    }
+    
+    if (isListening) {
+        stopSpeechRecognition();
+        return;
+    }
+    
+    const input = document.getElementById(inputId);
+    const statusId = inputId === 'title' ? 'speech-status-add' : 'speech-status-edit';
+    const statusDiv = document.getElementById(statusId);
+    
+    isListening = true;
+    statusDiv.style.display = 'block';
+    console.log('[DEBUG] 🎤 Starte Spracherkennung...');
+    
+    recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+        }
+        input.value = transcript;
+        console.log('[DEBUG] 🎤 Erkannt: ' + transcript);
+    };
+    
+    recognition.onerror = (event) => {
+        console.error('[DEBUG] Spracherkennung Fehler:', event.error);
+        statusDiv.style.display = 'none';
+        isListening = false;
+        alert('🎤 Fehler: ' + event.error);
+    };
+    
+    recognition.onend = () => {
+        statusDiv.style.display = 'none';
+        isListening = false;
+        console.log('[DEBUG] 🎤 Spracherkennung beendet');
+    };
+    
+    recognition.start();
+}
+
+function stopSpeechRecognition() {
+    if (recognition && isListening) {
+        recognition.stop();
+        isListening = false;
+    }
 }
 
 document.addEventListener('keydown', (e) => {
