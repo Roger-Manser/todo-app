@@ -74,5 +74,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.875
+  },
+  {
+    "id": "msn4c64n6dwezomruqn",
+    "title": "Pflanzen Wohnung düngen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-10T10:58:43.847Z",
+    "updatedAt": "2026-08-10T10:58:43.847Z",
+    "completedAt": null,
+    "recurring": true,
+    "recurringInterval": 7,
+    "nextDueDate": "2026-08-16",
+    "order": 1.975
   }
 ]
