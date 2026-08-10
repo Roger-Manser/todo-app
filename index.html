@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.5.2 - GitHub Sync</title>
+    <title>Todo App v1.5.3 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -445,7 +445,7 @@
         .todos-list {
             display: flex;
             flex-direction: column;
-            gap: 4px;  /* v1.5.2: Reduziert auf 4px für Platz */
+            gap: 4px;  /* v1.5.3: Reduziert auf 4px für Platz */
         }
 
         /* v1.0.39: Accordion-Style Todos */
@@ -883,12 +883,44 @@
 
         @media (max-width: 640px) {
             .header {
-                flex-direction: column;
-                align-items: flex-start;
+                display: grid;
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto;
+                gap: 4px;
+                align-items: center;
             }
-
+            
+            .header-left {
+                grid-column: 1;
+                grid-row: 1;
+                width: 100%;
+            }
+            
+            .header-stats {
+                grid-column: 1;
+                grid-row: 2;
+                width: 100%;
+                flex-shrink: 1;
+            }
+            
             .header-actions {
-                flex-wrap: wrap;
+                grid-column: 2;
+                grid-row: 2;
+                gap: 4px;
+            }
+            
+            .header-stats .stat-card {
+                min-width: 55px;
+                padding: 3px 6px;
+            }
+            
+            .header-stats .stat-value {
+                font-size: 13px;
+                margin-bottom: 1px;
+            }
+            
+            .header-stats .stat-label {
+                font-size: 9px;
             }
 
             .add-section.open {
@@ -942,7 +974,7 @@
         <div class="header-left">
             <img src="todo-icon.png" alt="Todo" style="width: 48px; height: 48px; border-radius: 6px; margin-right: 12px; flex-shrink: 0;">
             <h1>Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.5.2</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.5.3</div>
         </div>
         <!-- v1.0.66: Stats im Header -->
         <div class="header-stats">
@@ -960,9 +992,9 @@
             </div>
         </div>
         <div class="header-actions">
-            <button onclick="toggleAddSection()" style="background: #d32f2f; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);">✏️ Neue Aufgabe</button>
-            <button onclick="openSettings()" style="background: #f0f0f0; color: #333; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 13px;">⚙️ Einstellungen</button>
-            <div class="sync-status synced" id="sync-status">GitHub Sync</div>
+            <button onclick="toggleAddSection()" style="background: #d32f2f; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);">✏️</button>
+            <button onclick="openSettings()" style="background: #f0f0f0; color: #333; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 16px;">⚙️</button>
+            <div class="sync-status synced" id="sync-status" title="GitHub Sync" style="width: 12px; height: 12px; border-radius: 50%; background: #10b981; margin-left: 8px;"></div>
         </div>
     </div>
 
@@ -1237,13 +1269,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.5.2';
+const APP_VERSION = '1.5.3';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.5.3',
+        releaseDate: '2026-08-10',
+        name: 'Mobile Header & Task Redesign',
+        features: [
+            '📱 Header nur 2 Zeilen (Grid Layout)',
+            '📱 GitHub Sync: nur grüner Punkt (●) oben rechts',
+            '📱 Statistik: zweite Headerzeile, klein (13px/9px)',
+            '📱 Buttons: nur Icons (✏️/⚙️), keine Texte',
+            '📱 Task-Zeilen: Icons näher zusammen (gap 2px/4px)',
+            '📱 Mehr Platz für Todo-Titel'
+        ]
+    },
     {
         version: '1.5.2',
         releaseDate: '2026-08-10',
@@ -1295,7 +1340,7 @@ const VERSION_HISTORY = [
     {
         version: '1.4.7',
         releaseDate: '2026-08-10',
-        name: 'Icon vor Todos (entfernt in v1.5.2)',
+        name: 'Icon vor Todos (entfernt in v1.5.3)',
         features: [
             '📝 App-Icon war in den Todos (wurde entfernt)',
             '✨ Erste Iteration mit Icon-Feature',
@@ -1554,7 +1599,7 @@ let currentEditingTodo = null;
 let formAttachments = [];
 let editAttachments = [];
 let githubConfig = null;
-let showOrderNumbers = true;  // v1.5.2: Positionsnummern anzeigen
+let showOrderNumbers = true;  // v1.5.3: Positionsnummern anzeigen
 
 // Safe localStorage Speicherung mit Quota-Handling und Prioritäten
 // v1.0.16: Test ob localStorage funktioniert
@@ -2051,7 +2096,7 @@ async function initializeApp() {
     const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
     updateSyncStatus('Lade Daten...');
     console.log(`[DEBUG] Lade Daten von GitHub: ${githubConfig.username}/${githubConfig.repo}`);
-// ===== v1.5.2: NORMALISIERUNG ÄLTERER TODOS =====
+// ===== v1.5.3: NORMALISIERUNG ÄLTERER TODOS =====
 function normalizeTodos() {
     // Stelle sicher dass alle Todos einen order Wert haben
     let maxOrder = 0;
@@ -2078,7 +2123,7 @@ function normalizeTodos() {
     
     // v1.0.24: Ordner wurde bereits beim Verbinden erstellt
     allTodos = await sync.getTodos();
-    normalizeTodos();  // v1.5.2: Normalisiere order Werte
+    normalizeTodos();  // v1.5.3: Normalisiere order Werte
     allCategories = await sync.getCategories();
     // v1.0.70: Initialisiere Defaults SOFORT, dann lade vom GitHub
     initializeDefaultColors();
@@ -2091,7 +2136,7 @@ function normalizeTodos() {
     // v1.0.10: Nicht mehr in localStorage speichern!
     // Daten kommen von GitHub, nicht von Cache
     
-    // v1.5.2: Lade Anzeigeeinstellungen
+    // v1.5.3: Lade Anzeigeeinstellungen
     const savedShowOrderNumbers = localStorage.getItem('showOrderNumbers');
     if (savedShowOrderNumbers !== null) {
         showOrderNumbers = savedShowOrderNumbers === 'true';
@@ -2417,9 +2462,9 @@ function renderTodos() {
         return false;
     });
 
-    // v1.5.2: Sortiere nach createdAt (älteste zuerst)
+    // v1.5.3: Sortiere nach createdAt (älteste zuerst)
     const sorted = filtered.sort((a, b) => {
-        // v1.5.2: Sortiere nach order (nicht createdAt)
+        // v1.5.3: Sortiere nach order (nicht createdAt)
         const orderA = a.order || 999999;  // Fallback für alte Todos
         const orderB = b.order || 999999;
         return orderA - orderB;  // Aufsteigend: kleinste order zuerst
@@ -2443,20 +2488,20 @@ function renderTodos() {
                 <div class="todo-accordion" id="todo-${todo.id}" style="background: ${getCategoryColor(todo.category)}; border-left: 4px solid ${getCategoryColorBorder(todo.category)}; border-radius: 8px; overflow: hidden;">
                     <!-- Header: Nur Titel + Checkbox -->
                     <div class="todo-header" onclick="toggleTodoExpand('${todo.id}')">
-                        <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 4px; flex: 1;">
                             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
                                    onchange="event.stopPropagation(); toggleTodo('${todo.id}')" title="Abhaken">
-                            ${showOrderNumbers && todo.order ? `<span style="font-size: 11px; font-weight: 600; color: #d32f2f; min-width: 35px;">📍 ${todo.order.toFixed(1)}</span>` : ''}
+                            ${showOrderNumbers && todo.order ? `<span style="font-size: 10px; font-weight: 600; color: #d32f2f; min-width: 28px;">📍 ${todo.order.toFixed(1)}</span>` : ''}
                             <div class="todo-title-only">${escapeHtml(todo.title)}</div>
-                            ${todo.recurring ? '<span style="font-size: 12px; color: #d32f2f; margin-left: auto;">🔄</span>' : ''}
+                            ${todo.recurring ? '<span style="font-size: 11px; color: #d32f2f; margin-left: auto;">🔄</span>' : ''}
                         </div>
-                        <!-- v1.5.2: Pfeile-Buttons zum Verschieben -->
-                        <div style="display: flex; gap: 4px; align-items: center;">
+                        <!-- v1.5.3: Pfeile-Buttons zum Verschieben - kompakt -->
+                        <div style="display: flex; gap: 2px; align-items: center;">
                             <button onclick="event.stopPropagation(); moveTodoUp('${todo.id}')" 
-                                    style="background: transparent; border: none; cursor: pointer; padding: 4px 6px; color: #666; font-size: 16px; hover:color: #333;"
+                                    style="background: transparent; border: none; cursor: pointer; padding: 2px 4px; color: #666; font-size: 14px; line-height: 1;"
                                     title="Nach oben verschieben">⬆️</button>
                             <button onclick="event.stopPropagation(); moveTodoDown('${todo.id}')" 
-                                    style="background: transparent; border: none; cursor: pointer; padding: 4px 6px; color: #666; font-size: 16px; hover:color: #333;"
+                                    style="background: transparent; border: none; cursor: pointer; padding: 2px 4px; color: #666; font-size: 14px; line-height: 1;"
                                     title="Nach unten verschieben">⬇️</button>
                         </div>
                         <span class="expand-icon" style="color: #999;">▼</span>
@@ -2657,7 +2702,7 @@ function setupDragAndDrop() {
             const targetTodo = allTodos.find(t => t.id === todoEl.id.replace('todo-', ''));
             
             if (draggedTodo && targetTodo) {
-                // v1.5.2: Ändere order statt Array-Position zu tauschen
+                // v1.5.3: Ändere order statt Array-Position zu tauschen
                 const newOrder = targetTodo.order - 0.5;
                 draggedTodo.order = newOrder;
                 draggedTodo.updatedAt = new Date().toISOString();
@@ -2680,7 +2725,7 @@ function setupDragAndDrop() {
     });
 }
 
-// ===== v1.5.2: MOVE TODO UP/DOWN MIT BUTTONS =====
+// ===== v1.5.3: MOVE TODO UP/DOWN MIT BUTTONS =====
 function moveTodoUp(id) {
     const todo = allTodos.find(t => t.id === id);
     if (!todo) return;
@@ -2694,7 +2739,7 @@ function moveTodoUp(id) {
     const todoAbove = sorted[index - 1];
     const targetOrder = todoAbove.order - 0.1;
     
-    // v1.5.2: INTELLIGENTE LOGIK
+    // v1.5.3: INTELLIGENTE LOGIK
     if (targetOrder >= 0.1) {
         // Genug Platz - verkleinere um 0.1
         todo.order = targetOrder;
@@ -2726,7 +2771,7 @@ function moveTodoDown(id) {
     const todoBelow = sorted[index + 1];
     const targetOrder = todoBelow.order + 0.1;
     
-    // v1.5.2: INTELLIGENTE LOGIK - einfach +0.1, immer möglich
+    // v1.5.3: INTELLIGENTE LOGIK - einfach +0.1, immer möglich
     todo.order = targetOrder;
     console.log('[DEBUG] ⬇️ ' + todo.title + ' → ' + todo.order + ' (+0.1)');
     
@@ -2734,7 +2779,7 @@ function moveTodoDown(id) {
     renderTodos();
 }
 
-// ===== v1.5.2: TOGGLE ORDER NUMBERS =====
+// ===== v1.5.3: TOGGLE ORDER NUMBERS =====
 function toggleOrderNumbers() {
     const checkbox = document.getElementById('show-order-numbers');
     showOrderNumbers = checkbox.checked;
@@ -3068,7 +3113,7 @@ function toggleTodo(id) {
             // Wenn wieder aktiviert: completedAt zurücksetzen
             todo.completedAt = null;
             
-            // v1.5.2: Wiederkehrend Todo reaktiviert → order = 1.0
+            // v1.5.3: Wiederkehrend Todo reaktiviert → order = 1.0
             if (todo.recurring) {
                 todo.order = 1.0;
                 console.log('[DEBUG] 🔄 Wiederkehrend reaktiviert: order = 1.0');
@@ -3382,7 +3427,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
         return;
     }
 
-// ===== v1.5.2: ORDER/PRIORITY SYSTEM =====
+// ===== v1.5.3: ORDER/PRIORITY SYSTEM =====
 function calculateNewOrder() {
     // Finde alle aktiven (nicht-erledigten) Todos
     const activeTodos = allTodos.filter(todo => !todo.completed);
@@ -3418,7 +3463,7 @@ function calculateNewOrder() {
         recurring: document.getElementById('recurring').checked,
         recurringInterval: getRecurringInterval(),
         nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null,
-        // v1.5.2: Order für Sortierung
+        // v1.5.3: Order für Sortierung
         order: calculateNewOrder()
     });
 
