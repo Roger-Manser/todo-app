@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.3 - GitHub Sync</title>
+    <title>Todo App v1.4 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1.3a1a;
+            background: #1.4a1a;
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -30,7 +30,7 @@
         }
 
         .header {
-            background: #1.3a1a;
+            background: #1.4a1a;
             color: white;
             padding: 10px 16px;
             display: flex;
@@ -187,7 +187,7 @@
         .form-group input:focus {
             outline: none;
             border-color: #d32f2f;
-            box-shadow: 0 0 0 3px rgba(1.3, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(1.4, 126, 234, 0.1);
         }
 
         .form-help {
@@ -337,14 +337,14 @@
         }
 
         button.primary {
-            background: #1.3a1a;
+            background: #1.4a1a;
             color: white;
             border: none;
         }
 
         button.primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(1.3, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(1.4, 126, 234, 0.3);
         }
 
         button.small {
@@ -533,7 +533,7 @@
 
         .attachment-icon:hover {
             background: #dbeafe;
-            transform: scale(1.3);
+            transform: scale(1.4);
         }
 
         .todo-note {
@@ -696,7 +696,7 @@
 
         .error-msg {
             background: #fee2e2;
-            color: #991.3b;
+            color: #991.4b;
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 1rem;
@@ -903,11 +903,11 @@
             padding-top: calc(1rem - 3px);
         }
 </style>
-<!-- v1.3: App Icons & Manifest -->
+<!-- v1.4: App Icons & Manifest -->
 <link rel="icon" type="image/png" href="todo-icon.png">
 <link rel="apple-touch-icon" href="todo-icon.png">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1.3a1a">
+<meta name="theme-color" content="#1.4a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Todo">
@@ -918,7 +918,7 @@
     <div class="header">
         <div class="header-left">
             <h1>📝 Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.3</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.4</div>
         </div>
         <!-- v1.0.66: Stats im Header -->
         <div class="header-stats">
@@ -1008,6 +1008,28 @@
                         </select>
                     </div>
 
+                    <!-- v1.4: Wiederkehrende Todos -->
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="recurring" style="width: 16px; height: 16px; cursor: pointer;">
+                            <label for="recurring" style="font-weight: 600; cursor: pointer;">🔄 Wiederkehrend</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="recurring-settings" style="display: none;">
+                        <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Wiederholungs-Intervall</label>
+                        <select id="recurring-interval" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                            <option value="1">Täglich</option>
+                            <option value="7" selected>Wöchentlich (7 Tage)</option>
+                            <option value="14">Alle 2 Wochen (14 Tage)</option>
+                            <option value="30">Monatlich (30 Tage)</option>
+                            <option value="custom">Custom (Tage eingeben)</option>
+                        </select>
+                        <div id="custom-days-input" style="display: none; margin-top: 8px;">
+                            <input type="number" id="custom-days" min="1" max="365" placeholder="Anzahl Tage" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div style="display: flex; gap: 8px;">
                             <textarea id="notes" placeholder="Notizen..." style="flex: 1;"></textarea>
@@ -1042,7 +1064,7 @@
     </div>
 </div>
 
-<!-- Kamera Modal (v1.3: WebRTC ECHTE KAMERA!) -->
+<!-- Kamera Modal (v1.4: WebRTC ECHTE KAMERA!) -->
 <div id="cameraModal" class="modal" style="z-index: 2000;">
     <div class="modal-content" style="max-width: 500px;">
         <div class="modal-header">
@@ -1191,7 +1213,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.3';
+const APP_VERSION = '1.4';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1199,15 +1221,15 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.3',
+        version: '1.4',
         releaseDate: '2026-08-10',
-        name: 'Spracheingabe für Notizen',
+        name: 'Wiederkehrende Todos 🔄',
         features: [
-            '🎤 Mikrofon-Button für Titel + Notizen',
-            '🗣️ Deutsch-Spracherkennung überall',
-            '✍️ Notizen-Text wird angefügt (nicht überschrieben)',
-            '✨ Live Recording-Status für beide Felder',
-            '📝 Titel ersetzen, Notizen ergänzen'
+            '🔄 Wiederkehrende Todos: täglich, wöchentlich, 2-wöchig, monatlich',
+            '📅 Custom Interval: beliebige Tage eingeben',
+            '✅ Nach Abhaken: nächstes Datum berechnet, verschwindet bis dahin',
+            '📍 Automatische Rückkehr: Todo erscheint wieder oben',
+            '🎯 Perfekt für regelmäßige Aufgaben (Pflanzen, Putzen, etc.)'
         ]
     },
     {
@@ -1871,6 +1893,47 @@ async function initializeApp() {
     console.log('[DEBUG] ✅ App bereit!');
 }
 
+// ===== v1.4: WIEDERKEHRENDE TODOS =====
+document.addEventListener('DOMContentLoaded', () => {
+    // Event Listener für Recurring Checkbox
+    const recurringCheckbox = document.getElementById('recurring');
+    const recurringSettings = document.getElementById('recurring-settings');
+    const recurringInterval = document.getElementById('recurring-interval');
+    const customDaysInput = document.getElementById('custom-days-input');
+    
+    if (recurringCheckbox) {
+        recurringCheckbox.addEventListener('change', () => {
+            recurringSettings.style.display = recurringCheckbox.checked ? 'block' : 'none';
+        });
+    }
+    
+    if (recurringInterval) {
+        recurringInterval.addEventListener('change', () => {
+            customDaysInput.style.display = recurringInterval.value === 'custom' ? 'block' : 'none';
+        });
+    }
+});
+
+function getRecurringInterval() {
+    const checkbox = document.getElementById('recurring');
+    if (!checkbox || !checkbox.checked) return null;
+    
+    const interval = document.getElementById('recurring-interval').value;
+    if (interval === 'custom') {
+        const days = parseInt(document.getElementById('custom-days').value) || 7;
+        return days;
+    }
+    return parseInt(interval);
+}
+
+function calculateNextDueDate(intervalDays) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const nextDue = new Date(today);
+    nextDue.setDate(nextDue.getDate() + intervalDays);
+    return nextDue.toISOString().split('T')[0];  // YYYY-MM-DD Format
+}
+
 async function saveTodos() {
     if (!githubConfig) {
         console.warn('[DEBUG] saveTodos: Keine GitHub-Konfiguration');
@@ -1926,7 +1989,7 @@ function updateCategoryColor(category, hexColor) {
     categoryColors[category] = hexColor;
     console.log('[DEBUG] Farbe aktualisiert:', category, hexColor);
     
-    // v1.3: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
+    // v1.4: Aktualisiere NUR die Farb-Vorschau, nicht das ganze Modal!
     // Finde die entsprechende Farb-Box für diese Kategorie
     const colorBoxes = document.querySelectorAll('[data-category-color-box]');
     colorBoxes.forEach(box => {
@@ -2115,18 +2178,30 @@ function updateCategoryTabs() {
 }
 
 function updateCategorySelects() {
-    // v1.3: Füllle die Kategorie-Selects dynamisch!
+    // v1.4: Füllle die Kategorie-Selects dynamisch!
     populateCategorySelects();
 }
 
 function renderTodos() {
+    // v1.4: Wiederkehrende Todos berücksichtigen
+    const today = new Date().toISOString().split('T')[0];  // YYYY-MM-DD
+    
     // v1.0.39: Accordion-Style Expand in der Übersicht - nur Titel beim Start
     const filtered = allTodos.filter(todo => {
+        // Zeige nur nicht-erledigte Todos (oder wiederkehrend + fällig)
         if (!todo.completed) {
             if (currentFilter === 'all') return true;
             if (currentFilter === 'active') return true;
             return todo.category === currentFilter;
         }
+        
+        // v1.4: Wiederkehrende erledigte Todos: Zeige wieder wenn nextDueDate erreicht
+        if (todo.recurring && todo.nextDueDate && todo.nextDueDate <= today) {
+            if (currentFilter === 'all') return true;
+            if (currentFilter === 'active') return true;
+            return todo.category === currentFilter;
+        }
+        
         return false;
     });
 
@@ -2152,6 +2227,7 @@ function renderTodos() {
                             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}
                                    onchange="event.stopPropagation(); toggleTodo('${todo.id}')" title="Abhaken">
                             <div class="todo-title-only">${escapeHtml(todo.title)}</div>
+                            ${todo.recurring ? '<span style="font-size: 12px; color: #d32f2f; margin-left: auto;">🔄</span>' : ''}
                         </div>
                         <span class="expand-icon" style="color: #999;">▼</span>
                     </div>
@@ -2160,6 +2236,7 @@ function renderTodos() {
                     <div class="todo-details" style="display: none; padding: 1rem; background: #f9fafb; border-top: 1px solid #e5e7eb;">
                         <div style="margin-bottom: 1rem;">
                             <span class="badge">${escapeHtml(todo.category)}</span>
+                            ${todo.recurring ? '<span class="badge" style="background: #ffe0b2; color: #d32f2f; margin-left: 4px;">🔄 Wiederkehrend</span>' : ''}
                             <span style="font-size: 0.85rem; color: #666; margin-left: 1rem;">📅 ${formatFullTime(todo.createdAt)}</span>
                         </div>
                         
@@ -2400,14 +2477,14 @@ function toggleAddSection() {
     const section = document.getElementById('add-section');
     section.classList.toggle('open');
     if (section.classList.contains('open')) {
-        // v1.3: Füllle Kategorie-Select dynamisch!
+        // v1.4: Füllle Kategorie-Select dynamisch!
         populateCategorySelects();
         // v1.0.72: Focus auf title
         document.getElementById('title').focus();
     }
 }
 
-// v1.3: Dynamisches Füllen der Kategorie-Selects
+// v1.4: Dynamisches Füllen der Kategorie-Selects
 function populateCategorySelects() {
     const categorySelect = document.getElementById('category');
     const editCategorySelect = document.getElementById('edit-category');
@@ -2430,7 +2507,7 @@ function populateCategorySelects() {
 
 function attachFileInForm(source) {
     if (source === 'camera') {
-        // v1.3: ECHTE Kamera mit WebRTC!
+        // v1.4: ECHTE Kamera mit WebRTC!
         currentCameraContext = 'form';
         openCameraModal();
     } else {
@@ -2456,7 +2533,7 @@ function attachFileInForm(source) {
 
 function attachFileInEdit(source) {
     if (source === 'camera') {
-        // v1.3: ECHTE Kamera mit WebRTC!
+        // v1.4: ECHTE Kamera mit WebRTC!
         currentCameraContext = 'edit';
         openCameraModal();
     } else {
@@ -2484,7 +2561,7 @@ function attachFile(source, callback) {
     const input = document.createElement('input');
     input.type = 'file';
     
-    // v1.3: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
+    // v1.4: SIMPEL & PROVEN (wie Rezeptbuch/Fahrtenbuch)
     if (source === 'camera') {
         input.accept = 'image/*,video/*';
         input.capture = 'environment';  // Browser erkennt das
@@ -2515,7 +2592,7 @@ function attachFile(source, callback) {
     input.click();
 }
 
-// ===== v1.3: WebRTC ECHTE KAMERA! =====
+// ===== v1.4: WebRTC ECHTE KAMERA! =====
 let currentCameraContext = null;  // 'form' oder 'edit'
 let cameraStream = null;
 
@@ -2690,6 +2767,12 @@ function toggleTodo(id) {
         // v1.0.11: Setze completedAt wenn erledigt
         if (todo.completed) {
             todo.completedAt = now;
+            
+            // v1.4: Wiederkehrende Todos: Berechne nächstes DueDate
+            if (todo.recurring && todo.recurringInterval) {
+                todo.nextDueDate = calculateNextDueDate(todo.recurringInterval);
+                console.log('[DEBUG] 🔄 Wiederkehrend: Nächstes Datum:', todo.nextDueDate);
+            }
         } else {
             // Wenn wieder aktiviert: completedAt zurücksetzen
             todo.completedAt = null;
@@ -2829,7 +2912,7 @@ function openEditTodoModal(id) {
     
     editAttachments = JSON.parse(JSON.stringify(currentEditingTodo.attachments || []));
     
-    // v1.3: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
+    // v1.4: Füllle Kategorie-Selects BEVOR Werte gesetzt werden!
     populateCategorySelects();
     
     // v1.0.72: Setze Titel und Notizen
@@ -2855,7 +2938,7 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
     // v1.0.72: Lese Titel und Notizen vom Input
     currentEditingTodo.title = document.getElementById('edit-title').value.trim();
     currentEditingTodo.notes = document.getElementById('edit-notes').value.trim();
-    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.3: Lese Kategorie vom Select!
+    currentEditingTodo.category = document.getElementById('edit-category').value.trim();  // v1.4: Lese Kategorie vom Select!
     currentEditingTodo.attachments = editAttachments;
     currentEditingTodo.updated = new Date().toISOString();
     
@@ -2961,7 +3044,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     // v1.0.72: Lese Titel und Notizen vom Input
     const title = document.getElementById('title').value.trim();
     const notes = document.getElementById('notes').value.trim();
-    const category = document.getElementById('category').value.trim();  // v1.3: Lese vom Select!
+    const category = document.getElementById('category').value.trim();  // v1.4: Lese vom Select!
 
     if (!title || !category) return;
 
@@ -3014,7 +3097,11 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
         completed: false,
         createdAt: now,
         updatedAt: now,
-        completedAt: null
+        completedAt: null,
+        // v1.4: Wiederkehrende Todos
+        recurring: document.getElementById('recurring').checked,
+        recurringInterval: getRecurringInterval(),
+        nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null
     });
 
     console.log('[DEBUG] ✅ Todo erstellt mit ' + attachmentNames.length + ' Attachments');
@@ -3057,6 +3144,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     }
 
     document.getElementById('add-form').reset();
+    document.getElementById('recurring-settings').style.display = 'none';  // v1.4: Reset Recurring
     formAttachments = [];
     document.getElementById('form-attachments').innerHTML = '';
     toggleAddSection();
@@ -3136,12 +3224,12 @@ function closeVersionHistory() {
 }
 
 async function openSettings() {
-    // v1.3: Garantiere dass categoryColors IMMER gefüllt ist
+    // v1.4: Garantiere dass categoryColors IMMER gefüllt ist
     if (Object.keys(categoryColors).length === 0) {
         initializeDefaultColors();
     }
     
-    // v1.3: Lade Farben SYNCHRON (nicht im Hintergrund!)
+    // v1.4: Lade Farben SYNCHRON (nicht im Hintergrund!)
     // Erst laden → DANN HTML generieren!
     try {
         await loadCategoryColors();
@@ -3440,7 +3528,7 @@ function exportData() {
     link.click();
 }
 
-// ===== v1.3: WEB SPEECH API (Spracherkennung) =====
+// ===== v1.4: WEB SPEECH API (Spracherkennung) =====
 let recognition = null;
 let isListening = false;
 
@@ -3474,7 +3562,7 @@ function startSpeechRecognition(inputId) {
     
     const input = document.getElementById(inputId);
     
-    // v1.3: Automatische Status-Div Erkennung
+    // v1.4: Automatische Status-Div Erkennung
     let statusId;
     if (inputId === 'title') {
         statusId = 'speech-status-add';
@@ -3498,7 +3586,7 @@ function startSpeechRecognition(inputId) {
             transcript += event.results[i][0].transcript;
         }
         
-        // v1.3: Für Textareas am Ende anhängen (mit Leerzeichen)
+        // v1.4: Für Textareas am Ende anhängen (mit Leerzeichen)
         if (inputId.includes('notes')) {
             input.value = input.value ? input.value + ' ' + transcript : transcript;
         } else {
