@@ -194,5 +194,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 7.975
+  },
+  {
+    "id": "mso5impnjpvyf216qd9",
+    "title": "Steuererklärung",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-11T04:19:31.067Z",
+    "updatedAt": "2026-08-11T04:19:31.067Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 8.975
   }
 ]
