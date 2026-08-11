@@ -224,5 +224,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 8.975
+  },
+  {
+    "id": "msogwfoce9hm6d1arnl",
+    "title": "Raiffeisenbank besuchen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-11T09:38:10.908Z",
+    "updatedAt": "2026-08-11T09:38:10.908Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 9.975
   }
 ]
