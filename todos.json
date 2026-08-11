@@ -254,5 +254,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 10.975
+  },
+  {
+    "id": "msosaqp3bpb7fdvpci5",
+    "title": "Donnerstag Nachmittag Rean",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-11T14:57:14.150Z",
+    "updatedAt": "2026-08-11T14:57:14.150Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 11.975
   }
 ]
