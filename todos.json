@@ -239,5 +239,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 9.975
+  },
+  {
+    "id": "msohejrz1ea3gupwmmbh",
+    "title": "Frühlingsrollen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-11T09:52:16.031Z",
+    "updatedAt": "2026-08-11T09:52:16.031Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 10.975
   }
 ]
