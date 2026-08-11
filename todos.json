@@ -209,5 +209,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.10683593750000003
+  },
+  {
+    "id": "msoeu7rei1envp1aad9",
+    "title": "Reisebüro Geld eintreiben",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-11T08:40:28.106Z",
+    "updatedAt": "2026-08-11T08:40:28.106Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 8.975
   }
 ]
