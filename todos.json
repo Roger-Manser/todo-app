@@ -179,5 +179,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.875
+  },
+  {
+    "id": "mso5ielwg73nc3dn438",
+    "title": "Steamer Backofen reinigen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-11T04:19:20.564Z",
+    "updatedAt": "2026-08-11T04:19:20.564Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 7.975
   }
 ]
