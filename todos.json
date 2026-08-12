@@ -284,5 +284,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.10683593750000009
+  },
+  {
+    "id": "msq5dtvd6rs7lqj7fg4",
+    "title": "Krankenkasse kontaktieren wegen einmal und Zahlung",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-12T13:51:19.417Z",
+    "updatedAt": "2026-08-12T13:51:19.417Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 11.975
   }
 ]
