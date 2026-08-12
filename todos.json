@@ -233,12 +233,12 @@
     "attachments": [],
     "completed": false,
     "createdAt": "2026-08-11T09:38:10.908Z",
-    "updatedAt": "2026-08-11T09:38:10.908Z",
+    "updatedAt": "2026-08-12T07:17:39.072Z",
     "completedAt": null,
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 5.875
+    "order": 0.375
   },
   {
     "id": "msohejrz1ea3gupwmmbh",
