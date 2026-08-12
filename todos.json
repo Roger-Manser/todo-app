@@ -269,5 +269,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.10683593750000003
+  },
+  {
+    "id": "mspwym2vopym6we789",
+    "title": "27 August Fernbedienung im Garten lassen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-12T09:55:32.551Z",
+    "updatedAt": "2026-08-12T09:55:32.551Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 11.975
   }
 ]
