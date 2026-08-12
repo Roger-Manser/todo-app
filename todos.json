@@ -269,5 +269,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 0.10683593750000003
+  },
+  {
+    "id": "msprg7go861c3vhdq8u",
+    "title": "Test",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-12T07:21:15.720Z",
+    "updatedAt": "2026-08-12T07:21:15.720Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 11.975
   }
 ]
