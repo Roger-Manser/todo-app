@@ -309,12 +309,12 @@
     "attachments": [],
     "completed": false,
     "createdAt": "2026-08-13T08:13:51.459Z",
-    "updatedAt": "2026-08-13T08:13:51.459Z",
+    "updatedAt": "2026-08-13T08:14:17.859Z",
     "completedAt": null,
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 11.975,
+    "order": -0.19316406249999996,
     "updated": "2026-08-13T08:14:02.256Z"
   }
 ]
