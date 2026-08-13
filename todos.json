@@ -289,7 +289,7 @@
     "id": "msq5dtvd6rs7lqj7fg4",
     "title": "Krankenkasse kontaktieren wegen einmal und Zahlung",
     "category": "Privat",
-    "notes": "",
+    "notes": "Kein Bonus",
     "attachments": [],
     "completed": false,
     "createdAt": "2026-08-12T13:51:19.417Z",
@@ -298,6 +298,7 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 11.975
+    "order": 11.975,
+    "updated": "2026-08-13T08:13:06.230Z"
   }
 ]
