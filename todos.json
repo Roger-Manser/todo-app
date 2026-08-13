@@ -268,7 +268,7 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 0.10683593750000003
+    "order": 0.20683593750000004
   },
   {
     "id": "mspwym2vopym6we789",
@@ -314,7 +314,7 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": -0.19316406249999996,
+    "order": 0.30683593750000004,
     "updated": "2026-08-13T08:14:02.256Z"
   }
 ]
