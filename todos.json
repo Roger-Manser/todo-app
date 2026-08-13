@@ -316,5 +316,20 @@
     "nextDueDate": null,
     "order": 0.30683593750000004,
     "updated": "2026-08-13T08:14:02.256Z"
+  },
+  {
+    "id": "msrnd1v6g3ygds8f7kj",
+    "title": "Spezli Deckel 18 mm",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-13T15:02:22.386Z",
+    "updatedAt": "2026-08-13T15:02:22.386Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 11.975
   }
 ]
