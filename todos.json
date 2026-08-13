@@ -304,7 +304,7 @@
   {
     "id": "msr8rp43ajlmc4hh1jo",
     "title": "heute ab 16 Uhr Lars anrufen wie es aussieht ob wir den Termin am Freitag machen wollen",
-    "category": "Privat",
+    "category": "Geschäft",
     "notes": "",
     "attachments": [],
     "completed": false,
@@ -314,6 +314,7 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 11.975
+    "order": 11.975,
+    "updated": "2026-08-13T08:14:02.256Z"
   }
 ]
