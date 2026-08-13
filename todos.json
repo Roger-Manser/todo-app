@@ -300,5 +300,20 @@
     "nextDueDate": null,
     "order": 11.975,
     "updated": "2026-08-13T08:13:06.230Z"
+  },
+  {
+    "id": "msr8rp43ajlmc4hh1jo",
+    "title": "heute ab 16 Uhr Lars anrufen wie es aussieht ob wir den Termin am Freitag machen wollen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-13T08:13:51.459Z",
+    "updatedAt": "2026-08-13T08:13:51.459Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 11.975
   }
 ]
