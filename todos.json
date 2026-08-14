@@ -331,5 +331,25 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 11.975
+  },
+  {
+    "id": "mssz6p1yi1po89r5wie",
+    "title": "grüne Baumnüsse ernten beim Manser im Tobel",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [
+      {
+        "type": "image",
+        "name": "1000064007-1786713666795.webp"
+      }
+    ],
+    "completed": false,
+    "createdAt": "2026-08-14T13:21:07.414Z",
+    "updatedAt": "2026-08-14T13:21:07.414Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 12.975
   }
 ]
