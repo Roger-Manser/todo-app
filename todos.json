@@ -355,5 +355,20 @@
     "order": 12.975,
     "updated": "2026-08-14T13:33:42.080Z",
     "dueDate": "2027-06-14"
+  },
+  {
+    "id": "msufs9483reung33vgb",
+    "title": "AMAG Leasing anrufen wegen Mahnung",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-15T13:53:33.224Z",
+    "updatedAt": "2026-08-15T13:53:33.224Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 13.975
   }
 ]
