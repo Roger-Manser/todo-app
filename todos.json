@@ -505,5 +505,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 21.975
+  },
+  {
+    "id": "mt8rtjvuxmw0wxebjk8",
+    "title": "Kevin Angebot Blumer senden",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-25T14:39:15.690Z",
+    "updatedAt": "2026-08-25T14:39:15.690Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 22.975
   }
 ]
