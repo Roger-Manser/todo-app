@@ -430,5 +430,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 16.975
+  },
+  {
+    "id": "mt8p52lpem8e3umrpp",
+    "title": "Labelmaster Flach - Freitag anlieferung?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-25T13:24:14.317Z",
+    "updatedAt": "2026-08-25T13:24:14.317Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 17.975
   }
 ]
