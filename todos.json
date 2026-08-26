@@ -407,10 +407,10 @@
     "category": "Geschäft",
     "notes": "",
     "attachments": [],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-08-25T13:04:52.009Z",
-    "updatedAt": "2026-08-25T13:04:52.009Z",
-    "completedAt": null,
+    "updatedAt": "2026-08-26T07:27:37.642Z",
+    "completedAt": "2026-08-26T07:27:37.642Z",
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
@@ -505,20 +505,5 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 21.975
-  },
-  {
-    "id": "mt8rtjvuxmw0wxebjk8",
-    "title": "Kevin Angebot Blumer senden",
-    "category": "Privat",
-    "notes": "",
-    "attachments": [],
-    "completed": false,
-    "createdAt": "2026-08-25T14:39:15.690Z",
-    "updatedAt": "2026-08-25T14:39:15.690Z",
-    "completedAt": null,
-    "recurring": false,
-    "recurringInterval": null,
-    "nextDueDate": null,
-    "order": 22.975
   }
 ]
