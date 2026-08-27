@@ -535,5 +535,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 22.975
+  },
+  {
+    "id": "mtb9uwojp65c7qw7o1",
+    "title": "Zeitplaner Belgien anpassen",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-27T08:39:44.371Z",
+    "updatedAt": "2026-08-27T08:39:44.371Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 21.975
   }
 ]
