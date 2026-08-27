@@ -539,7 +539,7 @@
   {
     "id": "mtblglsz7ypiw597qt2",
     "title": "Mail an Marcin RCS430641 - Fragen - 2. Call?",
-    "category": "Privat",
+    "category": "Geschäft",
     "notes": "",
     "attachments": [],
     "completed": false,
@@ -549,6 +549,8 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 23.975
+    "order": 23.975,
+    "updated": "2026-08-27T14:04:45.375Z",
+    "dueDate": null
   }
 ]
