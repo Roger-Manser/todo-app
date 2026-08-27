@@ -552,5 +552,25 @@
     "order": 23.975,
     "updated": "2026-08-27T14:04:45.375Z",
     "dueDate": null
+  },
+  {
+    "id": "mtbthjn10nncbcwnzspi",
+    "title": "Minimalismus in der Mode",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [
+      {
+        "type": "image",
+        "name": "1000065137-1787852952198.jpg"
+      }
+    ],
+    "completed": false,
+    "createdAt": "2026-08-27T17:49:13.260Z",
+    "updatedAt": "2026-08-27T17:49:13.260Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 24.975
   }
 ]
