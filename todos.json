@@ -572,5 +572,25 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 24.975
+  },
+  {
+    "id": "mtbtpwofsb6oj9n8e3b",
+    "title": "Rückkehr des Grunch",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [
+      {
+        "type": "image",
+        "name": "1000065149-1787853342294.jpg"
+      }
+    ],
+    "completed": false,
+    "createdAt": "2026-08-27T17:55:43.406Z",
+    "updatedAt": "2026-08-27T17:55:43.406Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 25.975
   }
 ]
