@@ -535,5 +535,25 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 22.975
+  },
+  {
+    "id": "mtb3v0hv48dyga09ndt",
+    "title": "Rock n roll stile",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [
+      {
+        "type": "image",
+        "name": "1000065033-1787809910054.jpg"
+      }
+    ],
+    "completed": false,
+    "createdAt": "2026-08-27T05:51:51.619Z",
+    "updatedAt": "2026-08-27T05:51:51.619Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 23.975
   }
 ]
