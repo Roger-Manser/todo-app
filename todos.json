@@ -564,10 +564,10 @@
         "name": "1000065137-1787852952198.jpg"
       }
     ],
-    "completed": true,
+    "completed": false,
     "createdAt": "2026-08-27T17:49:13.260Z",
-    "updatedAt": "2026-08-27T17:56:00.223Z",
-    "completedAt": "2026-08-27T17:56:00.223Z",
+    "updatedAt": "2026-08-27T17:56:12.725Z",
+    "completedAt": null,
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
