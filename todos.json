@@ -251,7 +251,7 @@
   {
     "id": "mtch9t1pdmy69sjjpuk",
     "title": "RCS430638 - Call",
-    "category": "Privat",
+    "category": "Geschäft",
     "notes": "",
     "attachments": [],
     "completed": false,
@@ -261,6 +261,8 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 16
+    "order": 16,
+    "updated": "2026-08-28T04:55:09.812Z",
+    "dueDate": null
   }
 ]
