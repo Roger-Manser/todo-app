@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.4 - GitHub Sync</title>
+    <title>Todo App v1.6.5.15 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -662,7 +662,8 @@
         }
 
         .close-btn {
-            display: none;  /* v1.6.5.13: Kreuz-Button verstecken */
+            display: none !important;
+            visibility: hidden !important;
             background: none;
             border: none;
             font-size: 24px;
@@ -1298,13 +1299,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.14';
+const APP_VERSION = '1.6.5.15';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.15',
+        releaseDate: '2026-08-12',
+        name: '🔧 FIXES: Title + Close-Button CSS stärker',
+        features: [
+            '🔧 FIXED: Browser-Tab-Title aktualisiert auf v1.6.5.15',
+            '🚨 FIXED: Close-Button CSS mit !important + visibility:hidden',
+            '✅ Title zeigt jetzt korrekte Version im Register',
+            '✅ Kreuz-Button garantiert versteckt (stärker CSS)',
+            '✅ deleteEditAttachment Funktion funktioniert',
+            '🎯 Alles sollte jetzt funktionieren!'
+        ]
+    },
     {
         version: '1.6.5.14',
         releaseDate: '2026-08-12',
@@ -1314,8 +1328,7 @@ const VERSION_HISTORY = [
             '🚨 BUG: Console-Fehler "deleteEditAttachment is not defined"',
             '✅ Neue Funktion: löscht Attachments aus Edit-Modal',
             '✅ Attachment-Delete-Button (✕) funktioniert jetzt',
-            '✅ Close-Button immer noch mit CSS versteckt',
-            '🎯 Alle Funktionen jetzt vollständig!'
+            '⚠️  HAT BUG: Title nicht aktualisiert - verwende v1.6.5.15!'
         ]
     },
     {
