@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.27 - GitHub Sync</title>
+    <title>Todo App v1.6.5.28 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1384,7 +1384,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.27';
+const APP_VERSION = '1.6.5.28';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1392,15 +1392,15 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.6.5.27',
+        version: '1.6.5.28',
         releaseDate: '2026-08-28',
-        name: '✅ FINAL FIX: Notifications sofort ohne Refresh - GARANTIERT!',
+        name: '🔍 DEBUG + FIX: ensureNotificationElement() - Proaktive Erstellung!',
         features: [
-            '🔧 FIXED: startNotificationCheckInterval() wartet auf Element!',
-            '⏳ checkNotifications() wartet bis Notification-Element existiert',
-            '✅ Keine Refresh mehr nötig - GARANTIERT!',
-            '📍 Robuster Wait-Mechanismus (500ms Polling)',
-            '🎯 JETZT FUNKTIONIERT ES IMMER!'
+            '🔧 NEW: ensureNotificationElement() erstellt Element sofort beim Start!',
+            '🔍 EXTENSIVE DEBUGGING: Console-Logs überall zur Fehlersuche',
+            '✅ Notification-Element wird in autoInitializeApp() erstellt',
+            '📊 Debug-Output zeigt genau was passiert',
+            '🎯 Sollte JETZT funktionieren - wenn nicht sehen wir es in Console!'
         ]
     },
     {
@@ -4988,9 +4988,12 @@ function requestNotificationPermission() {
 function testNotification() {
     console.log('[DEBUG] 🧪 TEST-NOTIFICATION AUSGELÖST!');
     
+    // v1.6.5.28: ENSURE Element existiert
+    ensureNotificationElement();
+    
     const testMsg = '🧪 Test Notification! - Wenn du das siehst, funktionieren Notifications! 🎉';
     
-    // v1.6.5.24: Zeige In-App Notification (BLEIBT offen!)
+    console.log('[DEBUG] 🧪 Zeige In-App Notification...');
     displayInAppNotification(testMsg);
     
     // Versuche auch Push-Notification zu zeigen (falls Berechtigung)
@@ -5010,90 +5013,88 @@ function testNotification() {
     console.log('[DEBUG] 🧪 TEST-NOTIFICATION FERTIG!');
 }
 
-// v1.6.5.24: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
-function displayInAppNotification(message, duration = 0) {
-    // v1.6.5.26: SAFEGUARD - Erstelle Element falls nicht vorhanden!
+// v1.6.5.28: ENSURE Notification-Element existiert IMMER
+function ensureNotificationElement() {
     let notifEl = document.getElementById('in-app-notification');
     
-    if (!notifEl) {
-        console.log('[DEBUG] ⚠️ Notification-Element nicht gefunden - erstelle es!');
-        
-        // Erstelle das Element dynamisch
-        const mainContent = document.getElementById('main-content');
-        if (!mainContent) {
-            console.error('[DEBUG] ❌ main-content nicht gefunden - kann Notification nicht anzeigen!');
-            return;
-        }
-        
-        const notifHTML = `
-            <div id="in-app-notification" style="
-                display: flex;
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #4f46e5, #7c3aed);
-                color: white;
-                padding: 12px 16px;
-                text-align: center;
-                font-weight: 600;
-                font-size: 14px;
-                z-index: 4000;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-            ">
-                <span id="notification-text">🔔 Benachrichtigung!</span>
-                <button id="notification-close-btn" onclick="closeNotification()" style="
-                    background: rgba(255,255,255,0.2);
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    padding: 6px 10px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    font-size: 16px;
-                    white-space: nowrap;
-                ">✓ OK</button>
-            </div>
-        `;
-        
-        // Füge am Anfang von main-content ein
-        mainContent.insertAdjacentHTML('afterbegin', notifHTML);
-        notifEl = document.getElementById('in-app-notification');
-        
-        // Füge auch Styles hinzu wenn nicht vorhanden
-        if (!document.querySelector('style[data-notification]')) {
-            const styleEl = document.createElement('style');
-            styleEl.setAttribute('data-notification', 'true');
-            styleEl.textContent = `
-                @keyframes slideDown {
-                    from {
-                        transform: translateY(-100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateY(0);
-                        opacity: 1;
-                    }
-                }
-                @keyframes slideUp {
-                    from {
-                        transform: translateY(0);
-                        opacity: 1;
-                    }
-                    to {
-                        transform: translateY(-100%);
-                        opacity: 0;
-                    }
-                }
-            `;
-            document.head.appendChild(styleEl);
-        }
+    if (notifEl) {
+        console.log('[DEBUG] ✅ Notification-Element existiert bereits');
+        return notifEl;
     }
     
-    if (!notifEl) return;
+    console.log('[DEBUG] 🛠️ Erstelle Notification-Element...');
+    
+    // Finde einen sicheren Parent
+    let parent = document.getElementById('main-content');
+    if (!parent) {
+        parent = document.querySelector('.content');
+    }
+    if (!parent) {
+        parent = document.body;
+    }
+    
+    console.log(`[DEBUG] Parent gefunden: ${parent.id || parent.className}`);
+    
+    const notifHTML = `
+        <div id="in-app-notification" style="
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 4000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-direction: row;
+        ">
+            <span id="notification-text">🔔 Benachrichtigung!</span>
+            <button id="notification-close-btn" onclick="closeNotification()" style="
+                background: rgba(255,255,255,0.2);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 10px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            ">✓ OK</button>
+        </div>
+    `;
+    
+    // Füge als ersten Kind (oder nach Body öffnen) ein
+    if (parent === document.body) {
+        parent.insertAdjacentHTML('afterbegin', notifHTML);
+    } else {
+        parent.insertAdjacentHTML('afterbegin', notifHTML);
+    }
+    
+    notifEl = document.getElementById('in-app-notification');
+    console.log(`[DEBUG] ✅ Notification-Element erstellt!`);
+    
+    return notifEl;
+}
+
+// v1.6.5.22: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
+function displayInAppNotification(message, duration = 0) {
+    console.log(`[DEBUG] 📢 displayInAppNotification aufgerufen: "${message}"`);
+    
+    // v1.6.5.28: ENSURE Element existiert!
+    let notifEl = ensureNotificationElement();
+    
+    if (!notifEl) {
+        console.error('[DEBUG] ❌ Konnte Notification-Element nicht erstellen!');
+        return;
+    }
     
     const textEl = document.getElementById('notification-text');
     if (textEl) {
@@ -5102,6 +5103,7 @@ function displayInAppNotification(message, duration = 0) {
     
     notifEl.style.display = 'flex';
     notifEl.style.animation = 'slideDown 0.4s ease-out';
+    console.log('[DEBUG] ✅ Notification angezeigt!');
     
     // Spiele Ton ab
     playNotificationSound();
@@ -5153,6 +5155,9 @@ function playNotificationSound() {
 }
 
 function checkNotifications() {
+    // v1.6.5.28: DEBUG - Log dass wir hier sind!
+    console.log('[DEBUG] 🔔 checkNotifications() aufgerufen - prüfe Todos...');
+    
     // v1.6.5.27: WARTE bis Notification-Element existiert!
     const notifEl = document.getElementById('in-app-notification');
     if (!notifEl) {
@@ -5161,9 +5166,13 @@ function checkNotifications() {
         return;
     }
     
-    if (Notification.permission !== 'granted') return;
+    if (Notification.permission !== 'granted') {
+        console.log('[DEBUG] ⚠️ Notification.permission nicht granted');
+        return;
+    }
     
     const now = new Date();
+    console.log('[DEBUG] 📅 Prüfe ' + allTodos.length + ' Todos gegen Zeit: ' + now.toLocaleString('de-CH'));
     
     allTodos.forEach(todo => {
         if (!todo.dueDate) return;  // Kein Datum = keine Benachrichtigung
@@ -5273,6 +5282,9 @@ async function autoInitializeApp() {
     
     // v1.6.5.17: Frage Benachrichtigungen-Berechtigung
     requestNotificationPermission();
+    
+    // v1.6.5.28: ENSURE Notification-Element existiert BEVOR wir Checks starten!
+    ensureNotificationElement();
     
     try {
         const loaded = await loadGitHubConfigFromStorage();
