@@ -281,8 +281,9 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 18,
-    "updated": "2026-08-28T05:46:10.259Z",
-    "dueDate": "2027-06-14"
+    "updated": "2026-08-28T07:07:59.597Z",
+    "dueDate": "2027-06-14",
+    "dueTime": "06:00"
   },
   {
     "id": "mtchr7a3dhb04c06xp6",
