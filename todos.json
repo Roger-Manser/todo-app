@@ -345,7 +345,8 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 22,
-    "updated": "2026-08-28T06:57:31.854Z",
-    "dueDate": "2026-08-28"
+    "updated": "2026-08-28T07:06:57.701Z",
+    "dueDate": "2026-08-28",
+    "dueTime": "09:15"
   }
 ]
