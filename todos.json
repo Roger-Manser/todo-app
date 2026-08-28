@@ -328,5 +328,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 20
+  },
+  {
+    "id": "mtchub0z7652dv48w8v",
+    "title": "MTF überprüfen",
+    "category": "Geschäft",
+    "notes": "RCS430640\nLM440689\nLM440690\nLM440692\nRCS430635\nLM570013\nLM440686\nLM440703",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T05:10:59.411Z",
+    "updatedAt": "2026-08-28T05:10:59.411Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 21
   }
 ]
