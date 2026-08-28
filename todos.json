@@ -202,5 +202,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 12
+  },
+  {
+    "id": "mtch8ivhsrj0f7nnht",
+    "title": "Spezli Deckel 18mm für Rean erstellen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:54:03.149Z",
+    "updatedAt": "2026-08-28T04:54:03.149Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 13
   }
 ]
