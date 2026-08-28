@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.22 - GitHub Sync</title>
+    <title>Todo App v1.6.5.23 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1368,13 +1368,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.22';
+const APP_VERSION = '1.6.5.23';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.23',
+        releaseDate: '2026-08-28',
+        name: '🧪 NEW: Test-Button für Notifications-Debugging!',
+        features: [
+            '🧪 NEW: Test-Button in Einstellungen hinzugefügt!',
+            '✅ Zeigt sofort Purple Banner oben!',
+            '🔊 Spielt Test-Sound ab!',
+            '🐛 Hilfreich zum Debuggen von Notifications-Problemen',
+            '📍 In Einstellungen → "Benachrichtigungen testen" Sektion',
+            '🎯 Perfect für Android PWA Testing!'
+        ]
+    },
     {
         version: '1.6.5.22',
         releaseDate: '2026-08-28',
@@ -1385,8 +1398,7 @@ const VERSION_HISTORY = [
             '✅ App zu? → Push Notification auf Handy-Lockscreen!',
             '🔊 Automatischer Ton + Vibration!',
             '📍 Notification oben in der App (animiert)',
-            '⏰ Countdown für jede Stufe (1 Tag, 1 Stunde, 10 Min)',
-            '🎯 Perfekt für mobil und Web!'
+            '⚠️ Bug: Banner zeigt sich nicht auf Android PWA - verwende v1.6.5.23 zum Debuggen!'
         ]
     },
     {
@@ -4414,6 +4426,20 @@ async function openSettings() {
 
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>🧪 Benachrichtigungen testen</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <p style="font-size: 12px; color: #666; margin-bottom: 1rem;">Klick auf "Test" um zu sehen ob Benachrichtigungen funktionieren:</p>
+                    <button class="primary" style="width: 100%;" onclick="testNotification()">
+                        🧪 Test Notification zeigen!
+                    </button>
+                    <p style="font-size: 11px; color: #9ca3af; margin-top: 0.5rem;">→ Purple Banner oben sollte erscheinen + Ton spielen</p>
+                </div>
+            </div>
+
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
                     <span>⚙️ Weitere Optionen</span>
                     <span class="accordion-icon">▼</span>
                 </button>
@@ -4770,6 +4796,32 @@ function requestNotificationPermission() {
 }
 
 // v1.6.5.17: Prüfe ob Todo Benachrichtigung braucht
+// v1.6.5.23: TEST-FUNKTION für Notifications
+function testNotification() {
+    console.log('[DEBUG] 🧪 TEST-NOTIFICATION AUSGELÖST!');
+    
+    const testMsg = '🧪 Test Notification! - Wenn du das siehst, funktionieren Notifications! 🎉';
+    
+    // Zeige In-App Notification
+    displayInAppNotification(testMsg, 5000);
+    
+    // Versuche auch Push-Notification zu zeigen (falls Berechtigung)
+    if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+            new Notification('🧪 Todo App Test', {
+                body: 'Benachrichtigungen funktionieren!',
+                icon: '🧪',
+                tag: 'test_notification'
+            });
+            console.log('[DEBUG] ✅ Push-Notification gesendet!');
+        } catch (e) {
+            console.log('[DEBUG] ⚠️ Push-Notification nicht möglich:', e.message);
+        }
+    }
+    
+    console.log('[DEBUG] 🧪 TEST-NOTIFICATION FERTIG!');
+}
+
 // v1.6.5.22: HYBRID Notification System - Zeige In-App Notification
 function displayInAppNotification(message, duration = 3000) {
     const notifEl = document.getElementById('in-app-notification');
