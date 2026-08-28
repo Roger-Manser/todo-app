@@ -1298,7 +1298,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.4';
+const APP_VERSION = '1.6.5.5';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1306,16 +1306,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.6.5.4',
+        version: '1.6.5.5',
         releaseDate: '2026-08-12',
-        name: '🐛 DEBUG + Bestätigungsdialog beim Löschen',
+        name: '🚨 HOTFIX: VERSION_HISTORY repariert + GitHub Config restored',
         features: [
-            '🐛 DEBUG: openPhotoLightbox() mit console.log für Fehlersuche',
-            '🐛 DEBUG: zeigt alle Parameter + Datenladung in Console',
-            '✅ Bestätigungsdialog: "Möchtest du dieses Bild wirklich löschen?"',
-            '✅ Löschen nur nach Bestätigung (Abbruch mit "Nein")',
-            '📸 Console zeigt Step-by-Step was passiert beim Laden/Löschen',
-            '🎯 Hilft bei Fehlerfindung - offene Console (F12) anschauen!'
+            '🚨 FIXED: Kaputte VERSION_HISTORY Entry (v1.6.5.2) repariert',
+            '🚨 FIXED: Syntax Error "Unexpected token :" behoben',
+            '✅ GitHub-Einstellungen funktionieren wieder',
+            '✅ toggleAddSection() funktioniert wieder',
+            '🐛 DEBUG: openPhotoLightbox() mit Fehlersuche in Console',
+            '✅ Bestätigungsdialog beim Löschen funktioniert'
         ]
     },
     {
@@ -1331,13 +1331,17 @@ const VERSION_HISTORY = [
             '🎯 Foto-Verwaltung funktioniert jetzt vollständig!'
         ]
     },
+    {
+        version: '1.6.5.2',
+        releaseDate: '2026-08-12',
+        name: '📸 Todo-View Photo Deletion',
         features: [
             '📸 Attachment-Icons in Todo-Header sichtbar (🖼️🎥📄)',
             '🖼️ Klick auf Icon in Todo-Übersicht = Lightbox öffnet',
             '🗑️ [Löschen] Button = Foto aus Todo entfernen + speichern',
             '✅ Todo wird automatisch neu gespeichert auf GitHub',
             '📸 Fotos können jetzt aus der Übersicht gelöscht werden',
-            '⚠️ HINWEIS: Hat Bug - verwende v1.6.5.4 stattdessen!'
+            '⚠️ HINWEIS: Hat Bug - verwende v1.6.5.5 stattdessen!'
         ]
     },
     {
