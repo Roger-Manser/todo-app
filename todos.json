@@ -222,7 +222,7 @@
     "id": "mtch9eppr0btymq2fqk",
     "title": "GX000049 UV05 Umrüstung - Planung",
     "category": "Geschäft",
-    "notes": "",
+    "notes": "Wurde von Christian Schmidt koordiniert, aber die UV000049 ist nicht dabei",
     "attachments": [],
     "completed": false,
     "createdAt": "2026-08-28T04:54:44.413Z",
@@ -231,7 +231,10 @@
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
-    "order": 15
+    "order": 15,
+    "updated": "2026-08-28T08:02:44.945Z",
+    "dueDate": null,
+    "dueTime": null
   },
   {
     "id": "mtch9t1pdmy69sjjpuk",
