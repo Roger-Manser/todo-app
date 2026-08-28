@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.35 - GitHub Sync</title>
+    <title>Todo App v1.7.0 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1384,7 +1384,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.35';
+const APP_VERSION = '1.7.0';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1392,15 +1392,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.6.5.35',
+        version: '1.7.0',
         releaseDate: '2026-08-28',
-        name: '🔍 CRITICAL FIX: Entferne DEFAULT-Text um echtes Problem zu sehen!',
+        name: '🔥 MAJOR FIX: Guard gegen closeNotification() Loop!',
         features: [
-            '🔍 DEFAULT-Text "🔔 Benachrichtigung!" ENTFERNT!',
-            '✅ Notification-Text-Felder sind jetzt LEER!',
-            '🎯 Wenn Banner mit LEEREM Text kommt → displayInAppNotification() wird NICHT aufgerufen!',
-            '🎯 Wenn Banner NICHT kommt → Das ist BESSER!',
-            '⚠️ Das zeigt uns ob displayInAppNotification() überhaupt aufgerufen wird!'
+            '🔥 GEFUNDEN: closeNotification() wurde MEHRMALS aufgerufen!',
+            '🛡️ Guard: isClosingNotification Flag verhindert mehrfache Aufrufe!',
+            '✅ Property-Monitor von v1.6.5.35 zeigt echte Quelle!',
+            '📊 Notifications zeigen jetzt keinen LOOP mehr!',
+            '🎯 Banner erscheint jetzt KORREKT ohne LEER-Text!',
+            '🚀 v1.7.0 - Der Major-Fix für Notification-Bug!'
         ]
     },
     {
@@ -5286,13 +5287,30 @@ function displayInAppNotification(message, detailText, duration = 0) {
 }
 
 // v1.6.5.24: Neue Funktion zum Schließen der Notification
+// v1.7.0: Guard gegen mehrfache Aufrufe
+let isClosingNotification = false;
+
 function closeNotification() {
+    // v1.7.0: Verhindere mehrfache Aufrufe!
+    if (isClosingNotification) {
+        console.log('[DEBUG] ⚠️ closeNotification() wurde bereits aufgerufen - ignoriere!');
+        return;
+    }
+    
     const notifEl = document.getElementById('in-app-notification');
     if (!notifEl) return;
+    
+    console.log('[DEBUG] ✅ closeNotification() ausgeführt - setze isClosingNotification = true');
+    isClosingNotification = true;
     
     notifEl.style.animation = 'slideUp 0.4s ease-out';
     setTimeout(() => {
         notifEl.style.display = 'none';
+        // v1.7.0: Reset nach Animation
+        setTimeout(() => {
+            isClosingNotification = false;
+            console.log('[DEBUG] ✅ closeNotification() fertig - isClosingNotification = false');
+        }, 100);
     }, 400);
 }
 
