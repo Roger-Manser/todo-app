@@ -330,22 +330,5 @@
     "order": 21,
     "updated": "2026-08-28T05:38:25.541Z",
     "dueDate": null
-  },
-  {
-    "id": "mtcj9xswoni7g7ai9e9",
-    "title": "Test termin",
-    "category": "Privat",
-    "notes": "",
-    "attachments": [],
-    "completed": true,
-    "createdAt": "2026-08-28T05:51:08.384Z",
-    "updatedAt": "2026-08-28T06:04:04.902Z",
-    "completedAt": "2026-08-28T06:04:04.902Z",
-    "recurring": false,
-    "recurringInterval": null,
-    "nextDueDate": null,
-    "order": 22,
-    "updated": "2026-08-28T05:51:28.331Z",
-    "dueDate": "2026-08-28"
   }
 ]
