@@ -1298,13 +1298,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.13';
+const APP_VERSION = '1.6.5.14';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.14',
+        releaseDate: '2026-08-12',
+        name: '🚨 CRITICAL FIX: deleteEditAttachment Funktion fehlt',
+        features: [
+            '🚨 FIXED: deleteEditAttachment Funktion war nicht definiert',
+            '🚨 BUG: Console-Fehler "deleteEditAttachment is not defined"',
+            '✅ Neue Funktion: löscht Attachments aus Edit-Modal',
+            '✅ Attachment-Delete-Button (✕) funktioniert jetzt',
+            '✅ Close-Button immer noch mit CSS versteckt',
+            '🎯 Alle Funktionen jetzt vollständig!'
+        ]
+    },
     {
         version: '1.6.5.13',
         releaseDate: '2026-08-12',
@@ -1313,9 +1326,8 @@ const VERSION_HISTORY = [
             '🗑️ FIXED: Close-Button (X) mit display:none versteckt',
             '✅ Kreuz ist nicht mehr sichtbar im Edit-Modal',
             '✅ Löschen nur noch über Lightbox möglich',
-            '✅ Workflow: Foto öffnen → [🗑️ Löschen] → Bestätigung',
-            '🎯 Klare & sichere Lösch-Workflow',
-            '💾 CSS-basiert - keine Breaking Changes'
+            '⚠️  HAT BUG: deleteEditAttachment Funktion fehlt - verwende v1.6.5.14!',
+            '🎯 CSS-basiert - keine Breaking Changes'
         ]
     },
     {
@@ -3385,6 +3397,14 @@ function renderEditAttachments() {
 function deleteFormAttachment(idx) {
     formAttachments.splice(idx, 1);
     renderFormAttachments();
+}
+
+// v1.6.5.14: Löschen von Attachments aus Edit-Modal
+function deleteEditAttachment(idx) {
+    console.log('[DEBUG] deleteEditAttachment: Lösche idx=' + idx);
+    editAttachments.splice(idx, 1);
+    renderEditAttachments();
+    console.log('[DEBUG] Attachment gelöscht, renderEditAttachments aufgerufen');
 }
 
 // v1.6.5.4: PHOTO LIGHTBOX FUNKTIONEN
