@@ -82,5 +82,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 4
+  },
+  {
+    "id": "mtch5zzp0svf9tx0l4y9",
+    "title": "Laugenzopf",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:52:05.365Z",
+    "updatedAt": "2026-08-28T04:52:05.365Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 5
   }
 ]
