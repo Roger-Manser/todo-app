@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.19 - GitHub Sync</title>
+    <title>Todo App v1.6.5.20 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1196,7 +1196,7 @@
                 <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">📅 Termin (optional)</label>
                 <div style="display: flex; gap: 8px;">
                     <input type="date" id="edit-duedate" style="flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
-                    <!-- v1.6.5.19: Time-Input für Uhrzeit -->
+                    <!-- v1.6.5.20: Time-Input für Uhrzeit -->
                     <input type="time" id="edit-duetime" style="flex: 0.8; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
                 </div>
                 <small style="color: #666; display: block; margin-top: 4px;">📅 Datum + ⏰ Uhrzeit für Benachrichtigungen</small>
@@ -1316,7 +1316,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.19';
+const APP_VERSION = '1.6.5.20';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1324,18 +1324,31 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.6.5.19',
+        version: '1.6.5.20',
         releaseDate: '2026-08-28',
-        name: '⏰ NEW: Uhrzeit-Input + Zeit-basierte Notifications!',
+        name: '⏰ NEW: Uhrzeit-Input + Zeit-basierte Notifications (FIXED!)',
         features: [
             '⏰ NEW: Uhrzeit-Input neben Datum beim Bearbeiten!',
             '📅 Datum-Feld bleibt, 🕐 Uhrzeit-Feld neu hinzugefügt',
-            '🔔 Notifications berechnen sich jetzt mit Uhrzeit!',
+            '🔔 Notifications berechnen sich JETZT mit Uhrzeit!',
             '📅 Benachrichtigung: 1 TAG vor Termin (zur angegebenen Zeit)',
             '⏰ Benachrichtigung: 1 STUNDE vor Termin',
             '🔴 Benachrichtigung: 10 MINUTEN vor Termin',
             '✅ Wenn keine Uhrzeit: Standard 09:00 Uhr',
-            '🎯 Perfekt für Zeitmanagement auf Handy!'
+            '🐛 FIXED: v1.6.5.19 hatte normalizeTodos Fehler - das ist REPARIERT!',
+            '✅ Manuelle Sync funktioniert wieder!',
+            '🎯 PERFEKT für Zeitmanagement!'
+        ]
+    },
+    {
+        version: '1.6.5.19',
+        releaseDate: '2026-08-28',
+        name: '⏰ NEW: Uhrzeit-Input (KAPUTT - verwende v1.6.5.20!)',
+        features: [
+            '⏰ NEW: Uhrzeit-Input wurde hinzugefügt',
+            '🐛 BUG: normalizeTodos() Error bei manualSync',
+            '❌ NICHT VERWENDEN - verwende v1.6.5.20 stattdessen!',
+            '✅ v1.6.5.20 behebt alle Fehler'
         ]
     },
     {
@@ -1346,8 +1359,7 @@ const VERSION_HISTORY = [
             '🔧 FIXED: Settings-Fenster war nicht schließbar (GEFANGEN!)',
             '✅ NEU: "Fertig" Button am unteren Ende der Settings',
             '✅ Benutzer kann Settings jetzt verlassen',
-            '🔔 Notifications funktionieren weiterhin',
-            '⚠️  HAT BUG: Uhrzeit nicht implementiert - verwende v1.6.5.19!'
+            '⚠️  Uhrzeit-Input fehlt noch - verwende v1.6.5.20!'
         ]
     },
     {
@@ -3792,7 +3804,7 @@ function openEditTodoModal(id) {
     document.getElementById('edit-completed').checked = currentEditingTodo.completed || false;
     // v1.6.5.4: Setze Termin-Datum
     document.getElementById('edit-duedate').value = currentEditingTodo.dueDate || '';
-    // v1.6.5.19: Setze Termin-Uhrzeit
+    // v1.6.5.20: Setze Termin-Uhrzeit
     document.getElementById('edit-duetime').value = currentEditingTodo.dueTime || '';
     
     renderEditAttachments();
@@ -3820,7 +3832,7 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
     currentEditingTodo.completed = document.getElementById('edit-completed').checked;
     // v1.6.5.4: Lese Termin-Datum
     currentEditingTodo.dueDate = document.getElementById('edit-duedate').value || null;
-    // v1.6.5.19: Lese Termin-Uhrzeit
+    // v1.6.5.20: Lese Termin-Uhrzeit
     currentEditingTodo.dueTime = document.getElementById('edit-duetime').value || null;
     
     // v1.0.50: SPEICHERE ATTACHMENT-DATEN BEI EDIT!
@@ -4689,7 +4701,7 @@ function checkNotifications() {
     allTodos.forEach(todo => {
         if (!todo.dueDate) return;  // Kein Datum = keine Benachrichtigung
         
-        // v1.6.5.19: Kombiniere dueDate + dueTime
+        // v1.6.5.20: Kombiniere dueDate + dueTime
         let dueDateTime = todo.dueDate;
         if (todo.dueTime) {
             dueDateTime = `${todo.dueDate}T${todo.dueTime}`;  // z.B. "2026-08-28T14:30"
