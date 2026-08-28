@@ -232,5 +232,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 14
+  },
+  {
+    "id": "mtch9eppr0btymq2fqk",
+    "title": "GX000049 UV05 Umrüstung - Planung",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:54:44.413Z",
+    "updatedAt": "2026-08-28T04:54:44.413Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 15
   }
 ]
