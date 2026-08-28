@@ -5113,6 +5113,8 @@ function ensureNotificationElement() {
     
     if (notifEl) {
         console.log('[DEBUG] ✅ Notification-Element existiert bereits');
+        // v1.6.5.35: Installiere Monitor auch wenn Element bereits existiert!
+        monitorNotificationElement(notifEl);
         return notifEl;
     }
     
@@ -5186,7 +5188,48 @@ function ensureNotificationElement() {
     notifEl = document.getElementById('in-app-notification');
     console.log(`[DEBUG] ✅ Notification-Element erstellt!`);
     
+    // v1.6.5.35: Installiere Property Monitor!
+    monitorNotificationElement(notifEl);
+    
     return notifEl;
+}
+
+// v1.6.5.35: MONITOR - Tracke ALLE .style.display Zugriffe!
+function monitorNotificationElement(notifEl) {
+    console.log('[DEBUG] 🔍 Installiere Property-Monitor auf Notification-Element!');
+    
+    // Erstelle einen Proxy für style.display
+    const originalStyle = notifEl.style;
+    
+    // Überschreibe den display setter
+    Object.defineProperty(notifEl.style, 'display', {
+        get() {
+            return originalStyle.display;
+        },
+        set(value) {
+            console.log(`[DEBUG] 🚨 ALERT: .style.display wird gesetzt auf "${value}"!`);
+            console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
+            originalStyle.display = value;
+        }
+    });
+    
+    // v1.6.5.35: Überwache auch classList.add()!
+    const originalAdd = notifEl.classList.add;
+    notifEl.classList.add = function(...classes) {
+        console.log(`[DEBUG] 🚨 ALERT: classList.add() wird aufgerufen mit: ${classes.join(', ')}`);
+        console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
+        return originalAdd.call(this, ...classes);
+    };
+    
+    // v1.6.5.35: Überwache auch setAttribute!
+    const originalSetAttribute = notifEl.setAttribute;
+    notifEl.setAttribute = function(attr, value) {
+        if (attr.toLowerCase() === 'style' || attr.toLowerCase() === 'class') {
+            console.log(`[DEBUG] 🚨 ALERT: setAttribute("${attr}", "${value}") wird aufgerufen!`);
+            console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
+        }
+        return originalSetAttribute.call(this, attr, value);
+    };
 }
 
 // v1.6.5.22: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
