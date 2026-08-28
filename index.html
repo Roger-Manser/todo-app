@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.18 - GitHub Sync</title>
+    <title>Todo App v1.6.5.19 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1194,8 +1194,12 @@
             <!-- v1.6.5.4: Termin-Datumspicker -->
             <div class="form-group">
                 <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">📅 Termin (optional)</label>
-                <input type="date" id="edit-duedate" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
-                <small style="color: #666; display: block; margin-top: 4px;">Todo wird nach diesem Datum nicht mehr angezeigt</small>
+                <div style="display: flex; gap: 8px;">
+                    <input type="date" id="edit-duedate" style="flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                    <!-- v1.6.5.19: Time-Input für Uhrzeit -->
+                    <input type="time" id="edit-duetime" style="flex: 0.8; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                </div>
+                <small style="color: #666; display: block; margin-top: 4px;">📅 Datum + ⏰ Uhrzeit für Benachrichtigungen</small>
             </div>
 
             <div class="form-group">
@@ -1312,13 +1316,28 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.18';
+const APP_VERSION = '1.6.5.19';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.19',
+        releaseDate: '2026-08-28',
+        name: '⏰ NEW: Uhrzeit-Input + Zeit-basierte Notifications!',
+        features: [
+            '⏰ NEW: Uhrzeit-Input neben Datum beim Bearbeiten!',
+            '📅 Datum-Feld bleibt, 🕐 Uhrzeit-Feld neu hinzugefügt',
+            '🔔 Notifications berechnen sich jetzt mit Uhrzeit!',
+            '📅 Benachrichtigung: 1 TAG vor Termin (zur angegebenen Zeit)',
+            '⏰ Benachrichtigung: 1 STUNDE vor Termin',
+            '🔴 Benachrichtigung: 10 MINUTEN vor Termin',
+            '✅ Wenn keine Uhrzeit: Standard 09:00 Uhr',
+            '🎯 Perfekt für Zeitmanagement auf Handy!'
+        ]
+    },
     {
         version: '1.6.5.18',
         releaseDate: '2026-08-28',
@@ -1328,8 +1347,7 @@ const VERSION_HISTORY = [
             '✅ NEU: "Fertig" Button am unteren Ende der Settings',
             '✅ Benutzer kann Settings jetzt verlassen',
             '🔔 Notifications funktionieren weiterhin',
-            '⏰ Nächste Version: Datum+Uhrzeit beim Erstellen',
-            '🎯 Settings sind jetzt nutzbar!'
+            '⚠️  HAT BUG: Uhrzeit nicht implementiert - verwende v1.6.5.19!'
         ]
     },
     {
@@ -3774,6 +3792,8 @@ function openEditTodoModal(id) {
     document.getElementById('edit-completed').checked = currentEditingTodo.completed || false;
     // v1.6.5.4: Setze Termin-Datum
     document.getElementById('edit-duedate').value = currentEditingTodo.dueDate || '';
+    // v1.6.5.19: Setze Termin-Uhrzeit
+    document.getElementById('edit-duetime').value = currentEditingTodo.dueTime || '';
     
     renderEditAttachments();
     document.getElementById('editTodoModal').classList.add('show');
@@ -3800,6 +3820,8 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
     currentEditingTodo.completed = document.getElementById('edit-completed').checked;
     // v1.6.5.4: Lese Termin-Datum
     currentEditingTodo.dueDate = document.getElementById('edit-duedate').value || null;
+    // v1.6.5.19: Lese Termin-Uhrzeit
+    currentEditingTodo.dueTime = document.getElementById('edit-duetime').value || null;
     
     // v1.0.50: SPEICHERE ATTACHMENT-DATEN BEI EDIT!
     if (currentEditingTodo.attachments && currentEditingTodo.attachments.length > 0) {
@@ -4667,7 +4689,15 @@ function checkNotifications() {
     allTodos.forEach(todo => {
         if (!todo.dueDate) return;  // Kein Datum = keine Benachrichtigung
         
-        const dueDate = new Date(todo.dueDate);
+        // v1.6.5.19: Kombiniere dueDate + dueTime
+        let dueDateTime = todo.dueDate;
+        if (todo.dueTime) {
+            dueDateTime = `${todo.dueDate}T${todo.dueTime}`;  // z.B. "2026-08-28T14:30"
+        } else {
+            dueDateTime = `${todo.dueDate}T09:00`;  // Standard: 09:00
+        }
+        
+        const dueDate = new Date(dueDateTime);
         const notifKey = `${todo.id}`;
         
         // Berechne Zeit-Differenz
@@ -4678,7 +4708,7 @@ function checkNotifications() {
         // 1 TAG VOR (24 Stunden)
         if (hoursLeft > 23 && hoursLeft <= 24 && !notifiedTodos[`${notifKey}_1day`]) {
             new Notification(`📅 Morgen fällig: ${todo.title}`, {
-                body: `Fällig: ${dueDate.toLocaleDateString('de-CH')}`,
+                body: `Fällig: ${dueDate.toLocaleDateString('de-CH')} um ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})} Uhr`,
                 icon: '📅',
                 tag: `${notifKey}_1day`
             });
@@ -4689,7 +4719,7 @@ function checkNotifications() {
         // 1 STUNDE VOR (60 Minuten)
         if (minutesLeft > 55 && minutesLeft <= 60 && !notifiedTodos[`${notifKey}_1hour`]) {
             new Notification(`⏰ In 1 Stunde fällig: ${todo.title}`, {
-                body: `Fällig: ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})}`,
+                body: `Fällig: ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})} Uhr`,
                 icon: '⏰',
                 tag: `${notifKey}_1hour`
             });
@@ -4700,7 +4730,7 @@ function checkNotifications() {
         // 10 MINUTEN VOR
         if (minutesLeft > 5 && minutesLeft <= 10 && !notifiedTodos[`${notifKey}_10min`]) {
             new Notification(`🔴 JETZT: ${todo.title}`, {
-                body: `Fällig in 10 Minuten!`,
+                body: `Fällig in 10 Minuten um ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})} Uhr!`,
                 icon: '🔴',
                 tag: `${notifKey}_10min`,
                 requireInteraction: true  // Bleibt bis benutzer reagiert
