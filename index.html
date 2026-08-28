@@ -1157,7 +1157,6 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2>✏️ Aufgabe bearbeiten</h2>
-            <button class="close-btn" onclick="closeEditTodoModal()">&times;</button>
         </div>
         <form id="edit-form">
             <div class="form-group">
@@ -1298,13 +1297,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.11';
+const APP_VERSION = '1.6.5.12';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.12',
+        releaseDate: '2026-08-12',
+        name: '🗑️ UX: Kreuz-Button aus Edit-Modal entfernt',
+        features: [
+            '🗑️ REMOVED: Close-Button (X) aus Bearbeiten-Modal entfernt',
+            '✅ Löschen nur noch via Lightbox möglich',
+            '✅ Workflow: Foto öffnen → [🗑️ Löschen] → Bestätigung',
+            '✅ Sicherheit: Versehentliches Löschen verhindert',
+            '🎯 Klare & sichere Lösch-Workflow',
+            '💾 Alle anderen Funktionen unverändert'
+        ]
+    },
     {
         version: '1.6.5.11',
         releaseDate: '2026-08-12',
