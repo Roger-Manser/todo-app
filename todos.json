@@ -67,5 +67,20 @@
     "recurringInterval": 14,
     "nextDueDate": "2026-09-10",
     "order": 3
+  },
+  {
+    "id": "mtch5t7x0ynper308ad",
+    "title": "Steuererklärung",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:51:56.589Z",
+    "updatedAt": "2026-08-28T04:51:56.589Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 4
   }
 ]
