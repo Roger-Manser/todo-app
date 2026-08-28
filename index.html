@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.31 - GitHub Sync</title>
+    <title>Todo App v1.6.5.32 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1384,13 +1384,25 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.31';
+const APP_VERSION = '1.6.5.32';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.32',
+        releaseDate: '2026-08-28',
+        name: '🔍 CRITICAL DEBUG: Warum kommt Banner ohne Termin-Todo?',
+        features: [
+            '🔍 MASSIVE DEBUGGING in displayInAppNotification()!',
+            '🔍 MASSIVE DEBUGGING in checkNotifications()!',
+            '📊 Console zeigt genau was passiert Schritt-für-Schritt',
+            '✅ Bitte Console öffnen (F12) und sagen was du siehst!',
+            '🎯 So finden wir das echte Problem!'
+        ]
+    },
     {
         version: '1.6.5.31',
         releaseDate: '2026-08-28',
@@ -1401,7 +1413,7 @@ const VERSION_HISTORY = [
             '📋 Notification-Historie wird in localStorage gespeichert',
             '🔄 loadNotifiedTodos() beim App-Start',
             '💾 saveNotifiedTodos() nach jeder Benachrichtigung',
-            '🎯 PERFEKT - kein doppelter Banner mehr!'
+            '⚠️ Bug: Banner kommt ohne Termin-Todo - verwende v1.6.5.32 mit Debug!'
         ]
     },
     {
@@ -5156,8 +5168,12 @@ function ensureNotificationElement() {
 
 // v1.6.5.22: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
 // v1.6.5.29: Mit Titel + Details (Datum/Zeit)
+// v1.6.5.32: Mit Debugging!
 function displayInAppNotification(message, detailText, duration = 0) {
-    console.log(`[DEBUG] 📢 displayInAppNotification aufgerufen: "${message}"`);
+    console.log(`[DEBUG] 📢 displayInAppNotification aufgerufen!`);
+    console.log(`[DEBUG]   message: "${message}"`);
+    console.log(`[DEBUG]   detailText: "${detailText}"`);
+    console.log(`[DEBUG]   duration: ${duration}`);
     
     // v1.6.5.28: ENSURE Element existiert!
     let notifEl = ensureNotificationElement();
@@ -5170,11 +5186,16 @@ function displayInAppNotification(message, detailText, duration = 0) {
     const textEl = document.getElementById('notification-text');
     const detailEl = document.getElementById('notification-detail');
     
+    console.log(`[DEBUG]   textEl: ${textEl ? 'FOUND' : 'NOT FOUND'}`);
+    console.log(`[DEBUG]   detailEl: ${detailEl ? 'FOUND' : 'NOT FOUND'}`);
+    
     if (textEl) {
         textEl.textContent = message;
+        console.log(`[DEBUG] ✅ textEl gesetzt: "${message}"`);
     }
     if (detailEl) {
         detailEl.textContent = detailText || '';
+        console.log(`[DEBUG] ✅ detailEl gesetzt: "${detailText}"`);
     }
     
     notifEl.style.display = 'block';
@@ -5232,7 +5253,7 @@ function playNotificationSound() {
 
 function checkNotifications() {
     // v1.6.5.28: DEBUG - Log dass wir hier sind!
-    console.log('[DEBUG] 🔔 checkNotifications() aufgerufen - prüfe Todos...');
+    console.log('[DEBUG] 🔔 checkNotifications() AUFGERUFEN');
     
     // v1.6.5.27: WARTE bis Notification-Element existiert!
     const notifEl = document.getElementById('in-app-notification');
@@ -5250,13 +5271,21 @@ function checkNotifications() {
     const now = new Date();
     console.log('[DEBUG] 📅 Prüfe ' + allTodos.length + ' Todos gegen Zeit: ' + now.toLocaleString('de-CH'));
     
+    let notificationCount = 0;
+    
     allTodos.forEach(todo => {
         // v1.6.5.30: Überspringe erledigte Todos - die brauchen keine Benachrichtigungen!
         if (todo.completed) {
+            console.log(`[DEBUG]   TODO #${todo.id}: COMPLETED - SKIP`);
             return;  // Skip dieses Todo
         }
         
-        if (!todo.dueDate) return;  // Kein Datum = keine Benachrichtigung
+        if (!todo.dueDate) {
+            console.log(`[DEBUG]   TODO #${todo.id} "${todo.title}": NO DUEDATE - SKIP`);
+            return;  // Kein Datum = keine Benachrichtigung
+        }
+        
+        console.log(`[DEBUG]   TODO #${todo.id} "${todo.title}": HAS DUEDATE - CHECK!`);
         
         // v1.6.5.20: Kombiniere dueDate + dueTime
         let dueDateTime = todo.dueDate;
@@ -5335,6 +5364,8 @@ function checkNotifications() {
             console.log(`[DEBUG] 🔔 10-Minuten-Benachrichtigung: ${todo.title}`);
         }
     });
+    
+    console.log('[DEBUG] ✅ checkNotifications() FERTIG');
 }
 
 // v1.6.5.17: Starte regelmäßige Notification-Checks
