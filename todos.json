@@ -352,5 +352,22 @@
     "updated": "2026-08-28T09:52:51.368Z",
     "dueDate": "2026-08-28",
     "dueTime": "11:55"
+  },
+  {
+    "id": "mtcufget31kwkui99bn",
+    "title": "Elektrolux Geräte registrieren",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T11:03:21.557Z",
+    "updatedAt": "2026-08-28T11:03:21.557Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 23,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
