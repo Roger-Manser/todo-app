@@ -298,5 +298,20 @@
     "order": 18,
     "updated": "2026-08-28T05:07:49.180Z",
     "dueDate": null
+  },
+  {
+    "id": "mtchr7a3dhb04c06xp6",
+    "title": "RCS430635 - OPL",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T05:08:34.586Z",
+    "updatedAt": "2026-08-28T05:08:34.586Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 19
   }
 ]
