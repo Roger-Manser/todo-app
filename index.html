@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.30 - GitHub Sync</title>
+    <title>Todo App v1.6.5.31 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1384,13 +1384,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.30';
+const APP_VERSION = '1.6.5.31';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.31',
+        releaseDate: '2026-08-28',
+        name: '💾 FIXED: Keine doppelten Banner nach Refresh mehr!',
+        features: [
+            '💾 CRITICAL FIX: notifiedTodos wird jetzt persistent gespeichert!',
+            '✅ Nach Refresh kommt Banner NICHT nochmal!',
+            '📋 Notification-Historie wird in localStorage gespeichert',
+            '🔄 loadNotifiedTodos() beim App-Start',
+            '💾 saveNotifiedTodos() nach jeder Benachrichtigung',
+            '🎯 PERFEKT - kein doppelter Banner mehr!'
+        ]
+    },
     {
         version: '1.6.5.30',
         releaseDate: '2026-08-28',
@@ -1399,8 +1412,7 @@ const VERSION_HISTORY = [
             '✓ FIXED: Erledigte Todos bekommen keine Benachrichtigungen mehr!',
             '🎯 Nur noch aktive Todos werden benachrichtigt',
             '✅ Logischer Fluss - erledigt = kein Banner nötig',
-            '🧠 Intelligente Notification-Logik!',
-            '🚀 Cleaner und besseres User-Experience!'
+            '⚠️ Bug: Banner kommt bei jedem Refresh nochmal - verwende v1.6.5.31!'
         ]
     },
     {
@@ -4986,7 +4998,30 @@ if ('serviceWorker' in navigator) {
 }
 
 // v1.6.5.17: PUSH NOTIFICATIONS
+// v1.6.5.31: notifiedTodos wird jetzt PERSISTENT gespeichert!
 let notifiedTodos = {};  // Tracking: welche Todos bereits benachrichtigt
+
+function loadNotifiedTodos() {
+    try {
+        const stored = localStorage.getItem('notifiedTodos');
+        if (stored) {
+            notifiedTodos = JSON.parse(stored);
+            console.log('[DEBUG] 📋 notifiedTodos geladen:', Object.keys(notifiedTodos).length, 'Einträge');
+        }
+    } catch (e) {
+        console.log('[DEBUG] ⚠️ Fehler beim Laden von notifiedTodos:', e.message);
+        notifiedTodos = {};
+    }
+}
+
+function saveNotifiedTodos() {
+    try {
+        localStorage.setItem('notifiedTodos', JSON.stringify(notifiedTodos));
+        console.log('[DEBUG] 💾 notifiedTodos gespeichert');
+    } catch (e) {
+        console.log('[DEBUG] ⚠️ Fehler beim Speichern von notifiedTodos:', e.message);
+    }
+}
 
 // v1.6.5.17: Frage Benutzer um Berechtigung für Benachrichtigungen
 function requestNotificationPermission() {
@@ -5255,6 +5290,7 @@ function checkNotifications() {
                 displayInAppNotification(notifMsg, detailMsg);
             }
             notifiedTodos[`${notifKey}_1day`] = true;
+            saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
             console.log(`[DEBUG] 🔔 1-Tag-Benachrichtigung: ${todo.title}`);
         }
         
@@ -5274,6 +5310,7 @@ function checkNotifications() {
                 displayInAppNotification(notifMsg, detailMsg);
             }
             notifiedTodos[`${notifKey}_1hour`] = true;
+            saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
             console.log(`[DEBUG] 🔔 1-Stunde-Benachrichtigung: ${todo.title}`);
         }
         
@@ -5294,6 +5331,7 @@ function checkNotifications() {
                 displayInAppNotification(notifMsg, detailMsg);
             }
             notifiedTodos[`${notifKey}_10min`] = true;
+            saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
             console.log(`[DEBUG] 🔔 10-Minuten-Benachrichtigung: ${todo.title}`);
         }
     });
@@ -5334,6 +5372,9 @@ async function autoInitializeApp() {
     
     // v1.6.5.17: Frage Benachrichtigungen-Berechtigung
     requestNotificationPermission();
+    
+    // v1.6.5.31: Lade Notification-Historie!
+    loadNotifiedTodos();
     
     // v1.6.5.28: ENSURE Notification-Element existiert BEVOR wir Checks starten!
     ensureNotificationElement();
