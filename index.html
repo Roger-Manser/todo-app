@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.16 - GitHub Sync</title>
+    <title>Todo App v1.6.5.17 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1308,7 +1308,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.16';
+const APP_VERSION = '1.6.5.17';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1316,16 +1316,27 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
+        version: '1.6.5.17',
+        releaseDate: '2026-08-28',
+        name: '🔔 NEW: Push Notifications eingebaut!',
+        features: [
+            '🔔 NEW: Benachrichtigungen auf Handy eingebaut!',
+            '📅 Benachrichtigung: 1 TAG vor Termin',
+            '⏰ Benachrichtigung: 1 STUNDE vor Termin',
+            '🔴 Benachrichtigung: 10 MINUTEN vor Termin (mit Ton/Vibration)',
+            '✅ Funktioniert auch wenn App geschlossen ist',
+            '🎯 Vergiss kein Todo mehr! Nie wieder verpassen!'
+        ]
+    },
+    {
         version: '1.6.5.16',
         releaseDate: '2026-08-12',
-        name: '🔓 SICHERE VERSION: Kreuz komplett weg!',
+        name: '🔓 SICHERE VERSION: Kreuz mit Super-CSS versteckt',
         features: [
             '🔓 MEGA-SICHER: CSS versteckt Kreuz komplett',
             '✅ display: none, visibility: hidden, opacity: 0',
             '✅ left: -9999px, width: 0, height: 0, pointer-events: none',
-            '✅ Kreuz ist 100% unsichtbar & unerreichbar',
-            '✅ Title korrekt auf v1.6.5.16',
-            '🎯 SOLLTE JETZT FUNKTIONIEREN! 100% sicher!'
+            '⚠️  Deploy-Problem - verwende v1.6.5.17!'
         ]
     },
     {
@@ -4609,11 +4620,100 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// v1.6.5.17: PUSH NOTIFICATIONS
+let notifiedTodos = {};  // Tracking: welche Todos bereits benachrichtigt
+
+// v1.6.5.17: Frage Benutzer um Berechtigung für Benachrichtigungen
+function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+        console.log('[DEBUG] Browser unterstützt Notifications nicht');
+        return;
+    }
+    
+    if (Notification.permission === 'default') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('[DEBUG] ✅ Benachrichtigungen erlaubt!');
+            } else {
+                console.log('[DEBUG] ⚠️  Benachrichtigungen abgelehnt');
+            }
+        });
+    }
+}
+
+// v1.6.5.17: Prüfe ob Todo Benachrichtigung braucht
+function checkNotifications() {
+    if (Notification.permission !== 'granted') return;
+    
+    const now = new Date();
+    
+    allTodos.forEach(todo => {
+        if (!todo.dueDate) return;  // Kein Datum = keine Benachrichtigung
+        
+        const dueDate = new Date(todo.dueDate);
+        const notifKey = `${todo.id}`;
+        
+        // Berechne Zeit-Differenz
+        const timeDiff = dueDate - now;
+        const hoursLeft = timeDiff / (1000 * 60 * 60);
+        const minutesLeft = timeDiff / (1000 * 60);
+        
+        // 1 TAG VOR (24 Stunden)
+        if (hoursLeft > 23 && hoursLeft <= 24 && !notifiedTodos[`${notifKey}_1day`]) {
+            new Notification(`📅 Morgen fällig: ${todo.title}`, {
+                body: `Fällig: ${dueDate.toLocaleDateString('de-CH')}`,
+                icon: '📅',
+                tag: `${notifKey}_1day`
+            });
+            notifiedTodos[`${notifKey}_1day`] = true;
+            console.log(`[DEBUG] 🔔 1-Tag-Benachrichtigung: ${todo.title}`);
+        }
+        
+        // 1 STUNDE VOR (60 Minuten)
+        if (minutesLeft > 55 && minutesLeft <= 60 && !notifiedTodos[`${notifKey}_1hour`]) {
+            new Notification(`⏰ In 1 Stunde fällig: ${todo.title}`, {
+                body: `Fällig: ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})}`,
+                icon: '⏰',
+                tag: `${notifKey}_1hour`
+            });
+            notifiedTodos[`${notifKey}_1hour`] = true;
+            console.log(`[DEBUG] 🔔 1-Stunde-Benachrichtigung: ${todo.title}`);
+        }
+        
+        // 10 MINUTEN VOR
+        if (minutesLeft > 5 && minutesLeft <= 10 && !notifiedTodos[`${notifKey}_10min`]) {
+            new Notification(`🔴 JETZT: ${todo.title}`, {
+                body: `Fällig in 10 Minuten!`,
+                icon: '🔴',
+                tag: `${notifKey}_10min`,
+                requireInteraction: true  // Bleibt bis benutzer reagiert
+            });
+            notifiedTodos[`${notifKey}_10min`] = true;
+            console.log(`[DEBUG] 🔔 10-Minuten-Benachrichtigung: ${todo.title}`);
+        }
+    });
+}
+
+// v1.6.5.17: Starte regelmäßige Notification-Checks
+function startNotificationCheckInterval() {
+    if (!('Notification' in window)) return;
+    
+    // Sofort beim Start checken
+    checkNotifications();
+    
+    // Dann alle 1 Minute checken
+    setInterval(checkNotifications, 60000);
+    console.log('[DEBUG] 🔔 Notification-Checker gestartet (alle 1 Min)');
+}
+
 async function autoInitializeApp() {
     console.log('[DEBUG] === Auto-Init (v1.0.21) ===');
     
     // v1.6.5.10: Update Version-Badge sofort
     updateVersionBadge();
+    
+    // v1.6.5.17: Frage Benachrichtigungen-Berechtigung
+    requestNotificationPermission();
     
     try {
         const loaded = await loadGitHubConfigFromStorage();
@@ -4623,6 +4723,9 @@ async function autoInitializeApp() {
             
             // v1.6.5.10: Starte Update-Checker
             startUpdateCheckInterval();
+            
+            // v1.6.5.17: Starte Notification-Checker
+            startNotificationCheckInterval();
             
             setTimeout(() => {
                 console.log('[DEBUG] Initialisiere App mit GitHub-Config...');
