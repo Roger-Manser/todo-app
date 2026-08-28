@@ -37,5 +37,20 @@
     "order": 1,
     "updated": "2026-08-28T04:48:55.331Z",
     "dueDate": null
+  },
+  {
+    "id": "mtch53tpn4jj3nozrd",
+    "title": "Schlafzimmer Bettwäsche reinigen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:51:23.677Z",
+    "updatedAt": "2026-08-28T04:51:23.677Z",
+    "completedAt": null,
+    "recurring": true,
+    "recurringInterval": 45,
+    "nextDueDate": "2026-10-11",
+    "order": 2
   }
 ]
