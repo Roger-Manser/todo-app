@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.2 - GitHub Sync - Close Button Fix</title>
+    <title>Todo App v1.7.4 - GitHub Sync - Button Listener Always Register Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1027,40 +1027,8 @@
 
     <div class="content" id="main-content">
         <!-- v1.6.5.22: HYBRID In-App Notification System -->
-        <div id="in-app-notification" style="
-            display: none;
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 12px 16px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-            z-index: 4000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.4s ease-out;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        ">
-            <span id="notification-text">🔔 Benachrichtigung!</span>
-            <button id="notification-close-btn" onclick="closeNotification()" style="
-                background: rgba(255,255,255,0.2);
-                color: white;
-                border: none;
-                border-radius: 4px;
-                padding: 6px 10px;
-                cursor: pointer;
-                font-weight: 600;
-                font-size: 16px;
-                hover: background rgba(255,255,255,0.3);
-                white-space: nowrap;
-            ">✓ OK</button>
-        </div>
+        <!-- v1.7.3: REMOVED - wird dynamisch via ensureNotificationElement() eingefügt -->
+        <!-- Das statische Element hat `onclick` das sich mit addEventListener() Events verwirrt -->
 
         <style>
             @keyframes slideDown {
@@ -2183,17 +2151,11 @@ window.addEventListener('DOMContentLoaded', () => {
         console.warn('[DEBUG] ⚠️  localStorage funktioniert nicht! Daten könnten verloren gehen!');
     }
     
-    // v1.7.2: Binde Close-Button für Notifications
-    const closeBtn = document.getElementById('notification-close-btn');
-    if (closeBtn) {
-        console.log('[DEBUG] ✅ Notification Close-Button gefunden - Event-Listener wird hinzugefügt');
-        closeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[DEBUG] 🖱️ Close-Button geklickt (from DOMContentLoaded)!');
-            closeNotification();
-        });
-    }
+    // v1.7.4: Button-Listener wird jetzt von ensureNotificationElement() registriert
+    // Falls sich das HTML ändert, registriere nochmal hier
+    setTimeout(() => {
+        registerNotificationButtonListener();
+    }, 500);
     
     // v1.0.21: Event-Listener für Connect Button
     const connectBtn = document.getElementById('connect-btn');
@@ -5126,7 +5088,8 @@ function ensureNotificationElement() {
     
     if (notifEl) {
         console.log('[DEBUG] ✅ Notification-Element existiert bereits');
-        // v1.6.5.35: Installiere Monitor auch wenn Element bereits existiert!
+        // v1.7.4: IMMER Button-Listener registrieren, auch wenn Element schon existiert!
+        registerNotificationButtonListener();
         monitorNotificationElement(notifEl);
         return notifEl;
     }
@@ -5202,21 +5165,46 @@ function ensureNotificationElement() {
     console.log(`[DEBUG] ✅ Notification-Element erstellt!`);
     
     // v1.7.2: Binde Button-Click mit addEventListener statt onclick!
-    const closeBtn = document.getElementById('notification-close-btn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[DEBUG] 🖱️ Close-Button geklickt!');
-            closeNotification();
-        });
-        console.log('[DEBUG] ✅ Close-Button Event-Listener registriert!');
-    }
+    // v1.7.4: Ausgelagert in separate Funktion registerNotificationButtonListener()
+    registerNotificationButtonListener();
     
     // v1.6.5.35: Installiere Property Monitor!
     monitorNotificationElement(notifEl);
     
     return notifEl;
+}
+
+// v1.7.4: Separate Funktion zur Button-Listener-Registrierung (kann mehrmals aufgerufen werden)
+function registerNotificationButtonListener() {
+    const notifEl = document.getElementById('in-app-notification');
+    if (!notifEl) {
+        console.log('[DEBUG] ⚠️ Notification-Element nicht gefunden - Button-Listener kann nicht registriert werden');
+        return;
+    }
+    
+    const closeBtn = document.getElementById('notification-close-btn');
+    if (closeBtn) {
+        console.log('[DEBUG] ✅ Close-Button gefunden - Registriere Event-Listener!');
+        
+        // v1.7.4: Entferne alte Listener durch cloneNode
+        // (cloneNode entfernt alle Listener von dem alten Element)
+        const newBtn = closeBtn.cloneNode(true);
+        closeBtn.parentNode.replaceChild(newBtn, closeBtn);
+        
+        // Jetzt registriere den Listener auf dem neuen Button
+        const freshBtn = document.getElementById('notification-close-btn');
+        if (freshBtn) {
+            freshBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[DEBUG] 🖱️ Close-Button geklickt!');
+                closeNotification();
+            });
+            console.log('[DEBUG] ✅ Close-Button Event-Listener registriert (neu)!');
+        }
+    } else {
+        console.log('[DEBUG] ⚠️ Close-Button (#notification-close-btn) nicht gefunden');
+    }
 }
 
 // v1.6.5.35: MONITOR - Tracke ALLE .style.display Zugriffe!
@@ -5343,9 +5331,15 @@ function closeNotification() {
         return;
     }
     
+    // v1.7.3: Wenn bereits versteckt, nichts tun
+    if (notifEl.style.display === 'none') {
+        console.log('[DEBUG] ⚠️ Notification ist bereits versteckt - ignore!');
+        return;
+    }
+    
     console.log('[DEBUG] ✅ closeNotification() ausgeführt - setze isClosingNotification = true');
     isClosingNotification = true;
-    lastNotificationCloseTime = Date.now();  // v1.7.1: Merke Zeitstempel
+    lastNotificationCloseTime = Date.now();
     
     // v1.7.2: Vermeide Animations-Konflikte
     notifEl.style.animation = 'none';
@@ -5355,15 +5349,12 @@ function closeNotification() {
     
     setTimeout(() => {
         notifEl.style.display = 'none';
-        activeNotificationId = null;  // v1.7.1: Keine aktive Notification mehr
+        activeNotificationId = null;
         
-        // v1.7.0: Reset nach Animation
-        // v1.7.1: Warte länger (1 Sekunde statt 100ms) bevor wir neue erlauben
-        // v1.7.2: Extra-Sicherheit: 1500ms
         setTimeout(() => {
             isClosingNotification = false;
             console.log('[DEBUG] ✅ closeNotification() fertig - isClosingNotification = false');
-        }, 1500);  // v1.7.2: Noch länger für extra Sicherheit
+        }, 1500);
     }, 400);
 }
 
