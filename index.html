@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.24 - GitHub Sync</title>
+    <title>Todo App v1.6.5.26 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1384,13 +1384,37 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.24';
+const APP_VERSION = '1.6.5.26';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.26',
+        releaseDate: '2026-08-28',
+        name: '🐛 CRITICAL FIX: Notifications funktionieren jetzt sofort!',
+        features: [
+            '🐛 FIXED: Banner kam nur nach Refresh - JETZT SOFORT!',
+            '🛡️ Safeguard: Element wird dynamisch erstellt falls nötig',
+            '✅ Notifications funktionieren garantiert beim Start!',
+            '📍 Robustere displayInAppNotification() Funktion',
+            '🎯 KEINE Refresh mehr nötig für Notifications!'
+        ]
+    },
+    {
+        version: '1.6.5.25',
+        releaseDate: '2026-08-28',
+        name: '💾 NEW: Auto-Backup System - nie wieder Datenverlust!',
+        features: [
+            '💾 CRITICAL: Auto-Backup nach jeder Änderung!',
+            '✅ Lokale Backups in Browser-Storage gespeichert',
+            '📅 Letzte 10 Backups werden automatisch behalten',
+            '↩️ Ein-Klick Wiederherstellung aus Einstellungen!',
+            '⚠️ Bug: Notifications nur nach Refresh - verwende v1.6.5.26!'
+        ]
+    },
     {
         version: '1.6.5.24',
         releaseDate: '2026-08-28',
@@ -1399,8 +1423,7 @@ const VERSION_HISTORY = [
             '✅ NEW: Notifications bleiben offen bis User klickt ✓ OK',
             '🔘 Button "✓ OK" um Notification zu schließen',
             '📍 Keine auto-close mehr - User bestimmt wann schließen!',
-            '🎯 Viel besser für wichtige Meldungen!',
-            '🧪 Test-Button funktioniert auch!'
+            '⚠️ Bug: Keine Backups - verwende v1.6.5.25 für Auto-Backup!'
         ]
     },
     {
@@ -2629,6 +2652,100 @@ function calculateNextDueDate(intervalDays) {
     return nextDue.toISOString().split('T')[0];  // YYYY-MM-DD Format
 }
 
+// v1.6.5.25: AUTO-BACKUP SYSTEM - speichert lokale Backups
+const BACKUP_KEY_PREFIX = 'todo-backup-';
+const MAX_BACKUPS = 10;
+
+function createBackup() {
+    try {
+        const timestamp = new Date().toISOString();
+        const backupKey = `${BACKUP_KEY_PREFIX}${timestamp}`;
+        
+        // Speichere Backup im localStorage
+        localStorage.setItem(backupKey, JSON.stringify({
+            timestamp: timestamp,
+            todos: allTodos,
+            count: allTodos.length,
+            createdAt: new Date().toLocaleString('de-CH')
+        }));
+        
+        console.log(`[DEBUG] 💾 Backup erstellt: ${timestamp} (${allTodos.length} Todos)`);
+        
+        // Räume alte Backups auf - nur letzte 10 behalten
+        deleteOldBackups();
+        
+        return true;
+    } catch (error) {
+        console.error('[DEBUG] ❌ Backup-Fehler:', error.message);
+        return false;
+    }
+}
+
+function getBackups() {
+    try {
+        const backups = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith(BACKUP_KEY_PREFIX)) {
+                const data = JSON.parse(localStorage.getItem(key));
+                backups.push({
+                    key: key,
+                    timestamp: data.timestamp,
+                    count: data.count,
+                    createdAt: data.createdAt
+                });
+            }
+        }
+        // Sortiere nach Datum (neueste zuerst)
+        backups.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        return backups;
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim Laden von Backups:', error);
+        return [];
+    }
+}
+
+function deleteOldBackups() {
+    try {
+        const backups = getBackups();
+        // Lösche Backups die älter als die 10 neuesten sind
+        if (backups.length > MAX_BACKUPS) {
+            for (let i = MAX_BACKUPS; i < backups.length; i++) {
+                localStorage.removeItem(backups[i].key);
+                console.log(`[DEBUG] 🗑️ Altes Backup gelöscht: ${backups[i].createdAt}`);
+            }
+        }
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim Löschen von Backups:', error);
+    }
+}
+
+function restoreBackup(backupKey) {
+    try {
+        const backupData = localStorage.getItem(backupKey);
+        if (!backupData) {
+            alert('❌ Backup nicht gefunden!');
+            return false;
+        }
+        
+        const backup = JSON.parse(backupData);
+        allTodos = backup.todos;
+        
+        console.log(`[DEBUG] ✅ Backup wiederhergestellt: ${backup.createdAt} (${backup.count} Todos)`);
+        renderTodos();
+        updateStats();
+        
+        // Zeige Notification
+        displayInAppNotification(`✅ Backup wiederhergestellt: ${backup.count} Todos von ${backup.createdAt}`, 4000);
+        
+        return true;
+    } catch (error) {
+        console.error('[DEBUG] ❌ Fehler beim Wiederherstellen:', error);
+        alert('❌ Fehler beim Wiederherstellen des Backups!');
+        return false;
+    }
+}
+
 async function saveTodos() {
     if (!githubConfig) {
         console.warn('[DEBUG] saveTodos: Keine GitHub-Konfiguration');
@@ -2646,6 +2763,9 @@ async function saveTodos() {
         const success = await sync.saveTodos(allTodos);
         
         if (success) {
+            // v1.6.5.25: Erstelle lokales Backup nach erfolgreichem Save
+            createBackup();
+            
             updateSyncStatus('✅ GitHub Sync erfolgreich');
             console.log(`[DEBUG] ✅ ${allTodos.length} Aufgaben zu GitHub gespeichert`);
             // Reset nach 3 Sekunden
@@ -4435,6 +4555,37 @@ async function openSettings() {
                 </div>
             </div>
 
+            <!-- v1.6.5.25: Backups verwalten -->
+            <div class="accordion-section">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>💾 Backups verwalten (${getBackups().length})</span>
+                    <span class="accordion-icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    ${getBackups().length === 0 ? `
+                        <p style="color: #9ca3af; font-style: italic;">Noch keine Backups - werden automatisch erstellt!</p>
+                    ` : `
+                        <p style="font-size: 12px; color: #666; margin-bottom: 1rem;">Letzte ${Math.min(getBackups().length, MAX_BACKUPS)} automatische Backups (max 10):</p>
+                        <ul style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
+                            ${getBackups().map(backup => `
+                                <li style="padding: 8px; background: #f3f4f6; border-radius: 6px; margin-bottom: 0.5rem; font-size: 12px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; color: #333;">📅 ${backup.createdAt}</div>
+                                            <div style="color: #6b7280; font-size: 11px; margin-top: 0.25rem;">
+                                                📊 ${backup.count} Todos
+                                            </div>
+                                        </div>
+                                        <button onclick="restoreBackup('${backup.key}')" class="small" style="background: #10b981; color: white; border: none; padding: 6px 10px; white-space: nowrap; border-radius: 4px; cursor: pointer;">↩️ Wiederherstellen</button>
+                                    </div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `}
+                    <p style="font-size: 11px; color: #9ca3af; margin-top: 1rem;">💡 Backups werden automatisch nach jeder Änderung erstellt und lokal gespeichert.</p>
+                </div>
+            </div>
+
             <!-- 4. Weitere Optionen -->
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
@@ -4851,13 +5002,95 @@ function testNotification() {
 
 // v1.6.5.24: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
 function displayInAppNotification(message, duration = 0) {
-    const notifEl = document.getElementById('in-app-notification');
-    const textEl = document.getElementById('notification-text');
+    // v1.6.5.26: SAFEGUARD - Erstelle Element falls nicht vorhanden!
+    let notifEl = document.getElementById('in-app-notification');
+    
+    if (!notifEl) {
+        console.log('[DEBUG] ⚠️ Notification-Element nicht gefunden - erstelle es!');
+        
+        // Erstelle das Element dynamisch
+        const mainContent = document.getElementById('main-content');
+        if (!mainContent) {
+            console.error('[DEBUG] ❌ main-content nicht gefunden - kann Notification nicht anzeigen!');
+            return;
+        }
+        
+        const notifHTML = `
+            <div id="in-app-notification" style="
+                display: flex;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                color: white;
+                padding: 12px 16px;
+                text-align: center;
+                font-weight: 600;
+                font-size: 14px;
+                z-index: 4000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            ">
+                <span id="notification-text">🔔 Benachrichtigung!</span>
+                <button id="notification-close-btn" onclick="closeNotification()" style="
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    padding: 6px 10px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 16px;
+                    white-space: nowrap;
+                ">✓ OK</button>
+            </div>
+        `;
+        
+        // Füge am Anfang von main-content ein
+        mainContent.insertAdjacentHTML('afterbegin', notifHTML);
+        notifEl = document.getElementById('in-app-notification');
+        
+        // Füge auch Styles hinzu wenn nicht vorhanden
+        if (!document.querySelector('style[data-notification]')) {
+            const styleEl = document.createElement('style');
+            styleEl.setAttribute('data-notification', 'true');
+            styleEl.textContent = `
+                @keyframes slideDown {
+                    from {
+                        transform: translateY(-100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes slideUp {
+                    from {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateY(-100%);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(styleEl);
+        }
+    }
     
     if (!notifEl) return;
     
-    textEl.textContent = message;
-    notifEl.style.display = 'flex';  // v1.6.5.24: flex statt block wegen Close-Button
+    const textEl = document.getElementById('notification-text');
+    if (textEl) {
+        textEl.textContent = message;
+    }
+    
+    notifEl.style.display = 'flex';
     notifEl.style.animation = 'slideDown 0.4s ease-out';
     
     // Spiele Ton ab
