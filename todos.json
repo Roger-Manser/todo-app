@@ -127,5 +127,20 @@
     "recurringInterval": 7,
     "nextDueDate": "2026-09-03",
     "order": 7
+  },
+  {
+    "id": "mtch735wrbyruf8zba",
+    "title": "Papier bündeln und entsorgen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:52:56.132Z",
+    "updatedAt": "2026-08-28T04:52:56.132Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 8
   }
 ]
