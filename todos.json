@@ -112,5 +112,20 @@
     "recurringInterval": 7,
     "nextDueDate": "2026-09-03",
     "order": 6
+  },
+  {
+    "id": "mtch6re4vd86itpn8a",
+    "title": "Pflanzen Garten düngen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:52:40.876Z",
+    "updatedAt": "2026-08-28T04:52:40.876Z",
+    "completedAt": null,
+    "recurring": true,
+    "recurringInterval": 7,
+    "nextDueDate": "2026-09-03",
+    "order": 7
   }
 ]
