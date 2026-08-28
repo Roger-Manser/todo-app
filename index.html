@@ -990,7 +990,7 @@
         <div class="header-left">
             <img src="todo-icon.png" alt="Todo" style="width: 48px; height: 48px; border-radius: 6px; margin-right: 12px; flex-shrink: 0;">
             <h1>Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.6.5.4</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.0.0</div>
         </div>
         <!-- v1.0.66: Stats im Header -->
         <div class="header-stats">
@@ -1298,13 +1298,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.8';
+const APP_VERSION = '1.6.5.9';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.9',
+        releaseDate: '2026-08-12',
+        name: '🆙 FIX: Version-Badge wird jetzt dynamisch aktualisiert',
+        features: [
+            '🆙 FIXED: Version-Badge im Header zeigt jetzt APP_VERSION',
+            '✅ updateVersionBadge(): Setzt Badge auf aktuelle Version',
+            '🔄 Wird aufgerufen wenn App initialisiert wird',
+            '📊 Badge zeigt immer die korrekte Version an',
+            '✅ Auto-Update funktioniert auch hier!',
+            '🎯 Version-Anzeige ist jetzt immer aktuell!'
+        ]
+    },
     {
         version: '1.6.5.8',
         releaseDate: '2026-08-12',
@@ -1318,11 +1331,6 @@ const VERSION_HISTORY = [
             '🎯 Einfach + robust ohne Komplexität!'
         ]
     },
-    {
-        version: '1.6.5.6',
-        releaseDate: '2026-08-12',
-        name: '🚨 CRITICAL HOTFIX: TypeError & JSON-Parse Fehler',
-        features: [
             '🚨 FIXED: TypeError "Cannot read properties of null (reading \'style\')"',
             '🚨 FIXED: toggleTodoExpand() Null-Checks hinzugefügt',
             '🚨 FIXED: JSON Parse Error bei category-colors.json - besseres Handling',
@@ -2297,8 +2305,21 @@ function showSetupMessage(msg, type) {
     }
 }
 
+// v1.6.5.9: Update Version-Badge mit aktueller APP_VERSION
+function updateVersionBadge() {
+    const badge = document.getElementById('version-display');
+    if (badge) {
+        badge.textContent = `v${APP_VERSION}`;
+        console.log('[DEBUG] 🆙 Version-Badge aktualisiert auf:', APP_VERSION);
+    }
+}
+
 async function initializeApp() {
     console.log('[DEBUG] === App-Initialisierung startet (v1.0.23) ===');
+    
+    // v1.6.5.9: Update Version-Badge
+    updateVersionBadge();
+    
     document.getElementById('setup-screen').style.display = 'none';
     document.getElementById('app-container').style.display = 'block';
     
