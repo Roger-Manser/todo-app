@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.23 - GitHub Sync</title>
+    <title>Todo App v1.6.5.24 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1042,8 +1042,24 @@
             z-index: 4000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             animation: slideDown 0.4s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         ">
             <span id="notification-text">🔔 Benachrichtigung!</span>
+            <button id="notification-close-btn" onclick="closeNotification()" style="
+                background: rgba(255,255,255,0.2);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 10px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                hover: background rgba(255,255,255,0.3);
+                white-space: nowrap;
+            ">✓ OK</button>
         </div>
 
         <style>
@@ -1368,13 +1384,25 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.23';
+const APP_VERSION = '1.6.5.24';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.24',
+        releaseDate: '2026-08-28',
+        name: '✅ IMPROVED: Notification bleibt offen bis Quittierung!',
+        features: [
+            '✅ NEW: Notifications bleiben offen bis User klickt ✓ OK',
+            '🔘 Button "✓ OK" um Notification zu schließen',
+            '📍 Keine auto-close mehr - User bestimmt wann schließen!',
+            '🎯 Viel besser für wichtige Meldungen!',
+            '🧪 Test-Button funktioniert auch!'
+        ]
+    },
     {
         version: '1.6.5.23',
         releaseDate: '2026-08-28',
@@ -1384,8 +1412,7 @@ const VERSION_HISTORY = [
             '✅ Zeigt sofort Purple Banner oben!',
             '🔊 Spielt Test-Sound ab!',
             '🐛 Hilfreich zum Debuggen von Notifications-Problemen',
-            '📍 In Einstellungen → "Benachrichtigungen testen" Sektion',
-            '🎯 Perfect für Android PWA Testing!'
+            '⚠️ Bug: Notification verschwand nach 5 Sekunden - verwende v1.6.5.24 für Quittierung!'
         ]
     },
     {
@@ -4802,8 +4829,8 @@ function testNotification() {
     
     const testMsg = '🧪 Test Notification! - Wenn du das siehst, funktionieren Notifications! 🎉';
     
-    // Zeige In-App Notification
-    displayInAppNotification(testMsg, 5000);
+    // v1.6.5.24: Zeige In-App Notification (BLEIBT offen!)
+    displayInAppNotification(testMsg);
     
     // Versuche auch Push-Notification zu zeigen (falls Berechtigung)
     if ('Notification' in window && Notification.permission === 'granted') {
@@ -4822,27 +4849,38 @@ function testNotification() {
     console.log('[DEBUG] 🧪 TEST-NOTIFICATION FERTIG!');
 }
 
-// v1.6.5.22: HYBRID Notification System - Zeige In-App Notification
-function displayInAppNotification(message, duration = 3000) {
+// v1.6.5.24: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
+function displayInAppNotification(message, duration = 0) {
     const notifEl = document.getElementById('in-app-notification');
     const textEl = document.getElementById('notification-text');
     
     if (!notifEl) return;
     
     textEl.textContent = message;
-    notifEl.style.display = 'block';
+    notifEl.style.display = 'flex';  // v1.6.5.24: flex statt block wegen Close-Button
     notifEl.style.animation = 'slideDown 0.4s ease-out';
     
     // Spiele Ton ab
     playNotificationSound();
     
-    // Verstecke nach Duration
-    setTimeout(() => {
-        notifEl.style.animation = 'slideUp 0.4s ease-out';
+    // v1.6.5.24: Nur auto-close wenn duration > 0 gesetzt
+    if (duration > 0) {
         setTimeout(() => {
-            notifEl.style.display = 'none';
-        }, 400);
-    }, duration);
+            closeNotification();
+        }, duration);
+    }
+    // sonst: Notification bleibt offen bis User auf ✓ OK klickt!
+}
+
+// v1.6.5.24: Neue Funktion zum Schließen der Notification
+function closeNotification() {
+    const notifEl = document.getElementById('in-app-notification');
+    if (!notifEl) return;
+    
+    notifEl.style.animation = 'slideUp 0.4s ease-out';
+    setTimeout(() => {
+        notifEl.style.display = 'none';
+    }, 400);
 }
 
 // v1.6.5.22: Spiele Benachrichtigungston ab
@@ -4903,8 +4941,8 @@ function checkNotifications() {
                 icon: '📅',
                 tag: `${notifKey}_1day`
             });
-            // v1.6.5.22: Auch In-App Notification zeigen
-            displayInAppNotification(notifMsg, 4000);
+            // v1.6.5.24: In-App Notification OHNE auto-close (bleibt bis Quittierung!)
+            displayInAppNotification(notifMsg);
             notifiedTodos[`${notifKey}_1day`] = true;
             console.log(`[DEBUG] 🔔 1-Tag-Benachrichtigung: ${todo.title}`);
         }
@@ -4917,8 +4955,8 @@ function checkNotifications() {
                 icon: '⏰',
                 tag: `${notifKey}_1hour`
             });
-            // v1.6.5.22: Auch In-App Notification zeigen
-            displayInAppNotification(notifMsg, 4000);
+            // v1.6.5.24: In-App Notification OHNE auto-close
+            displayInAppNotification(notifMsg);
             notifiedTodos[`${notifKey}_1hour`] = true;
             console.log(`[DEBUG] 🔔 1-Stunde-Benachrichtigung: ${todo.title}`);
         }
@@ -4932,8 +4970,8 @@ function checkNotifications() {
                 tag: `${notifKey}_10min`,
                 requireInteraction: true  // Bleibt bis benutzer reagiert
             });
-            // v1.6.5.22: Auch In-App Notification zeigen (LÄNGER!)
-            displayInAppNotification(notifMsg, 6000);
+            // v1.6.5.24: In-App Notification OHNE auto-close (User muss quittieren!)
+            displayInAppNotification(notifMsg);
             notifiedTodos[`${notifKey}_10min`] = true;
             console.log(`[DEBUG] 🔔 10-Minuten-Benachrichtigung: ${todo.title}`);
         }
