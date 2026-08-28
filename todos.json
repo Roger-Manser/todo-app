@@ -142,5 +142,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 8
+  },
+  {
+    "id": "mtch79uke04h87b0fz",
+    "title": "Karton entsorgen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:53:04.796Z",
+    "updatedAt": "2026-08-28T04:53:04.796Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 9
   }
 ]
