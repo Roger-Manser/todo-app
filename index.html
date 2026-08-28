@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.1 - GitHub Sync - Notification Loop Fix</title>
+    <title>Todo App v1.7.2 - GitHub Sync - Close Button Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -2181,6 +2181,18 @@ window.addEventListener('DOMContentLoaded', () => {
     const storageWorks = testLocalStorage();
     if (!storageWorks) {
         console.warn('[DEBUG] ⚠️  localStorage funktioniert nicht! Daten könnten verloren gehen!');
+    }
+    
+    // v1.7.2: Binde Close-Button für Notifications
+    const closeBtn = document.getElementById('notification-close-btn');
+    if (closeBtn) {
+        console.log('[DEBUG] ✅ Notification Close-Button gefunden - Event-Listener wird hinzugefügt');
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[DEBUG] 🖱️ Close-Button geklickt (from DOMContentLoaded)!');
+            closeNotification();
+        });
     }
     
     // v1.0.21: Event-Listener für Connect Button
@@ -5162,7 +5174,7 @@ function ensureNotificationElement() {
                         line-height: 1.2;
                     "></div>
                 </div>
-                <button id="notification-close-btn" onclick="closeNotification()" style="
+                <button id="notification-close-btn" style="
                     background: rgba(255,255,255,0.2);
                     color: white;
                     border: none;
@@ -5188,6 +5200,18 @@ function ensureNotificationElement() {
     
     notifEl = document.getElementById('in-app-notification');
     console.log(`[DEBUG] ✅ Notification-Element erstellt!`);
+    
+    // v1.7.2: Binde Button-Click mit addEventListener statt onclick!
+    const closeBtn = document.getElementById('notification-close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[DEBUG] 🖱️ Close-Button geklickt!');
+            closeNotification();
+        });
+        console.log('[DEBUG] ✅ Close-Button Event-Listener registriert!');
+    }
     
     // v1.6.5.35: Installiere Property Monitor!
     monitorNotificationElement(notifEl);
@@ -5314,23 +5338,32 @@ function closeNotification() {
     }
     
     const notifEl = document.getElementById('in-app-notification');
-    if (!notifEl) return;
+    if (!notifEl) {
+        console.log('[DEBUG] ❌ Notification-Element nicht gefunden!');
+        return;
+    }
     
     console.log('[DEBUG] ✅ closeNotification() ausgeführt - setze isClosingNotification = true');
     isClosingNotification = true;
     lastNotificationCloseTime = Date.now();  // v1.7.1: Merke Zeitstempel
     
-    notifEl.style.animation = 'slideUp 0.4s ease-out';
+    // v1.7.2: Vermeide Animations-Konflikte
+    notifEl.style.animation = 'none';
+    setTimeout(() => {
+        notifEl.style.animation = 'slideUp 0.4s ease-out';
+    }, 10);
+    
     setTimeout(() => {
         notifEl.style.display = 'none';
         activeNotificationId = null;  // v1.7.1: Keine aktive Notification mehr
         
         // v1.7.0: Reset nach Animation
         // v1.7.1: Warte länger (1 Sekunde statt 100ms) bevor wir neue erlauben
+        // v1.7.2: Extra-Sicherheit: 1500ms
         setTimeout(() => {
             isClosingNotification = false;
             console.log('[DEBUG] ✅ closeNotification() fertig - isClosingNotification = false');
-        }, 1000);  // v1.7.1: 1 Sekunde statt 100ms
+        }, 1500);  // v1.7.2: Noch länger für extra Sicherheit
     }, 400);
 }
 
