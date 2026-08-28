@@ -1298,13 +1298,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.5';
+const APP_VERSION = '1.6.5.6';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.6',
+        releaseDate: '2026-08-12',
+        name: '🚨 CRITICAL HOTFIX: TypeError & JSON-Parse Fehler',
+        features: [
+            '🚨 FIXED: TypeError "Cannot read properties of null (reading \'style\')"',
+            '🚨 FIXED: toggleTodoExpand() Null-Checks hinzugefügt',
+            '🚨 FIXED: JSON Parse Error bei category-colors.json - besseres Handling',
+            '✅ Category-Farben laden jetzt Defaults wenn JSON kaputt',
+            '✅ Todos können wieder expandiert/collapsiert werden',
+            '🎯 App stabil und funktionsfähig!'
+        ]
+    },
     {
         version: '1.6.5.5',
         releaseDate: '2026-08-12',
@@ -1341,7 +1354,7 @@ const VERSION_HISTORY = [
             '🗑️ [Löschen] Button = Foto aus Todo entfernen + speichern',
             '✅ Todo wird automatisch neu gespeichert auf GitHub',
             '📸 Fotos können jetzt aus der Übersicht gelöscht werden',
-            '⚠️ HINWEIS: Hat Bug - verwende v1.6.5.5 stattdessen!'
+            '⚠️ HINWEIS: Hat Bug - verwende v1.6.5.6 stattdessen!'
         ]
     },
     {
@@ -3036,22 +3049,35 @@ function toggleOrderNumbers() {
 }
 
 function toggleTodoExpand(todoId) {
+    // v1.6.5.6: Null-Check für Fehlerbehandlung
     const accordion = document.getElementById(`todo-${todoId}`);
+    
+    if (!accordion) {
+        console.error('[DEBUG] ❌ toggleTodoExpand: accordion nicht gefunden für ID:', todoId);
+        return;
+    }
+    
     const details = accordion.querySelector('.todo-details');
     const header = accordion.querySelector('.todo-header');
     const icon = accordion.querySelector('.expand-icon');
+    
+    // v1.6.5.6: Null-Checks für alle Elemente
+    if (!details || !header) {
+        console.error('[DEBUG] ❌ toggleTodoExpand: details oder header nicht gefunden');
+        return;
+    }
     
     const isOpen = details.style.display !== 'none';
     
     if (isOpen) {
         // Schließen
         details.style.display = 'none';
-        icon.style.transform = 'rotate(0deg)';
+        if (icon) icon.style.transform = 'rotate(0deg)';
         header.style.background = 'transparent';
     } else {
         // Öffnen
         details.style.display = 'block';
-        icon.style.transform = 'rotate(180deg)';
+        if (icon) icon.style.transform = 'rotate(180deg)';
         header.style.background = '#f0f9ff';
     }
 }
