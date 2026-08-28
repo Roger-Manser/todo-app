@@ -187,5 +187,20 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 11
+  },
+  {
+    "id": "mtch86laet7qjgwp82",
+    "title": "Frühlingsrollen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:53:47.229Z",
+    "updatedAt": "2026-08-28T04:53:47.229Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 12
   }
 ]
