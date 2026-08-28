@@ -369,5 +369,22 @@
     "order": 23,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtcufvo0c2s7m3komag",
+    "title": "Elektrolux Anleitung scannen oder herunterladen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T11:03:41.328Z",
+    "updatedAt": "2026-08-28T11:03:41.328Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 24,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
