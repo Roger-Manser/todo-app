@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.32 - GitHub Sync</title>
+    <title>Todo App v1.6.5.33 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1384,13 +1384,25 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.32';
+const APP_VERSION = '1.6.5.33';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.33',
+        releaseDate: '2026-08-28',
+        name: '🔗 CRITICAL STACK-TRACE: Wo wird displayInAppNotification() aufgerufen?',
+        features: [
+            '🔗 STACK-TRACE in displayInAppNotification()!',
+            '📊 console.trace() zeigt exakt WO die Funktion aufgerufen wird!',
+            '✅ Bitte Console öffnen (F12) → Tab "Console" → Stack-Trace kopieren!',
+            '🎯 Das zeigt uns WER den Banner aufruft - nicht checkNotifications()!',
+            '⚠️ Notification.permission nicht granted - trotzdem Banner!'
+        ]
+    },
     {
         version: '1.6.5.32',
         releaseDate: '2026-08-28',
@@ -1399,8 +1411,8 @@ const VERSION_HISTORY = [
             '🔍 MASSIVE DEBUGGING in displayInAppNotification()!',
             '🔍 MASSIVE DEBUGGING in checkNotifications()!',
             '📊 Console zeigt genau was passiert Schritt-für-Schritt',
-            '✅ Bitte Console öffnen (F12) und sagen was du siehst!',
-            '🎯 So finden wir das echte Problem!'
+            '⚠️ Bug gefunden: Banner kommt obwohl Notification.permission NICHT granted!',
+            '🎯 Verwende v1.6.5.33 mit Stack-Trace für mehr Info!'
         ]
     },
     {
@@ -5169,11 +5181,16 @@ function ensureNotificationElement() {
 // v1.6.5.22: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
 // v1.6.5.29: Mit Titel + Details (Datum/Zeit)
 // v1.6.5.32: Mit Debugging!
+// v1.6.5.33: Mit STACK-TRACE um zu sehen WO das aufgerufen wird!
 function displayInAppNotification(message, detailText, duration = 0) {
     console.log(`[DEBUG] 📢 displayInAppNotification aufgerufen!`);
     console.log(`[DEBUG]   message: "${message}"`);
     console.log(`[DEBUG]   detailText: "${detailText}"`);
     console.log(`[DEBUG]   duration: ${duration}`);
+    
+    // v1.6.5.33: STACK-TRACE um zu sehen WER das aufruft!
+    console.log('[DEBUG] 🔗 STACK-TRACE:');
+    console.trace();  // Zeigt exakt wo die Funktion aufgerufen wird!
     
     // v1.6.5.28: ENSURE Element existiert!
     let notifEl = ensureNotificationElement();
@@ -5396,7 +5413,8 @@ function startNotificationCheckInterval() {
 }
 
 async function autoInitializeApp() {
-    console.log('[DEBUG] === Auto-Init (v1.0.21) ===');
+    console.log('[DEBUG] 🚀 autoInitializeApp() STARTET!');
+    console.log('[DEBUG] === Auto-Init (v1.6.5.33) ===');
     
     // v1.6.5.10: Update Version-Badge sofort
     updateVersionBadge();
