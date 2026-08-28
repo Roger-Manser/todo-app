@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.0 - GitHub Sync</title>
+    <title>Todo App v1.7.1 - GitHub Sync - Notification Loop Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -5237,15 +5237,25 @@ function monitorNotificationElement(notifEl) {
 // v1.6.5.29: Mit Titel + Details (Datum/Zeit)
 // v1.6.5.32: Mit Debugging!
 // v1.6.5.33: Mit STACK-TRACE um zu sehen WO das aufgerufen wird!
-function displayInAppNotification(message, detailText, duration = 0) {
+// v1.7.1: Mit Duplicate-Protection über activeNotificationId!
+function displayInAppNotification(message, detailText, duration = 0, notificationId = null) {
     console.log(`[DEBUG] 📢 displayInAppNotification aufgerufen!`);
     console.log(`[DEBUG]   message: "${message}"`);
     console.log(`[DEBUG]   detailText: "${detailText}"`);
-    console.log(`[DEBUG]   duration: ${duration}`);
+    console.log(`[DEBUG]   notificationId: ${notificationId}`);
     
-    // v1.6.5.33: STACK-TRACE um zu sehen WER das aufruft!
-    console.log('[DEBUG] 🔗 STACK-TRACE:');
-    console.trace();  // Zeigt exakt wo die Funktion aufgerufen wird!
+    // v1.7.1: Wenn gerade eine Notification geschlossen wird, WARTE!
+    if (isClosingNotification) {
+        console.log('[DEBUG] ⚠️ Gerade eine Notification am Schließen - warte 500ms...');
+        setTimeout(() => displayInAppNotification(message, detailText, duration, notificationId), 500);
+        return;
+    }
+    
+    // v1.7.1: Wenn die gleiche Notification gerade aktiv ist, zeige sie nicht nochmal!
+    if (activeNotificationId === notificationId && notificationId) {
+        console.log(`[DEBUG] ⚠️ Notification #${notificationId} ist bereits aktiv - skip!`);
+        return;
+    }
     
     // v1.6.5.28: ENSURE Element existiert!
     let notifEl = ensureNotificationElement();
@@ -5270,6 +5280,9 @@ function displayInAppNotification(message, detailText, duration = 0) {
         console.log(`[DEBUG] ✅ detailEl gesetzt: "${detailText}"`);
     }
     
+    // v1.7.1: Setze aktive Notification ID
+    activeNotificationId = notificationId;
+    
     notifEl.style.display = 'block';
     notifEl.style.animation = 'slideDown 0.4s ease-out';
     console.log('[DEBUG] ✅ Notification angezeigt!');
@@ -5288,7 +5301,10 @@ function displayInAppNotification(message, detailText, duration = 0) {
 
 // v1.6.5.24: Neue Funktion zum Schließen der Notification
 // v1.7.0: Guard gegen mehrfache Aufrufe
+// v1.7.1: NOTIFICATION LOOP FIX - Verhindere dass die gleiche Benachrichtigung sofort nochmal gezeigt wird!
 let isClosingNotification = false;
+let activeNotificationId = null;  // v1.7.1: Welche Notification ist gerade aktiv?
+let lastNotificationCloseTime = 0;  // v1.7.1: Wann wurde zuletzt geschlossen?
 
 function closeNotification() {
     // v1.7.0: Verhindere mehrfache Aufrufe!
@@ -5302,15 +5318,19 @@ function closeNotification() {
     
     console.log('[DEBUG] ✅ closeNotification() ausgeführt - setze isClosingNotification = true');
     isClosingNotification = true;
+    lastNotificationCloseTime = Date.now();  // v1.7.1: Merke Zeitstempel
     
     notifEl.style.animation = 'slideUp 0.4s ease-out';
     setTimeout(() => {
         notifEl.style.display = 'none';
+        activeNotificationId = null;  // v1.7.1: Keine aktive Notification mehr
+        
         // v1.7.0: Reset nach Animation
+        // v1.7.1: Warte länger (1 Sekunde statt 100ms) bevor wir neue erlauben
         setTimeout(() => {
             isClosingNotification = false;
             console.log('[DEBUG] ✅ closeNotification() fertig - isClosingNotification = false');
-        }, 100);
+        }, 1000);  // v1.7.1: 1 Sekunde statt 100ms
     }, 400);
 }
 
@@ -5403,9 +5423,10 @@ function checkNotifications() {
                 tag: `${notifKey}_1day`
             });
             // v1.6.5.29: Zeige Titel + Details!
+            // v1.7.1: Übergebe notificationId für Duplicate-Protection!
             const el = document.getElementById('in-app-notification');
             if (el) {
-                displayInAppNotification(notifMsg, detailMsg);
+                displayInAppNotification(notifMsg, detailMsg, 0, `${notifKey}_1day`);
             }
             notifiedTodos[`${notifKey}_1day`] = true;
             saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
@@ -5423,9 +5444,10 @@ function checkNotifications() {
                 tag: `${notifKey}_1hour`
             });
             // v1.6.5.29: Zeige Titel + Details!
+            // v1.7.1: Übergebe notificationId für Duplicate-Protection!
             const el = document.getElementById('in-app-notification');
             if (el) {
-                displayInAppNotification(notifMsg, detailMsg);
+                displayInAppNotification(notifMsg, detailMsg, 0, `${notifKey}_1hour`);
             }
             notifiedTodos[`${notifKey}_1hour`] = true;
             saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
@@ -5444,9 +5466,10 @@ function checkNotifications() {
                 requireInteraction: true  // Bleibt bis benutzer reagiert
             });
             // v1.6.5.29: Zeige Titel + Details!
+            // v1.7.1: Übergebe notificationId für Duplicate-Protection!
             const el = document.getElementById('in-app-notification');
             if (el) {
-                displayInAppNotification(notifMsg, detailMsg);
+                displayInAppNotification(notifMsg, detailMsg, 0, `${notifKey}_10min`);
             }
             notifiedTodos[`${notifKey}_10min`] = true;
             saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
