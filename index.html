@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.17 - GitHub Sync</title>
+    <title>Todo App v1.6.5.18 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1242,6 +1242,10 @@
             <button class="close-btn" onclick="closeSettings()">&times;</button>
         </div>
         <div id="settings-content"></div>
+        <!-- v1.6.5.18: Fertig Button zum Schließen -->
+        <div style="padding: 1rem; border-top: 1px solid #e5e7eb; margin-top: 1rem;">
+            <button type="button" onclick="closeSettings()" style="width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">✅ Fertig</button>
+        </div>
     </div>
 </div>
 
@@ -1308,13 +1312,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.17';
+const APP_VERSION = '1.6.5.18';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.18',
+        releaseDate: '2026-08-28',
+        name: '🔧 CRITICAL FIX: Settings Modal schließbar!',
+        features: [
+            '🔧 FIXED: Settings-Fenster war nicht schließbar (GEFANGEN!)',
+            '✅ NEU: "Fertig" Button am unteren Ende der Settings',
+            '✅ Benutzer kann Settings jetzt verlassen',
+            '🔔 Notifications funktionieren weiterhin',
+            '⏰ Nächste Version: Datum+Uhrzeit beim Erstellen',
+            '🎯 Settings sind jetzt nutzbar!'
+        ]
+    },
     {
         version: '1.6.5.17',
         releaseDate: '2026-08-28',
@@ -1325,7 +1342,7 @@ const VERSION_HISTORY = [
             '⏰ Benachrichtigung: 1 STUNDE vor Termin',
             '🔴 Benachrichtigung: 10 MINUTEN vor Termin (mit Ton/Vibration)',
             '✅ Funktioniert auch wenn App geschlossen ist',
-            '🎯 Vergiss kein Todo mehr! Nie wieder verpassen!'
+            '⚠️  HAT BUG: Settings schließbar - verwende v1.6.5.18!'
         ]
     },
     {
