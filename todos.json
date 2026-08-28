@@ -52,5 +52,20 @@
     "recurringInterval": 45,
     "nextDueDate": "2026-10-11",
     "order": 2
+  },
+  {
+    "id": "mtch5j3ieznjkeu0w76",
+    "title": "Schlafzimmer Stubsaugen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T04:51:43.470Z",
+    "updatedAt": "2026-08-28T04:51:43.470Z",
+    "completedAt": null,
+    "recurring": true,
+    "recurringInterval": 14,
+    "nextDueDate": "2026-09-10",
+    "order": 3
   }
 ]
