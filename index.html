@@ -662,6 +662,7 @@
         }
 
         .close-btn {
+            display: none;  /* v1.6.5.13: Kreuz-Button verstecken */
             background: none;
             border: none;
             font-size: 24px;
@@ -1297,7 +1298,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.12';
+const APP_VERSION = '1.6.5.13';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1305,16 +1306,27 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
+        version: '1.6.5.13',
+        releaseDate: '2026-08-12',
+        name: '🗑️ UX: Kreuz-Button mit CSS versteckt',
+        features: [
+            '🗑️ FIXED: Close-Button (X) mit display:none versteckt',
+            '✅ Kreuz ist nicht mehr sichtbar im Edit-Modal',
+            '✅ Löschen nur noch über Lightbox möglich',
+            '✅ Workflow: Foto öffnen → [🗑️ Löschen] → Bestätigung',
+            '🎯 Klare & sichere Lösch-Workflow',
+            '💾 CSS-basiert - keine Breaking Changes'
+        ]
+    },
+    {
         version: '1.6.5.12',
         releaseDate: '2026-08-12',
-        name: '🗑️ UX: Kreuz-Button aus Edit-Modal entfernt',
+        name: '🗑️ UX: Kreuz-Button aus Edit-Modal entfernt (SKIPPED - CSS besser)',
         features: [
-            '🗑️ REMOVED: Close-Button (X) aus Bearbeiten-Modal entfernt',
-            '✅ Löschen nur noch via Lightbox möglich',
-            '✅ Workflow: Foto öffnen → [🗑️ Löschen] → Bestätigung',
-            '✅ Sicherheit: Versehentliches Löschen verhindert',
-            '🎯 Klare & sichere Lösch-Workflow',
-            '💾 Alle anderen Funktionen unverändert'
+            '⚠️  SKIPPED: HTML-Ansatz war nicht effektiv',
+            '⚠️  v1.6.5.13 behebt das mit CSS (display:none)',
+            '✅ Verwende v1.6.5.13 stattdessen!',
+            '🎯 CSS-Lösung ist robuster'
         ]
     },
     {
