@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.21 - GitHub Sync</title>
+    <title>Todo App v1.6.5.22 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1026,6 +1026,48 @@
     </div>
 
     <div class="content" id="main-content">
+        <!-- v1.6.5.22: HYBRID In-App Notification System -->
+        <div id="in-app-notification" style="
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 4000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease-out;
+        ">
+            <span id="notification-text">🔔 Benachrichtigung!</span>
+        </div>
+
+        <style>
+            @keyframes slideDown {
+                from {
+                    transform: translateY(-100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideUp {
+                from {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateY(-100%);
+                    opacity: 0;
+                }
+            }
+        </style>
         <div class="setup-screen" id="setup-screen">
             <h2>🚀 GitHub Synchronisierung</h2>
             <p>Speichere deine To-Dos sicher in GitHub!</p>
@@ -1326,13 +1368,27 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.21';
+const APP_VERSION = '1.6.5.22';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.22',
+        releaseDate: '2026-08-28',
+        name: '🔔 NEW: HYBRID Notifications (In-App + Push)!',
+        features: [
+            '🔔 HYBRID Notification System eingebaut!',
+            '✅ App offen? → Sieht Notification IN der App!',
+            '✅ App zu? → Push Notification auf Handy-Lockscreen!',
+            '🔊 Automatischer Ton + Vibration!',
+            '📍 Notification oben in der App (animiert)',
+            '⏰ Countdown für jede Stufe (1 Tag, 1 Stunde, 10 Min)',
+            '🎯 Perfekt für mobil und Web!'
+        ]
+    },
     {
         version: '1.6.5.21',
         releaseDate: '2026-08-28',
@@ -1341,10 +1397,7 @@ const VERSION_HISTORY = [
             '✨ NEW: Datum + Uhrzeit Inputs in der Add-Form!',
             '📅 Beim Erstellen → direkt Termin + Zeit setzen',
             '🕐 Keine Bearbeitung mehr notwendig!',
-            '🔔 Notifications funktionieren sofort!',
-            '⏰ Uhrzeit beim Bearbeiten funktioniert auch',
-            '✅ Vollständiger Termin-Workflow!',
-            '🎯 Perfekt für schnelle Aufgabenverwaltung!'
+            '⚠️ Bug: Notifications nur als Push - verwende v1.6.5.22 für HYBRID!'
         ]
     },
     {
@@ -4717,6 +4770,55 @@ function requestNotificationPermission() {
 }
 
 // v1.6.5.17: Prüfe ob Todo Benachrichtigung braucht
+// v1.6.5.22: HYBRID Notification System - Zeige In-App Notification
+function displayInAppNotification(message, duration = 3000) {
+    const notifEl = document.getElementById('in-app-notification');
+    const textEl = document.getElementById('notification-text');
+    
+    if (!notifEl) return;
+    
+    textEl.textContent = message;
+    notifEl.style.display = 'block';
+    notifEl.style.animation = 'slideDown 0.4s ease-out';
+    
+    // Spiele Ton ab
+    playNotificationSound();
+    
+    // Verstecke nach Duration
+    setTimeout(() => {
+        notifEl.style.animation = 'slideUp 0.4s ease-out';
+        setTimeout(() => {
+            notifEl.style.display = 'none';
+        }, 400);
+    }, duration);
+}
+
+// v1.6.5.22: Spiele Benachrichtigungston ab
+function playNotificationSound() {
+    try {
+        // Verwende Web Audio API für einfachen Ton
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Kurzer 2-Ton Ping (200ms + 200ms Pause + 200ms)
+        oscillator.frequency.value = 800;  // Höherer Ton
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.15);
+        
+        // 2. Ton
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime + 0.25);
+        oscillator.start(audioContext.currentTime + 0.25);
+        oscillator.stop(audioContext.currentTime + 0.4);
+    } catch (e) {
+        console.log('[DEBUG] ⚠️ Audio Fehler (kein Problem):', e.message);
+    }
+}
+
 function checkNotifications() {
     if (Notification.permission !== 'granted') return;
     
@@ -4743,34 +4845,43 @@ function checkNotifications() {
         
         // 1 TAG VOR (24 Stunden)
         if (hoursLeft > 23 && hoursLeft <= 24 && !notifiedTodos[`${notifKey}_1day`]) {
-            new Notification(`📅 Morgen fällig: ${todo.title}`, {
+            const notifMsg = `📅 Morgen fällig: ${todo.title}`;
+            new Notification(notifMsg, {
                 body: `Fällig: ${dueDate.toLocaleDateString('de-CH')} um ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})} Uhr`,
                 icon: '📅',
                 tag: `${notifKey}_1day`
             });
+            // v1.6.5.22: Auch In-App Notification zeigen
+            displayInAppNotification(notifMsg, 4000);
             notifiedTodos[`${notifKey}_1day`] = true;
             console.log(`[DEBUG] 🔔 1-Tag-Benachrichtigung: ${todo.title}`);
         }
         
         // 1 STUNDE VOR (60 Minuten)
         if (minutesLeft > 55 && minutesLeft <= 60 && !notifiedTodos[`${notifKey}_1hour`]) {
-            new Notification(`⏰ In 1 Stunde fällig: ${todo.title}`, {
+            const notifMsg = `⏰ In 1 Stunde fällig: ${todo.title}`;
+            new Notification(notifMsg, {
                 body: `Fällig: ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})} Uhr`,
                 icon: '⏰',
                 tag: `${notifKey}_1hour`
             });
+            // v1.6.5.22: Auch In-App Notification zeigen
+            displayInAppNotification(notifMsg, 4000);
             notifiedTodos[`${notifKey}_1hour`] = true;
             console.log(`[DEBUG] 🔔 1-Stunde-Benachrichtigung: ${todo.title}`);
         }
         
         // 10 MINUTEN VOR
         if (minutesLeft > 5 && minutesLeft <= 10 && !notifiedTodos[`${notifKey}_10min`]) {
+            const notifMsg = `🔴 JETZT: ${todo.title} - fällig in 10 Minuten!`;
             new Notification(`🔴 JETZT: ${todo.title}`, {
                 body: `Fällig in 10 Minuten um ${dueDate.toLocaleTimeString('de-CH', {hour: '2-digit', minute:'2-digit'})} Uhr!`,
                 icon: '🔴',
                 tag: `${notifKey}_10min`,
                 requireInteraction: true  // Bleibt bis benutzer reagiert
             });
+            // v1.6.5.22: Auch In-App Notification zeigen (LÄNGER!)
+            displayInAppNotification(notifMsg, 6000);
             notifiedTodos[`${notifKey}_10min`] = true;
             console.log(`[DEBUG] 🔔 10-Minuten-Benachrichtigung: ${todo.title}`);
         }
