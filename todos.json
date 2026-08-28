@@ -281,5 +281,20 @@
     "order": 17,
     "updated": "2026-08-28T04:55:52.478Z",
     "dueDate": null
+  },
+  {
+    "id": "mtchq1a9nqds9opuuwd",
+    "title": "Grüne Baumnüsse \"stehlen\" beim Manser im Tobel",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-08-28T05:07:40.161Z",
+    "updatedAt": "2026-08-28T05:07:40.161Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 18
   }
 ]
