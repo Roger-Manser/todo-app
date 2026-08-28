@@ -1298,13 +1298,26 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.10';
+const APP_VERSION = '1.6.5.11';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5.11',
+        releaseDate: '2026-08-12',
+        name: '🚨 CRITICAL FIX: Attachment-Icons in Übersicht öffnen falsche App',
+        features: [
+            '🚨 FIXED: handleAttachmentClick ruft jetzt openPhotoLightbox auf',
+            '🚨 BUG: War viewAttachment statt openPhotoLightbox - öffnete externe URL',
+            '✅ Attachment-Icons in Todo-Liste öffnen jetzt Lightbox',
+            '✅ Fotos aus Übersicht können jetzt angesehen werden',
+            '✅ Konsistent mit Bearbeiten-Modal Verhalten',
+            '🎯 Lightbox funktioniert ÜBERALL!'
+        ]
+    },
     {
         version: '1.6.5.10',
         releaseDate: '2026-08-12',
@@ -1315,7 +1328,7 @@ const VERSION_HISTORY = [
             '📢 performUpdate(): Service Worker + Cache + Hard Reload',
             '⏰ startUpdateCheckInterval(): Prüft beim Start + alle 30 Min',
             '👂 controllerchange Event: Höre auf neue Version',
-            '🎯 App aktualisiert sich automatisch!'
+            '⚠️  HAT BUG: Attachment-Icons in Übersicht - verwende v1.6.5.11!'
         ]
     },
     {
@@ -3759,10 +3772,9 @@ async function viewAttachment(todoId, attachmentIdx) {
     viewer.classList.add('show');
 }
 function handleAttachmentClick(todoId, attachmentIdx) {
-    console.log('[DEBUG] handleAttachmentClick:', todoId, attachmentIdx);
-    viewAttachment(todoId, attachmentIdx).catch(err => {
-        console.error('[DEBUG] Fehler in viewAttachment:', err);
-    });
+    // v1.6.5.11: FIXED - Rufe openPhotoLightbox statt viewAttachment auf!
+    console.log('[DEBUG] handleAttachmentClick: Öffne Lightbox für', todoId, 'idx:', attachmentIdx);
+    openPhotoLightbox(attachmentIdx, 'view', todoId);
 }
 
 function closeImageViewer() {
