@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.3 - GitHub Sync</title>
+    <title>Todo App v1.6.5 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -456,7 +456,7 @@
         .todos-list {
             display: flex;
             flex-direction: column;
-            gap: 4px;  /* v1.6.3: Reduziert auf 4px für Platz */
+            gap: 4px;  /* v1.6.5: Reduziert auf 4px für Platz */
         }
 
         /* v1.0.39: Accordion-Style Todos */
@@ -614,7 +614,7 @@
             overflow-y: auto;
         }
         
-        /* v1.6.3: Edit-Modal immer oben */
+        /* v1.6.5: Edit-Modal immer oben */
         #editTodoModal {
             z-index: 2000 !important;
         }
@@ -726,7 +726,7 @@
 
         .success-msg {
             background: #dcfce7;
-            color: #166534;
+            color: #1.6.54;
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 1rem;
@@ -990,7 +990,7 @@
         <div class="header-left">
             <img src="todo-icon.png" alt="Todo" style="width: 48px; height: 48px; border-radius: 6px; margin-right: 12px; flex-shrink: 0;">
             <h1>Meine To-Dos</h1>
-            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.6.3</div>
+            <div class="version-badge" id="version-display" onclick="openVersionHistory()">v1.6.5</div>
         </div>
         <!-- v1.0.66: Stats im Header -->
         <div class="header-stats">
@@ -1175,13 +1175,13 @@
                 </select>
             </div>
             
-            <!-- v1.6.3: Erledigt Checkbox ins Modal -->
+            <!-- v1.6.5: Erledigt Checkbox ins Modal -->
             <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
                 <input type="checkbox" id="edit-completed" style="width: 18px; height: 18px; cursor: pointer;">
                 <label for="edit-completed" style="font-weight: 600; cursor: pointer;">✅ Erledigt</label>
             </div>
             
-            <!-- v1.6.3: Termin-Datumspicker -->
+            <!-- v1.6.5: Termin-Datumspicker -->
             <div class="form-group">
                 <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">📅 Termin (optional)</label>
                 <input type="date" id="edit-duedate" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
@@ -1298,13 +1298,39 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.3';
+const APP_VERSION = '1.6.5';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.6.5',
+        releaseDate: '2026-08-12',
+        name: '📸 Lightbox: Delete + Close Buttons',
+        features: [
+            '📸 Klick auf Foto = Großansicht mit 2 Buttons',
+            '🗑️ [Löschen] Button - Foto aus Lightbox löschen',
+            '✕ [Schließen] Button - Lightbox schließen',
+            '✅ Fotos löschen funktioniert jetzt (Bug gefixt)',
+            '🎯 Professionelle Foto-Verwaltung wie im Haushaltbuch',
+            '⚡ Vollständig funktionierende Attachment-Verwaltung'
+        ]
+    },
+    {
+        version: '1.6.4',
+        releaseDate: '2026-08-12',
+        name: '🚨 CRITICAL BUG-FIX: Verlorene Todos retten!',
+        features: [
+            '🚨 FIXED: `today` Scope Bug - entfernt doppelte Definition',
+            '🔴 Cause: nextDueDate Vergleich verwendete undefined today',
+            '✅ Result: Alle Todos werden jetzt korrekt angezeigt',
+            '💾 renderTodos() Filter läuft jetzt fehlerfrei',
+            '🎯 Keine verlorenen Daten mehr beim Erstellen von Todos',
+            '⚡ Critical Hotfix für v1.6.3'
+        ]
+    },
     {
         version: '1.6.3',
         releaseDate: '2026-08-12',
@@ -1445,7 +1471,7 @@ const VERSION_HISTORY = [
     {
         version: '1.4.7',
         releaseDate: '2026-08-10',
-        name: 'Icon vor Todos (entfernt in v1.6.3)',
+        name: 'Icon vor Todos (entfernt in v1.6.5)',
         features: [
             '📝 App-Icon war in den Todos (wurde entfernt)',
             '✨ Erste Iteration mit Icon-Feature',
@@ -1704,7 +1730,7 @@ let currentEditingTodo = null;
 let formAttachments = [];
 let editAttachments = [];
 let githubConfig = null;
-let showOrderNumbers = true;  // v1.6.3: Positionsnummern anzeigen
+let showOrderNumbers = true;  // v1.6.5: Positionsnummern anzeigen
 
 // Safe localStorage Speicherung mit Quota-Handling und Prioritäten
 // v1.0.16: Test ob localStorage funktioniert
@@ -2201,7 +2227,7 @@ async function initializeApp() {
     const sync = new GitHubSync(githubConfig.username, githubConfig.token, githubConfig.repo);
     updateSyncStatus('Lade Daten...');
     console.log(`[DEBUG] Lade Daten von GitHub: ${githubConfig.username}/${githubConfig.repo}`);
-// ===== v1.6.3: NORMALISIERUNG ÄLTERER TODOS =====
+// ===== v1.6.5: NORMALISIERUNG ÄLTERER TODOS =====
 function normalizeTodos() {
     // Stelle sicher dass alle Todos einen order Wert haben
     let maxOrder = 0;
@@ -2228,7 +2254,7 @@ function normalizeTodos() {
     
     // v1.0.24: Ordner wurde bereits beim Verbinden erstellt
     allTodos = await sync.getTodos();
-    normalizeTodos();  // v1.6.3: Normalisiere order Werte
+    normalizeTodos();  // v1.6.5: Normalisiere order Werte
     allCategories = await sync.getCategories();
     // v1.0.70: Initialisiere Defaults SOFORT, dann lade vom GitHub
     initializeDefaultColors();
@@ -2241,7 +2267,7 @@ function normalizeTodos() {
     // v1.0.10: Nicht mehr in localStorage speichern!
     // Daten kommen von GitHub, nicht von Cache
     
-    // v1.6.3: Lade Anzeigeeinstellungen
+    // v1.6.5: Lade Anzeigeeinstellungen
     const savedShowOrderNumbers = localStorage.getItem('showOrderNumbers');
     if (savedShowOrderNumbers !== null) {
         showOrderNumbers = savedShowOrderNumbers === 'true';
@@ -2327,7 +2353,7 @@ async function saveTodos() {
     }
 }
 
-// v1.6.3: MANUELLE SYNC MIT KLICK AUF ● PUNKT
+// v1.6.5: MANUELLE SYNC MIT KLICK AUF ● PUNKT
 async function manualSync() {
     if (!githubConfig) {
         alert('❌ GitHub-Verbindung nicht konfiguriert!\n\nBitte erst in den Einstellungen einrichten.');
@@ -2596,9 +2622,8 @@ function renderTodos() {
     
     // v1.0.39: Accordion-Style Expand in der Übersicht - nur Titel beim Start
     const filtered = allTodos.filter(todo => {
-        // v1.6.3: Wenn Todo abgelaufen (dueDate in Zukunft), nicht anzeigen
+        // v1.6.0: Wenn Todo abgelaufen (dueDate in Zukunft), nicht anzeigen
         if (todo.dueDate) {
-            const today = new Date().toISOString().split('T')[0];
             if (todo.dueDate > today) {
                 return false;  // Termin noch nicht erreicht - verstecken
             }
@@ -2621,9 +2646,9 @@ function renderTodos() {
         return false;
     });
 
-    // v1.6.3: Sortiere nach createdAt (älteste zuerst)
+    // v1.6.5: Sortiere nach createdAt (älteste zuerst)
     const sorted = filtered.sort((a, b) => {
-        // v1.6.3: Sortiere nach order (nicht createdAt)
+        // v1.6.5: Sortiere nach order (nicht createdAt)
         const orderA = a.order || 999999;  // Fallback für alte Todos
         const orderB = b.order || 999999;
         return orderA - orderB;  // Aufsteigend: kleinste order zuerst
@@ -2653,7 +2678,7 @@ function renderTodos() {
                             ${todo.dueDate ? `<span style="font-size: 10px; color: #666; white-space: nowrap; margin-left: auto; margin-right: 4px;">📅 ${todo.dueDate}</span>` : ''}
                             ${todo.recurring ? '<span style="font-size: 11px; color: #d32f2f; margin-left: auto;">🔄</span>' : ''}
                         </div>
-                        <!-- v1.6.3: Pfeile-Buttons zum Verschieben - kompakt -->
+                        <!-- v1.6.5: Pfeile-Buttons zum Verschieben - kompakt -->
                         <div style="display: flex; gap: 2px; align-items: center;">
                             <button onclick="event.stopPropagation(); moveTodoUp('${todo.id}')" 
                                     style="background: transparent; border: none; cursor: pointer; padding: 2px 4px; color: #666; font-size: 14px; line-height: 1;"
@@ -2859,7 +2884,7 @@ function setupDragAndDrop() {
             const targetTodo = allTodos.find(t => t.id === todoEl.id.replace('todo-', ''));
             
             if (draggedTodo && targetTodo) {
-                // v1.6.3: Ändere order statt Array-Position zu tauschen
+                // v1.6.5: Ändere order statt Array-Position zu tauschen
                 const newOrder = targetTodo.order - 0.5;
                 draggedTodo.order = newOrder;
                 draggedTodo.updatedAt = new Date().toISOString();
@@ -2882,7 +2907,7 @@ function setupDragAndDrop() {
     });
 }
 
-// ===== v1.6.3: MOVE TODO UP/DOWN MIT BUTTONS =====
+// ===== v1.6.5: MOVE TODO UP/DOWN MIT BUTTONS =====
 function moveTodoUp(id) {
     const todo = allTodos.find(t => t.id === id);
     if (!todo) return;
@@ -2896,7 +2921,7 @@ function moveTodoUp(id) {
     const todoAbove = sorted[index - 1];
     const targetOrder = todoAbove.order - 0.1;
     
-    // v1.6.3: INTELLIGENTE LOGIK
+    // v1.6.5: INTELLIGENTE LOGIK
     if (targetOrder >= 0.1) {
         // Genug Platz - verkleinere um 0.1
         todo.order = targetOrder;
@@ -2928,7 +2953,7 @@ function moveTodoDown(id) {
     const todoBelow = sorted[index + 1];
     const targetOrder = todoBelow.order + 0.1;
     
-    // v1.6.3: INTELLIGENTE LOGIK - einfach +0.1, immer möglich
+    // v1.6.5: INTELLIGENTE LOGIK - einfach +0.1, immer möglich
     todo.order = targetOrder;
     console.log('[DEBUG] ⬇️ ' + todo.title + ' → ' + todo.order + ' (+0.1)');
     
@@ -2936,7 +2961,7 @@ function moveTodoDown(id) {
     renderTodos();
 }
 
-// ===== v1.6.3: TOGGLE ORDER NUMBERS =====
+// ===== v1.6.5: TOGGLE ORDER NUMBERS =====
 function toggleOrderNumbers() {
     const checkbox = document.getElementById('show-order-numbers');
     showOrderNumbers = checkbox.checked;
@@ -3214,8 +3239,8 @@ function renderFormAttachments() {
     }
     container.innerHTML = formAttachments.map((att, idx) => `
         <div class="attachment-thumb ${att.type}">
-            ${att.type === 'image' ? `<img src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}')">` : 
-              att.type === 'video' ? `<video src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}')"></video>` :
+            ${att.type === 'image' ? `<img src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}', ${idx}, 'form')">` : 
+              att.type === 'video' ? `<video src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}', ${idx}, 'form')"></video>` :
               `<div>📄</div>`}
             <button class="attachment-delete-btn" onclick="deleteFormAttachment(${idx})">✕</button>
         </div>
@@ -3230,8 +3255,8 @@ function renderEditAttachments() {
     }
     container.innerHTML = editAttachments.map((att, idx) => `
         <div class="attachment-thumb ${att.type}">
-            ${att.type === 'image' ? `<img src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}')">` : 
-              att.type === 'video' ? `<video src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}')"></video>` :
+            ${att.type === 'image' ? `<img src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}', ${idx}, 'edit')">` : 
+              att.type === 'video' ? `<video src="${att.data}" style="cursor: pointer;" onclick="openPhotoLightbox('${att.data}', ${idx}, 'edit')"></video>` :
               `<div>📄</div>`}
             <button class="attachment-delete-btn" onclick="deleteEditAttachment(${idx})">✕</button>
         </div>
@@ -3243,12 +3268,20 @@ function deleteFormAttachment(idx) {
     renderFormAttachments();
 }
 
-// v1.6.3: PHOTO LIGHTBOX FUNKTIONEN
-function openPhotoLightbox(src) {
+// v1.6.5: PHOTO LIGHTBOX FUNKTIONEN
+// v1.6.5: Globale Variablen für Lightbox
+let currentPhotoIndex = -1;
+let currentPhotoSource = null;  // 'form' oder 'edit'
+
+function openPhotoLightbox(src, idx, source) {
+    currentPhotoIndex = idx;
+    currentPhotoSource = source;
+    
     const lightbox = document.getElementById('photoLightbox');
     const img = document.getElementById('lightboxImage');
     img.src = src;
     lightbox.style.display = 'flex';
+    
     // Klick auf Hintergrund schließt auch
     lightbox.onclick = (e) => {
         if (e.target === lightbox) {
@@ -3260,6 +3293,23 @@ function openPhotoLightbox(src) {
 function closePhotoLightbox() {
     const lightbox = document.getElementById('photoLightbox');
     lightbox.style.display = 'none';
+    currentPhotoIndex = -1;
+    currentPhotoSource = null;
+}
+
+// v1.6.5: Lösche aktuelles Foto aus Lightbox
+function deleteCurrentPhoto() {
+    if (currentPhotoIndex < 0 || !currentPhotoSource) return;
+    
+    if (currentPhotoSource === 'form') {
+        formAttachments.splice(currentPhotoIndex, 1);
+        renderFormAttachments();
+    } else if (currentPhotoSource === 'edit') {
+        editAttachments.splice(currentPhotoIndex, 1);
+        renderEditAttachments();
+    }
+    
+    closePhotoLightbox();
 }
 
 // ESC-Taste schließt Lightbox
@@ -3296,7 +3346,7 @@ function toggleTodo(id) {
             // Wenn wieder aktiviert: completedAt zurücksetzen
             todo.completedAt = null;
             
-            // v1.6.3: Wiederkehrend Todo reaktiviert → order = 1.0
+            // v1.6.5: Wiederkehrend Todo reaktiviert → order = 1.0
             if (todo.recurring) {
                 todo.order = 1.0;
                 console.log('[DEBUG] 🔄 Wiederkehrend reaktiviert: order = 1.0');
@@ -3446,7 +3496,7 @@ function openEditTodoModal(id) {
     document.getElementById('edit-category').value = currentEditingTodo.category || 'Privat';
     // v1.5.4: Setze Checkbox
     document.getElementById('edit-completed').checked = currentEditingTodo.completed || false;
-    // v1.6.3: Setze Termin-Datum
+    // v1.6.5: Setze Termin-Datum
     document.getElementById('edit-duedate').value = currentEditingTodo.dueDate || '';
     
     renderEditAttachments();
@@ -3472,7 +3522,7 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
     currentEditingTodo.updated = new Date().toISOString();
     // v1.5.4: Lese Checkbox
     currentEditingTodo.completed = document.getElementById('edit-completed').checked;
-    // v1.6.3: Lese Termin-Datum
+    // v1.6.5: Lese Termin-Datum
     currentEditingTodo.dueDate = document.getElementById('edit-duedate').value || null;
     
     // v1.0.50: SPEICHERE ATTACHMENT-DATEN BEI EDIT!
@@ -3618,7 +3668,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
         return;
     }
 
-// ===== v1.6.3: ORDER/PRIORITY SYSTEM =====
+// ===== v1.6.5: ORDER/PRIORITY SYSTEM =====
 function calculateNewOrder() {
     // Finde alle aktiven (nicht-erledigten) Todos
     const activeTodos = allTodos.filter(todo => !todo.completed);
@@ -3654,7 +3704,7 @@ function calculateNewOrder() {
         recurring: document.getElementById('recurring').checked,
         recurringInterval: getRecurringInterval(),
         nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null,
-        // v1.6.3: Order für Sortierung
+        // v1.6.5: Order für Sortierung
         order: calculateNewOrder()
     });
 
@@ -3927,7 +3977,7 @@ async function openSettings() {
                 </div>
             </div>
             
-            <!-- v1.6.3: Abgelaufene Aufgaben (mit Termin in der Zukunft) -->
+            <!-- v1.6.5: Abgelaufene Aufgaben (mit Termin in der Zukunft) -->
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
                     <span>📅 Terminierte Aufgaben (${allTodos.filter(t => t.dueDate && t.dueDate > new Date().toISOString().split('T')[0]).length})</span>
@@ -4264,10 +4314,16 @@ if (document.readyState === 'loading') {
     autoInitializeApp();
 }
 </script>
-<!-- v1.6.3: Photo-Lightbox Modal -->
-<div id="photoLightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center;">
+<!-- v1.6.5: Photo-Lightbox Modal -->
+<div id="photoLightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <button onclick="closePhotoLightbox()" style="position: absolute; top: 12px; right: 12px; background: none; border: none; color: white; font-size: 28px; cursor: pointer; z-index: 3001;">✕</button>
-    <img id="lightboxImage" src="" style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px;">
+    <img id="lightboxImage" src="" style="max-width: 90%; max-height: 80%; object-fit: contain; border-radius: 8px; margin-bottom: 20px;">
+    
+    <!-- v1.6.5: Delete + Close Buttons -->
+    <div style="display: flex; gap: 12px;">
+        <button id="lightboxDeleteBtn" onclick="deleteCurrentPhoto()" style="background: #d32f2f; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">🗑️ Löschen</button>
+        <button onclick="closePhotoLightbox()" style="background: #6b7280; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">✕ Schließen</button>
+    </div>
 </div>
 
 </body>
