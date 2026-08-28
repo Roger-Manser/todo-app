@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.6.5.20 - GitHub Sync</title>
+    <title>Todo App v1.6.5.21 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1130,6 +1130,16 @@
                         <div class="attachment-preview" id="form-attachments"></div>
                     </div>
 
+                    <!-- v1.6.5.21: Termin + Uhrzeit beim Erstellen -->
+                    <div class="form-group">
+                        <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">📅 Termin (optional)</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="date" id="add-duedate" style="flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                            <input type="time" id="add-duetime" style="flex: 0.8; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 12px;">
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 4px;">📅 Datum + ⏰ Uhrzeit für Benachrichtigungen</small>
+                    </div>
+
                     <div class="button-group">
                         <button type="submit" class="primary" style="flex: 1;">Aufgabe hinzufügen</button>
                         <button type="button" onclick="toggleAddSection()" style="flex: 1;">Abbrechen</button>
@@ -1316,7 +1326,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.6.5.20';
+const APP_VERSION = '1.6.5.21';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1324,20 +1334,29 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
+        version: '1.6.5.21',
+        releaseDate: '2026-08-28',
+        name: '✨ NEW: Termin + Uhrzeit beim Erstellen möglich!',
+        features: [
+            '✨ NEW: Datum + Uhrzeit Inputs in der Add-Form!',
+            '📅 Beim Erstellen → direkt Termin + Zeit setzen',
+            '🕐 Keine Bearbeitung mehr notwendig!',
+            '🔔 Notifications funktionieren sofort!',
+            '⏰ Uhrzeit beim Bearbeiten funktioniert auch',
+            '✅ Vollständiger Termin-Workflow!',
+            '🎯 Perfekt für schnelle Aufgabenverwaltung!'
+        ]
+    },
+    {
         version: '1.6.5.20',
         releaseDate: '2026-08-28',
         name: '⏰ NEW: Uhrzeit-Input + Zeit-basierte Notifications (FIXED!)',
         features: [
             '⏰ NEW: Uhrzeit-Input neben Datum beim Bearbeiten!',
-            '📅 Datum-Feld bleibt, 🕐 Uhrzeit-Feld neu hinzugefügt',
             '🔔 Notifications berechnen sich JETZT mit Uhrzeit!',
-            '📅 Benachrichtigung: 1 TAG vor Termin (zur angegebenen Zeit)',
-            '⏰ Benachrichtigung: 1 STUNDE vor Termin',
-            '🔴 Benachrichtigung: 10 MINUTEN vor Termin',
-            '✅ Wenn keine Uhrzeit: Standard 09:00 Uhr',
-            '🐛 FIXED: v1.6.5.19 hatte normalizeTodos Fehler - das ist REPARIERT!',
+            '🐛 FIXED: v1.6.5.19 hatte normalizeTodos Fehler',
             '✅ Manuelle Sync funktioniert wieder!',
-            '🎯 PERFEKT für Zeitmanagement!'
+            '⚠️  Bug: Termin nicht beim Erstellen möglich - verwende v1.6.5.21!'
         ]
     },
     {
@@ -4014,7 +4033,10 @@ function calculateNewOrder() {
         recurringInterval: getRecurringInterval(),
         nextDueDate: document.getElementById('recurring').checked ? calculateNextDueDate(getRecurringInterval()) : null,
         // v1.6.5.4: Order für Sortierung
-        order: calculateNewOrder()
+        order: calculateNewOrder(),
+        // v1.6.5.21: Termin beim Erstellen
+        dueDate: document.getElementById('add-duedate').value || null,
+        dueTime: document.getElementById('add-duetime').value || null
     });
 
     console.log('[DEBUG] ✅ Todo erstellt mit ' + attachmentNames.length + ' Attachments');
@@ -4057,6 +4079,8 @@ function calculateNewOrder() {
     }
 
     document.getElementById('add-form').reset();
+    document.getElementById('add-duedate').value = '';  // v1.6.5.21: Reset dueDate
+    document.getElementById('add-duetime').value = '';  // v1.6.5.21: Reset dueTime
     document.getElementById('recurring-settings').style.display = 'none';  // v1.4.1: Reset Recurring
     formAttachments = [];
     document.getElementById('form-attachments').innerHTML = '';
