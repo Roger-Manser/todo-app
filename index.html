@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.25 - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.26 - GitHub Sync - Delete Backups Feature Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1391,7 +1391,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.25';
+const APP_VERSION = '1.7.26';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1399,7 +1399,7 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.25',
+        version: '1.7.26',
         name: '✅ Z-INDEX FIX: Delete Backups Modal über Settings Modal',
         releaseDate: '2026-08-31',
         name: '✅ Delete Backups Button FIXED - onclick Attribut',
@@ -5161,11 +5161,14 @@ function openDeleteBackupsModal() {
 }
 
 function closeDeleteBackupsModal() {
+    console.log('[BACKUP] closeDeleteBackupsModal() aufgerufen');
     try {
         const modal = document.getElementById('deleteBackupsModal');
+        console.log('[BACKUP] Modal Element:', !!modal);
         if (modal) {
+            console.log('[BACKUP] Modal hat show class:', modal.classList.contains('show'));
             modal.classList.remove('show');
-            console.log('[BACKUP] 🔒 Modal geschlossen');
+            console.log('[BACKUP] 🔒 Modal geschlossen - show class entfernt');
         }
     } catch (error) {
         console.error('[BACKUP] ❌ Fehler beim Schließen des Modals:', error);
@@ -5173,6 +5176,9 @@ function closeDeleteBackupsModal() {
 }
 
 function deleteAllBackups() {
+    console.log('[BACKUP-CLICK] 🔴 deleteAllBackups() WURDE AUFGERUFEN!!!');
+    console.log('[BACKUP-CLICK] Function startet jetzt...');
+    
     try {
         console.log('[BACKUP] 🗑️ deleteAllBackups() aufgerufen...');
         
@@ -6027,6 +6033,47 @@ if (document.readyState === 'loading') {
 </div>
 
 
+
+<!-- v1.7.26: Delete Backups Button Event Listeners - Setup as Fallback -->
+<script>
+    console.log('[BACKUP-SETUP] Setting up Delete Backups button listeners...');
+    
+    // Wait for DOM to be ready
+    function setupDeleteBackupsListeners() {
+        const deleteBtn = document.querySelector('button[onclick="deleteAllBackups()"]');
+        const cancelBtn = document.querySelector('button[onclick="closeDeleteBackupsModal()"]');
+        
+        console.log('[BACKUP-SETUP] Delete button found:', !!deleteBtn);
+        console.log('[BACKUP-SETUP] Cancel button found:', !!cancelBtn);
+        
+        if (deleteBtn) {
+            // Add event listener as backup to onclick
+            deleteBtn.addEventListener('click', function(e) {
+                console.log('[BACKUP-SETUP] Delete button clicked via addEventListener!');
+                e.preventDefault();
+                e.stopPropagation();
+                deleteAllBackups();
+            }, false);
+            console.log('[BACKUP-SETUP] ✅ Delete button listener added');
+        }
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function(e) {
+                console.log('[BACKUP-SETUP] Cancel button clicked via addEventListener!');
+                e.preventDefault();
+                e.stopPropagation();
+                closeDeleteBackupsModal();
+            }, false);
+            console.log('[BACKUP-SETUP] ✅ Cancel button listener added');
+        }
+    }
+    
+    // Setup immediately
+    setupDeleteBackupsListeners();
+    
+    // Also setup when DOM changes
+    document.addEventListener('DOMContentLoaded', setupDeleteBackupsListeners);
+</script>
 
 </body>
 </html>
