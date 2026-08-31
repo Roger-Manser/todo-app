@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.6 - GitHub Sync - Rotating Backup System (B1, B2, B3)</title>
+    <title>Todo App v1.7.7 - GitHub Sync - Rotating Backup System (Fix)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -2884,6 +2884,7 @@ function restoreFromBackup(backupFile) {
 }
 
 
+async function saveTodos() {
     if (!githubConfig) {
         console.warn('[DEBUG] saveTodos: Keine GitHub-Konfiguration');
         return;
