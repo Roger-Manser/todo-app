@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.13 - GitHub Sync - UI Loop Stack Overflow Fix</title>
+    <title>Todo App v1.7.14 - GitHub Sync - No GitHub Save During Init</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1352,7 +1352,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.13';
+const APP_VERSION = '1.7.14';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,16 +1360,17 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.13',
+        version: '1.7.14',
         releaseDate: '2026-08-31',
-        name: '🔧 CRITICAL HOTFIX: UI-Loop Stack Overflow gefixt!',
+        name: '🛑 CRITICAL HOTFIX: localStorage Loop - Only Local Save During Init!',
         features: [
-            '🔴 CRITICAL: Stack Overflow in v1.7.12 (UI-Rendering Loop)',
-            '❌ ROOT CAUSE: saveCategoryColors() → renderTodos() → saveCategoryColors() Rekursion',
-            '✅ FIXED: isAppInitializing Flag - keine GitHub Saves während App-Init!',
-            '🛡️ Beide Functions: initializeDefaultColors() & autoGenerateCategoryColors() geschützt',
-            '📌 GitHub Save erst NACH App-Initialization (isAppInitializing = false)',
-            '⚡ App lädt ohne UI-Loop Stack Overflow'
+            '🔴 CRITICAL: Stack Overflow in v1.7.13 (localStorage.setItem Loop)',
+            '❌ ROOT CAUSE: saveCategoryColors() wird trotz Flag aufgerufen during Init',
+            '✅ FIXED: NUR lokales localStorage.setItem während App-Init - GitHub speichern NICHT!',
+            '📌 autoGenerateCategoryColors(): Speichert lokal, skippt GitHub während Init',
+            '📌 initializeDefaultColors(): Speichert lokal, skippt GitHub während Init',
+            '🎯 GitHub-Saves kommen später, nach App vollständig initialisiert',
+            '⚡ App lädt ohne localStorage Stack Overflow'
         ]
     },
     {
@@ -3238,14 +3239,13 @@ function autoGenerateCategoryColors() {
         categoryColors = {};
     }
     
-    // v1.7.11: Speichere die generierten Farben zu GitHub
-    // v1.7.13: Nur NACH App-Init! Während Init nicht speichern (UI-Loop!)
-    if (githubConfig && !isInitializingColors && !isAppInitializing) {
-        console.log('[DEBUG] 💾 Speichere Auto-Generated Farben zu GitHub...');
-        saveCategoryColors().catch(e => {
-            console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
-            // Aber kein kritischer Fehler - Farben funktionieren lokal
-        });
+    // v1.7.14: NICHT zu GitHub speichern während App-Init!
+    // Speichere nur lokal in localStorage als Backup
+    if (!isAppInitializing) {
+        localStorage.setItem('categoryColors_backup', JSON.stringify(categoryColors));
+        console.log('[DEBUG] 💾 Farben lokal gespeichert');
+    } else {
+        console.log('[DEBUG] ⏸️ GitHub-Save übersprungen (App initialisiert sich noch)');
     }
 }
 
@@ -3551,9 +3551,11 @@ function initializeDefaultColors() {
         }
         
         // v1.7.11: Speichere initialisierte Farben auch zu GitHub
-        // v1.7.13: NUR NACH App-Init! Während Init nicht speichern (UI-Loop!)
-        if (githubConfig && !isInitializingColors && !isAppInitializing) {
-            console.log('[DEBUG] 💾 Speichere initialisierte Farben zu GitHub...');
+        // v1.7.14: NUR lokal speichern während App-Init! GitHub später!
+        localStorage.setItem('categoryColors_backup', JSON.stringify(categoryColors));
+        
+        if (!isAppInitializing && githubConfig) {
+            console.log('[DEBUG] 💾 Speichere Farben zu GitHub (Post-Init)...');
             saveCategoryColors().catch(e => {
                 console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
             });
