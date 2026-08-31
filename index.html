@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.28 - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.29 - GitHub Sync - Delete Backups Feature Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1391,7 +1391,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.28';
+const APP_VERSION = '1.7.29';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1399,7 +1399,7 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.28',
+        version: '1.7.29',
         name: '✅ Z-INDEX FIX: Delete Backups Modal über Settings Modal',
         releaseDate: '2026-08-31',
         name: '✅ Delete Backups Button FIXED - onclick Attribut',
@@ -5247,11 +5247,41 @@ function deleteAllBackups() {
     try {
         console.log('[BACKUP] 🗑️ deleteAllBackups() aufgerufen...');
         
-        // Delete B1 and B2
-        localStorage.removeItem('backup_b1');
-        localStorage.removeItem('backup_b2');
+        // v1.7.29: Aggressive cleanup - delete ALL backup-related keys
+        const keysToDelete = [];
         
-        console.log('[BACKUP] ✅ backup_b1 und backup_b2 gelöscht');
+        // Check all localStorage keys
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            
+            // Delete new format backups
+            if (key === 'backup_b1' || key === 'backup_b2') {
+                keysToDelete.push(key);
+                console.log('[BACKUP] Found new format backup:', key);
+            }
+            
+            // Delete old format backups
+            if (key && key.startsWith('todo-backup-')) {
+                keysToDelete.push(key);
+                console.log('[BACKUP] Found old format backup:', key);
+            }
+        }
+        
+        console.log('[BACKUP] Keys to delete:', keysToDelete);
+        
+        // Delete all found keys
+        let deleted = 0;
+        keysToDelete.forEach(key => {
+            try {
+                localStorage.removeItem(key);
+                console.log('[BACKUP] ✅ Deleted:', key);
+                deleted++;
+            } catch (e) {
+                console.error('[BACKUP] ❌ Failed to delete ' + key + ':', e);
+            }
+        });
+        
+        console.log('[BACKUP] ✅ Insgesamt ' + deleted + ' Backups gelöscht');
         
         // Close modal FIRST
         closeDeleteBackupsModal();
@@ -5261,7 +5291,7 @@ function deleteAllBackups() {
         if (typeof displayInAppNotification === 'function') {
             displayInAppNotification(
                 '✅ Backups gelöscht',
-                '💾 Alle lokalen Backups wurden erfolgreich gelöscht!',
+                '💾 ' + deleted + ' lokale Backups wurden erfolgreich gelöscht!',
                 3000
             );
             console.log('[BACKUP] Erfolgsmeldung angezeigt');
