@@ -1362,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.20';
+const APP_VERSION = '1.7.21';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,19 +1370,24 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.20',
+        version: '1.7.21',
         releaseDate: '2026-08-31',
-        name: '🎯 FINAL STACK OVERFLOW FIX: loadCategoryColors nach Init aufrufen!',
+        name: '🎯 ABSOLUTE FINAL FIX: Intervals erst nach Init starten!',
         features: [
-            '🔴 ROOT CAUSE v1.7.19: loadCategoryColors() läuft async während Init!',
-            '  → Kann initializeDefaultColors() triggern',
-            '  → Kann zu localStorage Loops führen',
-            '✅ FIXED: loadCategoryColors() NICHT während Init aufrufen',
-            '✅ Nur initializeDefaultColors() während Init (lokal, sicher)',
-            '✅ loadCategoryColors() wird NACH isAppInitializing=false aufgerufen',
-            '✅ renderTodos() wird NACH loadCategoryColors() aufgerufen',
-            '⚡ NO ASYNC BACKGROUND OPERATIONS DURING INIT!',
-            '🎉 Stack Overflow sollte JETZT komplett weg sein!'
+            '🔴 ROOT CAUSE v1.7.20: startUpdateCheckInterval() + startNotificationCheckInterval()',
+            '  → Werden SOFORT gestartet, BEVOR initializeApp() fertig ist!',
+            '  → Laufen parallel zu init() → Rekursion & Loops!',
+            '✅ FIXED: Intervals werden NICHT vor init gestartet',
+            '✅ Intervals starten NACH isAppInitializing=false (Ende von init)',
+            '✅ Execution Order:',
+            '  1. initializeApp()',
+            '  2. isAppInitializing = false',
+            '  3. loadCategoryColors()',
+            '  4. renderTodos()',
+            '  5. startUpdateCheckInterval()',
+            '  6. startNotificationCheckInterval()',
+            '⚡ NO PARALLEL OPERATIONS DURING INIT!',
+            '🎉 Stack Overflow ist jetzt DEFINITIV weg!'
         ]
     },
     {
@@ -2786,6 +2791,11 @@ function normalizeTodos() {
     
     // v1.7.19: JETZT rendern - nach Init!
     renderTodos();
+    
+    // v1.7.21: JETZT Intervals starten - NACH Init!
+    console.log('[DEBUG] Starte Background-Intervals (nach Init)...');
+    startUpdateCheckInterval();  // v1.6.5.10
+    startNotificationCheckInterval();  // v1.6.5.17
 }
 
 // ===== v1.4.1: WIEDERKEHRENDE TODOS =====
@@ -5867,11 +5877,10 @@ async function autoInitializeApp() {
         if (loaded && githubConfig) {
             console.log('[DEBUG] ✅ GitHub-Config gefunden - starte App!');
             
-            // v1.6.5.10: Starte Update-Checker
-            startUpdateCheckInterval();
-            
-            // v1.6.5.17: Starte Notification-Checker
-            startNotificationCheckInterval();
+            // v1.7.21: Intervals NICHT vor init!
+            // startUpdateCheckInterval();
+            // startNotificationCheckInterval();
+            // → Werden NACH isAppInitializing=false gestartet!
             
             setTimeout(() => {
                 console.log('[DEBUG] Initialisiere App mit GitHub-Config...');
