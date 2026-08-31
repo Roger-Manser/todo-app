@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.12 - GitHub Sync - Infinite Recursion Fix</title>
+    <title>Todo App v1.7.13 - GitHub Sync - UI Loop Stack Overflow Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1352,7 +1352,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.12';
+const APP_VERSION = '1.7.13';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,16 +1360,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.12',
+        version: '1.7.13',
         releaseDate: '2026-08-31',
-        name: '🔧 CRITICAL HOTFIX: Infinite Recursion Stack Overflow gefixt!',
+        name: '🔧 CRITICAL HOTFIX: UI-Loop Stack Overflow gefixt!',
         features: [
-            '🔴 CRITICAL: Stack Overflow in v1.7.11 (Maximum call stack size exceeded)',
-            '❌ ROOT CAUSE: initializeDefaultColors() rief saveCategoryColors() auf → Infinite Loop',
-            '✅ FIXED: isInitializingColors Guard-Flag verhindert Rekursion',
+            '🔴 CRITICAL: Stack Overflow in v1.7.12 (UI-Rendering Loop)',
+            '❌ ROOT CAUSE: saveCategoryColors() → renderTodos() → saveCategoryColors() Rekursion',
+            '✅ FIXED: isAppInitializing Flag - keine GitHub Saves während App-Init!',
             '🛡️ Beide Functions: initializeDefaultColors() & autoGenerateCategoryColors() geschützt',
-            '📌 saveCategoryColors() wird nur aufgerufen wenn nicht bereits initialisierend',
-            '⚡ App lädt wieder normal ohne Stack Overflow'
+            '📌 GitHub Save erst NACH App-Initialization (isAppInitializing = false)',
+            '⚡ App lädt ohne UI-Loop Stack Overflow'
         ]
     },
     {
@@ -2761,6 +2761,9 @@ function normalizeTodos() {
     renderTodos();
     updateSyncStatus('GitHub Sync');
     console.log('[DEBUG] ✅ App bereit!');
+    
+    // v1.7.13: Signalisiere dass App-Init fertig ist (kein UI-Loop mehr!)
+    isAppInitializing = false;
 }
 
 // ===== v1.4.1: WIEDERKEHRENDE TODOS =====
@@ -3236,8 +3239,8 @@ function autoGenerateCategoryColors() {
     }
     
     // v1.7.11: Speichere die generierten Farben zu GitHub
-    // v1.7.12: Nur wenn githubConfig existiert + nicht rekursiv
-    if (githubConfig && !isInitializingColors) {
+    // v1.7.13: Nur NACH App-Init! Während Init nicht speichern (UI-Loop!)
+    if (githubConfig && !isInitializingColors && !isAppInitializing) {
         console.log('[DEBUG] 💾 Speichere Auto-Generated Farben zu GitHub...');
         saveCategoryColors().catch(e => {
             console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
@@ -3522,6 +3525,9 @@ const DEFAULT_CATEGORY_COLORS = {
 // v1.7.12: Guard gegen Infinite Recursion
 let isInitializingColors = false;
 
+// v1.7.13: Guard gegen UI-Loop während App-Init
+let isAppInitializing = true;  // Start = true, wird false wenn App fertig ist
+
 function initializeDefaultColors() {
     // v1.7.12: Guard gegen Recursive Call
     if (isInitializingColors) {
@@ -3545,8 +3551,8 @@ function initializeDefaultColors() {
         }
         
         // v1.7.11: Speichere initialisierte Farben auch zu GitHub
-        // v1.7.12: NUR wenn wir nicht schon in initializeDefaultColors sind!
-        if (githubConfig && !isInitializingColors) {
+        // v1.7.13: NUR NACH App-Init! Während Init nicht speichern (UI-Loop!)
+        if (githubConfig && !isInitializingColors && !isAppInitializing) {
             console.log('[DEBUG] 💾 Speichere initialisierte Farben zu GitHub...');
             saveCategoryColors().catch(e => {
                 console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
