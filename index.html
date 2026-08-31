@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.17 - GitHub Sync - Remove Duplicate createBackup Function</title>
+    <title>Todo App v1.7.18 - GitHub Sync - Stop autoGenerateCategoryColors Loop During Init</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1362,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.17';
+const APP_VERSION = '1.7.18';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,17 +1370,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.17',
+        version: '1.7.18',
         releaseDate: '2026-08-31',
-        name: '🔴 CRITICAL BUG FIX: Doppelte createBackup() Function gelöscht!',
+        name: '🔴 CRITICAL: Stop localStorage Loop - autoGenerateCategoryColors während Init!',
         features: [
-            '🔴 BUG: Stack Overflow wenn "Fertig" in Einstellungen gedrückt',
-            '❌ ROOT CAUSE: ZWEI createBackup() Funktionen mit gleichen Namen!',
-            '  - Alte v1.6.5.25 Auto-Backup (Zeile 2824) - OBSOLET',
-            '  - Neue v1.7.8 Rotating Backup (Zeile 2926) - AKTUAL',
-            '✅ FIXED: Alte Funktion komplett gelöscht',
-            '✅ Nur noch eine createBackup() - v1.7.8 Rotating Backup',
-            '⚡ Stack Overflow beim "Fertig"-Button sollte behoben sein'
+            '🔴 STILL BROKEN v1.7.17: Stack Overflow beim Start der App',
+            '❌ ROOT CAUSE: tryLocalStorageCategoryColors() → autoGenerateCategoryColors()',
+            '  → autoGenerateCategoryColors() versucht localStorage.setItem() während Init!',
+            '✅ FIXED: Nicht mehr autoGenerateCategoryColors() aufrufen',
+            '✅ STATTDESSEN: Nur initializeDefaultColors() verwenden (lokal, kein GitHub)',
+            '⚡ Stack Overflow beim App-Start sollte endlich behoben sein'
         ]
     },
     {
@@ -3192,9 +3191,11 @@ function tryLocalStorageCategoryColors() {
         }
     }
     
-    // v1.7.11: Auto-Generate fehlendes category-colors.json
-    console.log('[DEBUG] ⚠️ FALLBACK: Auto-Generate Default-Farben für alle Kategorien...');
-    autoGenerateCategoryColors();
+    // v1.7.18: NICHT autoGenerateCategoryColors() während App-Init!
+    // Das verursacht localStorage.setItem() Loop!
+    // Stattdessen nur initializeDefaultColors() aufrufen
+    console.log('[DEBUG] ⚠️ FALLBACK: Verwende initializeDefaultColors()...');
+    initializeDefaultColors();  // ← Lokal, kein GitHub-Save während Init!
 }
 
 // v1.7.11: NEW - Auto-Generate Farben für alle Kategorien
