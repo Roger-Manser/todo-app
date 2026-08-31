@@ -1272,6 +1272,36 @@
     </div>
 </div>
 
+<!-- v1.7.23: Delete Backups Confirmation Modal -->
+<div id="deleteBackupsModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h2>🗑️ Backups löschen</h2>
+            <button class="close-btn" onclick="closeDeleteBackupsModal()">&times;</button>
+        </div>
+        <div style="padding: 1rem;">
+            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; border-radius: 6px; margin-bottom: 1rem;">
+                <p style="margin: 0; color: #991b1b; font-weight: 600;">⚠️ Warnung</p>
+                <p style="margin: 0.5rem 0 0 0; color: #7f1d1d; font-size: 14px;">
+                    Möchtest du wirklich <strong>ALLE</strong> Backups löschen? Diese Aktion kann nicht rückgängig gemacht werden!
+                </p>
+            </div>
+            
+            <div style="background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 1.5rem;">
+                <p style="margin: 0 0 0.5rem 0; font-weight: 600; color: #333;">Betroffene Backups:</p>
+                <p id="backupCountInfo" style="margin: 0; color: #666; font-size: 13px;"></p>
+            </div>
+            
+            <div class="button-group">
+                <button class="primary" style="flex: 1; background: #ef4444;" onclick="deleteAllBackups()">
+                    🗑️ Ja, alles löschen!
+                </button>
+                <button onclick="closeDeleteBackupsModal()" style="flex: 1;">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Version History Modal -->
 <div id="versionModal" class="modal">
     <div class="modal-content">
@@ -1362,7 +1392,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.22';
+const APP_VERSION = '1.7.23';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,19 +1400,18 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.22',
+        version: '1.7.23',
         releaseDate: '2026-08-31',
-        name: '🎯 REAL FINAL FIX: Debug-Code monitorNotificationElement() gelöscht!',
+        name: '✨ Feature: Delete All Backups mit Sicherheitsdialog',
         features: [
-            '🔴 ROOT CAUSE v1.7.21: monitorNotificationElement() Debugging-Code!',
-            '  → Object.defineProperty() + console.trace() bei JEDEM display change!',
-            '  → console.trace() erzeugt Stack Frames → Stack Overflow!',
-            '✅ FIXED: Ganze monitorNotificationElement() Funktion gelöscht',
-            '✅ Beide Aufrufe in ensureNotificationElement() entfernt',
-            '✅ Keine Object.defineProperty() Proxy-Wrapper mehr',
-            '✅ Keine console.trace() in kritischen Code-Pfaden mehr',
-            '⚡ PRODUCTION CLEAN - keine Debugging-Hooks mehr!',
-            '🎉 Stack Overflow DEFINITIV weg - das war reiner Debugging-Code!'
+            '✨ Neues Feature: Backup-Verwaltung erweitert',
+            '🗑️ Button "Alle Backups löschen" in Einstellungen → Backups verwalten',
+            '⚠️ Sicherheitsdialog zeigt Warnung + alle Backups zum Löschen',
+            '📊 Zeigt Anzahl + Details der Backups vor dem Löschen',
+            '✅ Erfolgsmeldung nach dem Löschen',
+            '🔄 Settings werden automatisch aktualisiert (Button verschwindet wenn keine Backups)',
+            '💡 Löst localStorage-Quota-Problem: Roger kann jetzt leicht Backups freigeben',
+            '🎯 Einfache Bedienung: Einstellungen → Backups verwalten → Alle Backups löschen'
         ]
     },
     {
@@ -4955,6 +4984,13 @@ async function openSettings() {
                         </ul>
                     `}
                     <p style="font-size: 11px; color: #9ca3af; margin-top: 1rem;">💡 Backups werden automatisch nach jeder Änderung erstellt und lokal gespeichert.</p>
+                    
+                    <!-- v1.7.23: Delete All Backups Button -->
+                    ${getBackups().length > 0 ? `
+                        <button class="primary" style="width: 100%; margin-top: 1rem; background: #ef4444;" onclick="openDeleteBackupsModal()">
+                            🗑️ Alle Backups löschen
+                        </button>
+                    ` : ''}
                 </div>
             </div>
 
@@ -5062,6 +5098,47 @@ function closeSettings() {
     // v1.7.5: BACKUP nach Einstellungen "Fertig"
     createBackup();
     document.getElementById('settingsModal').classList.remove('show');
+}
+
+// v1.7.23: Delete Backups Modal Functions
+function openDeleteBackupsModal() {
+    const backups = getBackups();
+    const backupInfo = document.getElementById('backupCountInfo');
+    
+    if (backups.length === 0) {
+        backupInfo.innerHTML = '❌ Keine Backups vorhanden';
+        return;
+    }
+    
+    const info = backups.map((b, idx) => `${idx + 1}. ${b.createdAt} (${b.count} Todos)`).join('<br>');
+    backupInfo.innerHTML = `📊 ${backups.length} Backup(s):<br>${info}`;
+    
+    document.getElementById('deleteBackupsModal').classList.add('show');
+}
+
+function closeDeleteBackupsModal() {
+    document.getElementById('deleteBackupsModal').classList.remove('show');
+}
+
+function deleteAllBackups() {
+    // Delete B1 and B2
+    localStorage.removeItem('backup_b1');
+    localStorage.removeItem('backup_b2');
+    
+    console.log('[BACKUP] 🗑️ Alle Backups gelöscht!');
+    
+    // Show success message
+    displayInAppNotification(
+        '✅ Backups gelöscht',
+        '💾 Alle lokalen Backups wurden erfolgreich gelöscht!',
+        3000
+    );
+    
+    // Close modal
+    closeDeleteBackupsModal();
+    
+    // Refresh settings to update button
+    openSettings();
 }
 
 function openEditGithubModal() {
