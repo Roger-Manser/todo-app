@@ -1,0 +1,34 @@
+{
+  "name": "Todo App v1.7.17",
+  "short_name": "Todo",
+  "description": "Swiss Minimalist Todo App with GitHub Sync, Notifications & Photo Attachments",
+  "start_url": "/todo-app/",
+  "scope": "/todo-app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "todo-icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "todo-icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["productivity"],
+  "screenshots": [
+    {
+      "src": "todo-icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

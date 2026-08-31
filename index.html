@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.16 - GitHub Sync - Close Button Now Visible (CSS Fix)</title>
+    <title>Todo App v1.7.17 - GitHub Sync - Remove Duplicate createBackup Function</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1362,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.16';
+const APP_VERSION = '1.7.17';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,16 +1370,17 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.16',
+        version: '1.7.17',
         releaseDate: '2026-08-31',
-        name: '🔴 CRITICAL UX FIX: Close Button CSS versteckt - jetzt sichtbar!',
+        name: '🔴 CRITICAL BUG FIX: Doppelte createBackup() Function gelöscht!',
         features: [
-            '🔴 BUG: Close-Button war mit display:none CSS komplett versteckt!',
-            '❌ ROOT CAUSE: .close-btn CSS hatte display:none !important',
-            '✅ FIXED: CSS geändert - Close-Button jetzt sichtbar & klickbar!',
-            '📍 Position: Oben rechts neben "Versionshistorie" Titel',
-            '🎯 Größe: 40×40px mit 28px × Symbol',
-            '⚡ User kann jetzt Versionshistorie schließen (endlich!)'
+            '🔴 BUG: Stack Overflow wenn "Fertig" in Einstellungen gedrückt',
+            '❌ ROOT CAUSE: ZWEI createBackup() Funktionen mit gleichen Namen!',
+            '  - Alte v1.6.5.25 Auto-Backup (Zeile 2824) - OBSOLET',
+            '  - Neue v1.7.8 Rotating Backup (Zeile 2926) - AKTUAL',
+            '✅ FIXED: Alte Funktion komplett gelöscht',
+            '✅ Nur noch eine createBackup() - v1.7.8 Rotating Backup',
+            '⚡ Stack Overflow beim "Fertig"-Button sollte behoben sein'
         ]
     },
     {
@@ -2821,30 +2822,8 @@ function calculateNextDueDate(intervalDays) {
 const BACKUP_KEY_PREFIX = 'todo-backup-';
 const MAX_BACKUPS = 10;
 
-function createBackup() {
-    try {
-        const timestamp = new Date().toISOString();
-        const backupKey = `${BACKUP_KEY_PREFIX}${timestamp}`;
-        
-        // Speichere Backup im localStorage
-        localStorage.setItem(backupKey, JSON.stringify({
-            timestamp: timestamp,
-            todos: allTodos,
-            count: allTodos.length,
-            createdAt: new Date().toLocaleString('de-CH')
-        }));
-        
-        console.log(`[DEBUG] 💾 Backup erstellt: ${timestamp} (${allTodos.length} Todos)`);
-        
-        // Räume alte Backups auf - nur letzte 10 behalten
-        deleteOldBackups();
-        
-        return true;
-    } catch (error) {
-        console.error('[DEBUG] ❌ Backup-Fehler:', error.message);
-        return false;
-    }
-}
+// v1.7.17: GELÖSCHTE DOPPELLUNG - Nur v1.7.8 createBackup() bleibt!
+// (Alte v1.6.5.25 Funktion entfernt - verursachte Verwirrung)
 
 function getBackups() {
     try {
