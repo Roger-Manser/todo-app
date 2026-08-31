@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.15 - GitHub Sync - Visible Close Button for Version History</title>
+    <title>Todo App v1.7.16 - GitHub Sync - Close Button Now Visible (CSS Fix)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -662,22 +662,31 @@
         }
 
         .close-btn {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            width: 0 !important;
-            height: 0 !important;
+            display: inline-flex !important;      /* v1.7.16: Sichtbar! */
+            visibility: visible !important;        /* v1.7.16: Nicht versteckt! */
+            opacity: 1 !important;                /* v1.7.16: Vollständig sichtbar */
+            width: 40px !important;               /* v1.7.16: Hat Größe */
+            height: 40px !important;
             margin: 0 !important;
             padding: 0 !important;
             border: none !important;
             background: none !important;
-            pointer-events: none !important;
-            font-size: 0 !important;
-            color: transparent !important;
-            text-indent: -9999px !important;
-            position: absolute !important;
-            left: -9999px !important;
-            top: -9999px !important;
+            pointer-events: auto !important;      /* v1.7.16: Klickbar! */
+            font-size: 28px !important;           /* v1.7.16: Großes Symbol */
+            color: #666 !important;
+            text-indent: 0 !important;            /* v1.7.16: Text normal */
+            position: relative !important;        /* v1.7.16: Nicht versteckt positioniert */
+            left: auto !important;
+            top: auto !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #000 !important;
+        }
         }
 
         .version-item {
@@ -1353,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.15';
+const APP_VERSION = '1.7.16';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1361,15 +1370,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.15',
+        version: '1.7.16',
         releaseDate: '2026-08-31',
-        name: '🔘 UX IMPROVEMENT: Close Button für Version History sichtbar machen!',
+        name: '🔴 CRITICAL UX FIX: Close Button CSS versteckt - jetzt sichtbar!',
         features: [
-            '🔘 BUG: Close-Button war zu klein/unsichtbar in Versionshistorie',
-            '✅ FIXED: Close-Button vergrößert (28px, 40px×40px)',
-            '✅ Besser sichtbar: weiße × auf grauem Hintergrund',
-            '✅ Bessere Usability: jetzt kann man die Versionshistorie schließen!',
-            '📋 Close-Button oben rechts im Modal (standard Platzierung)'
+            '🔴 BUG: Close-Button war mit display:none CSS komplett versteckt!',
+            '❌ ROOT CAUSE: .close-btn CSS hatte display:none !important',
+            '✅ FIXED: CSS geändert - Close-Button jetzt sichtbar & klickbar!',
+            '📍 Position: Oben rechts neben "Versionshistorie" Titel',
+            '🎯 Größe: 40×40px mit 28px × Symbol',
+            '⚡ User kann jetzt Versionshistorie schließen (endlich!)'
         ]
     },
     {
