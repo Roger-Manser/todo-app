@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.9 - GitHub Sync - Robust Category-Colors Loading</title>
+    <title>Todo App v1.7.10 - GitHub Sync - Syntax Error Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1352,7 +1352,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.9';
+const APP_VERSION = '1.7.10';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,17 +1360,27 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
+        version: '1.7.10',
+        releaseDate: '2026-08-31',
+        name: '🔧 HOTFIX: Orphan catch block syntax error behoben!',
+        features: [
+            '🔧 CRITICAL: Syntax Error in v1.7.9 (Unexpected token })',
+            '❌ FIXED: Verwaiste catch-Blöcke gelöscht (Zeilen 3196-3200)',
+            '✅ Script lädt perfekt',
+            '🎨 Category-Colors Fallback-System (v1.7.9) funktioniert',
+            '⚡ Sauberer Code'
+        ]
+    },
+    {
         version: '1.7.9',
         releaseDate: '2026-08-31',
         name: '🔧 ROBUST: Category-Colors mit 3-stufigem Fallback-System!',
         features: [
-            '🔧 CRITICAL FIX: GitHub category-colors.json Parse Error',
-            '📌 3-stufiges Fallback-System: GitHub → localStorage → Defaults',
-            '💾 categoryColors_backup in localStorage speichern',
-            '✅ Wenn GitHub kaputt → localStorage Backup verwenden',
-            '✅ Wenn auch localStorage leer → Default-Farben verwenden',
-            '🛡️ App funktioniert IMMER - keine Fehler mehr!',
-            '⚡ Bessere Error-Messages im Debug'
+            '🔧 Parse Error bei category-colors.json',
+            '📌 3-stufiges Fallback: GitHub → localStorage → Defaults',
+            '💾 categoryColors_backup in localStorage',
+            '✅ App funktioniert IMMER',
+            '⚠️ BUG: Syntax Error (Zeilen 3196-3200) - verwende v1.7.10!'
         ]
     },
     {
@@ -3192,11 +3202,6 @@ function tryLocalStorageCategoryColors() {
     // v1.7.9: Letzter Ausweg - Default-Farben
     console.log('[DEBUG] ⚠️ FALLBACK: Verwende Default-Farben');
     initializeDefaultColors();
-}
-    } catch (error) {
-        console.error('[DEBUG] Fehler beim Laden von category-colors.json:', error);
-        initializeDefaultColors();
-    }
 }
 
 async function saveCategoryColors() {
