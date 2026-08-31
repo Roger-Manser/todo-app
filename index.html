@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.10 - GitHub Sync - Syntax Error Fix</title>
+    <title>Todo App v1.7.11 - GitHub Sync - Auto-Generate Category-Colors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1352,7 +1352,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.10';
+const APP_VERSION = '1.7.11';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,15 +1360,17 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.10',
+        version: '1.7.11',
         releaseDate: '2026-08-31',
-        name: '🔧 HOTFIX: Orphan catch block syntax error behoben!',
+        name: '🎨 AUTO-GENERATE: Category-Colors Wiederherstellung!',
         features: [
-            '🔧 CRITICAL: Syntax Error in v1.7.9 (Unexpected token })',
-            '❌ FIXED: Verwaiste catch-Blöcke gelöscht (Zeilen 3196-3200)',
-            '✅ Script lädt perfekt',
-            '🎨 Category-Colors Fallback-System (v1.7.9) funktioniert',
-            '⚡ Sauberer Code'
+            '🎨 CRITICAL FIX: GitHub category-colors.json ist kaputt',
+            '✅ Auto-Generate Default-Farben für alle Kategorien',
+            '📌 autoGenerateCategoryColors() - intelligente Farbzuweisung',
+            '💾 Generierte Farben werden automatisch zu GitHub gespeichert',
+            '🎯 10 vordefinierte Farben (Blau, Rot, Grün, Orange, Violett...)',
+            '🛡️ Fallback: initializeDefaultColors() speichert auch zu GitHub',
+            '⚡ App funktioniert IMMER - mit oder ohne GitHub-Daten'
         ]
     },
     {
@@ -3199,9 +3201,47 @@ function tryLocalStorageCategoryColors() {
         }
     }
     
-    // v1.7.9: Letzter Ausweg - Default-Farben
-    console.log('[DEBUG] ⚠️ FALLBACK: Verwende Default-Farben');
-    initializeDefaultColors();
+    // v1.7.11: Auto-Generate fehlendes category-colors.json
+    console.log('[DEBUG] ⚠️ FALLBACK: Auto-Generate Default-Farben für alle Kategorien...');
+    autoGenerateCategoryColors();
+}
+
+// v1.7.11: NEW - Auto-Generate Farben für alle Kategorien
+function autoGenerateCategoryColors() {
+    const defaultColorPalette = [
+        '#3498db', // Blau
+        '#e74c3c', // Rot
+        '#2ecc71', // Grün
+        '#f39c12', // Orange
+        '#9b59b6', // Violett
+        '#1abc9c', // Türkis
+        '#34495e', // Dunkelgrau
+        '#d35400', // Dunkel-Orange
+        '#16a085', // Dunkel-Türkis
+        '#27ae60'  // Dunkel-Grün
+    ];
+    
+    categoryColors = {};
+    
+    if (allCategories && allCategories.length > 0) {
+        console.log(`[DEBUG] 🎨 Generiere Farben für ${allCategories.length} Kategorien...`);
+        allCategories.forEach((category, index) => {
+            if (!categoryColors[category]) {
+                categoryColors[category] = defaultColorPalette[index % defaultColorPalette.length];
+                console.log(`[DEBUG] 🎨 ${category} → ${categoryColors[category]}`);
+            }
+        });
+    } else {
+        console.log('[DEBUG] ⚠️ Keine Kategorien vorhanden - verwende leere categoryColors');
+        categoryColors = {};
+    }
+    
+    // v1.7.11: Speichere die generierten Farben zu GitHub
+    console.log('[DEBUG] 💾 Speichere Auto-Generated Farben zu GitHub...');
+    saveCategoryColors().catch(e => {
+        console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
+        // Aber kein kritischer Fehler - Farben funktionieren lokal
+    });
 }
 
 async function saveCategoryColors() {
@@ -3488,6 +3528,14 @@ function initializeDefaultColors() {
         if (!categoryColors[cat]) {
             categoryColors[cat] = generateRandomPastelColor();
         }
+    }
+    
+    // v1.7.11: Speichere initialisierte Farben auch zu GitHub
+    if (githubConfig) {
+        console.log('[DEBUG] 💾 Speichere initialisierte Farben zu GitHub...');
+        saveCategoryColors().catch(e => {
+            console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
+        });
     }
 }
 
