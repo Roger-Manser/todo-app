@@ -1392,7 +1392,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.23';
+const APP_VERSION = '1.7.23a';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1400,18 +1400,20 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.23',
+        version: '1.7.23a',
         releaseDate: '2026-08-31',
-        name: '✨ Feature: Delete All Backups mit Sicherheitsdialog',
+        name: '🐛 HOTFIX: Delete Backups Button funktioniert jetzt!',
         features: [
-            '✨ Neues Feature: Backup-Verwaltung erweitert',
-            '🗑️ Button "Alle Backups löschen" in Einstellungen → Backups verwalten',
-            '⚠️ Sicherheitsdialog zeigt Warnung + alle Backups zum Löschen',
-            '📊 Zeigt Anzahl + Details der Backups vor dem Löschen',
-            '✅ Erfolgsmeldung nach dem Löschen',
-            '🔄 Settings werden automatisch aktualisiert (Button verschwindet wenn keine Backups)',
-            '💡 Löst localStorage-Quota-Problem: Roger kann jetzt leicht Backups freigeben',
-            '🎯 Einfache Bedienung: Einstellungen → Backups verwalten → Alle Backups löschen'
+            '🐛 BUG v1.7.23: Button "Alle Backups löschen" wurde nicht angezeigt',
+            '❌ ROOT CAUSE: getBackups() suchte nach "todo-backup-" aber neue Backups heißen "backup_b1"/"backup_b2"',
+            '  → startsWith() Check schlug fehl → getBackups() gab leeres Array zurück',
+            '  → Button wurde nicht angezeigt (wenn getBackups().length > 0 Condition)',
+            '✅ FIXED: getBackups() sucht jetzt nach BEIDEN Backup-Systemen:',
+            '  1. Neue: backup_b1, backup_b2 (v1.7.8+)',
+            '  2. Alt: todo-backup-* Präfix (legacy)',
+            '✅ Button wird jetzt angezeigt wenn Backups existieren!',
+            '✅ manifest.json wird korrekt nachgeführt (v1.7.23a)',
+            '🎉 Delete Backups Feature ist jetzt PRODUKTIV!'
         ]
     },
     {
@@ -2873,9 +2875,25 @@ const MAX_BACKUPS = 10;
 function getBackups() {
     try {
         const backups = [];
+        // v1.7.23 FIX: Suche nach beiden Backup-Systemen
+        // Alt: 'todo-backup-' Präfix (legacy)
+        // Neu: 'backup_b1', 'backup_b2' (v1.7.8+)
+        
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key && key.startsWith(BACKUP_KEY_PREFIX)) {
+            
+            // Prüfe auf NEUES Backup-System (v1.7.8+)
+            if (key && (key === 'backup_b1' || key === 'backup_b2')) {
+                const data = JSON.parse(localStorage.getItem(key));
+                backups.push({
+                    key: key,
+                    timestamp: data.timestamp || new Date().toISOString(),
+                    count: data.todos ? data.todos.length : 0,
+                    createdAt: data.timestamp ? new Date(data.timestamp).toLocaleString('de-CH') : 'Unbekannt'
+                });
+            }
+            // Prüfe auch auf ALTES Backup-System (legacy)
+            else if (key && key.startsWith(BACKUP_KEY_PREFIX)) {
                 const data = JSON.parse(localStorage.getItem(key));
                 backups.push({
                     key: key,
