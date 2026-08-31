@@ -1352,13 +1352,98 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.7.7';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
+    {
+        version: '1.7.7',
+        releaseDate: '2026-08-31',
+        name: '🔧 CRITICAL BUG FIX: saveTodos() Syntax Error behoben!',
+        features: [
+            '🔧 FIXED: saveTodos() function-Deklaration wiederhergestellt',
+            '❌ Gelöst: "Illegal return statement" Syntax Error',
+            '✅ Script lädt komplett',
+            '📋 Rotating Backup System (v1.7.6) nun funktional',
+            '🚀 Alle Handler funktionieren (openSettings, toggleAddSection)',
+            '🛡️ 3-faches Backup-System B1→B2→B3→B1 aktiv'
+        ]
+    },
+    {
+        version: '1.7.6',
+        releaseDate: '2026-08-28',
+        name: '🔄 FEATURE: Rotierendes 3-Backup-System (B1, B2, B3)!',
+        features: [
+            '🔄 CRITICAL: 3-faches rotierendes Backup-System!',
+            '✅ Automatisch bei: Todo erledigt, Edit speichern, Kategorie erstellen, Settings fertig',
+            '💾 Backups: B1→B2→B3→B1 (nie alle gleichzeitig überschrieben)',
+            '⏰ Timestamp in jedem Backup für Nachverfolgung',
+            '📋 listBackups() zeigt alle 3 Backup-Versionen',
+            '↩️ restoreFromBackup() stellt beliebiges Backup her',
+            '🛡️ Schutz vor Totalverlust der Daten auf dem Handy'
+        ]
+    },
+    {
+        version: '1.7.5',
+        releaseDate: '2026-08-28',
+        name: '🔵 FIXED: Button-Listener wird IMMER registriert!',
+        features: [
+            '🔵 CRITICAL: registerNotificationButtonListener() in ensureNotificationElement()',
+            '✅ Button funktioniert auch bei 2+ Notifications',
+            '🔨 cloneNode() entfernt alte Listener bevor neue registriert werden',
+            '📌 Listener wird bei JEDEM ensureNotificationElement() aufgerufen',
+            '✅ DOMContentLoaded Fallback als Sicherheit',
+            '🐛 Verhindert: "Button funktioniert beim 2. Mal nicht"'
+        ]
+    },
+    {
+        version: '1.7.4',
+        releaseDate: '2026-08-28',
+        name: '🔴 FIXED: Button-Listener wird IMMER registriert!',
+        features: [
+            '🔴 ROOT CAUSE: Wenn Element schon existiert, wurde Listener NICHT registriert',
+            '✅ registerNotificationButtonListener() separate Funktion',
+            '📌 ensureNotificationElement() ruft IMMER registerNotificationButtonListener() auf',
+            '🎯 Verhindert dass Button bei 2. Notification nicht funktioniert'
+        ]
+    },
+    {
+        version: '1.7.3',
+        releaseDate: '2026-08-28',
+        name: '🔴 FIXED: Statisches Notification-Element entfernt!',
+        features: [
+            '🔴 ROOT CAUSE: 2 Button-Elemente (statisch + dynamisch) verwirren sich',
+            '✅ Nur noch EINE Notification-Element-Quelle (dynamisch)',
+            '📝 closeNotification() robuster: Prüft ob schon versteckt',
+            '🎯 Keine Event-Konflikte mehr'
+        ]
+    },
+    {
+        version: '1.7.2',
+        releaseDate: '2026-08-28',
+        name: '🔵 FIXED: Close-Button funktioniert jetzt!',
+        features: [
+            '🔵 addEventListener statt onclick für robustes Event-Handling',
+            '✅ e.stopPropagation() + e.preventDefault() für Sicherheit',
+            '📌 Button-Listener an 2 Stellen: DOMContentLoaded + ensureNotificationElement()',
+            '⏱️ 1500ms Cooldown nach Schließen'
+        ]
+    },
+    {
+        version: '1.7.1',
+        releaseDate: '2026-08-28',
+        name: '🔥 CRITICAL FIX: Notification Loop Prevention!',
+        features: [
+            '🔥 PROBLEM: Benachrichtigungsbalken kommt immer wieder!',
+            '🛡️ activeNotificationId tracking + 1000ms cooldown',
+            '📊 Duplicate-Protection verhindert Loop',
+            '⏱️ Längerer Flag-Reset verhindert Race Conditions',
+            '📌 Smart Retry-System wartet 500ms'
+        ]
+    },
     {
         version: '1.7.0',
         releaseDate: '2026-08-28',
