@@ -1362,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.19';
+const APP_VERSION = '1.7.20';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,17 +1370,19 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.19',
+        version: '1.7.20',
         releaseDate: '2026-08-31',
-        name: '🔴 CRITICAL FINAL FIX: renderTodos NACH Init aufrufen!',
+        name: '🎯 FINAL STACK OVERFLOW FIX: loadCategoryColors nach Init aufrufen!',
         features: [
-            '🔴 STILL BROKEN v1.7.18: Stack Overflow beim App-Start',
-            '❌ ROOT CAUSE: renderTodos() wird WÄHREND Init aufgerufen',
-            '  → renderTodos() kann andere Funktionen triggern → Rekursion!',
-            '✅ FIXED: renderTodos() wird NACH isAppInitializing=false aufgerufen',
-            '  → isAppInitializing = false zuerst',
-            '  → DANN renderTodos()',
-            '⚡ NO LOOPS DURING INIT! Stack Overflow final behoben!'
+            '🔴 ROOT CAUSE v1.7.19: loadCategoryColors() läuft async während Init!',
+            '  → Kann initializeDefaultColors() triggern',
+            '  → Kann zu localStorage Loops führen',
+            '✅ FIXED: loadCategoryColors() NICHT während Init aufrufen',
+            '✅ Nur initializeDefaultColors() während Init (lokal, sicher)',
+            '✅ loadCategoryColors() wird NACH isAppInitializing=false aufgerufen',
+            '✅ renderTodos() wird NACH loadCategoryColors() aufgerufen',
+            '⚡ NO ASYNC BACKGROUND OPERATIONS DURING INIT!',
+            '🎉 Stack Overflow sollte JETZT komplett weg sein!'
         ]
     },
     {
@@ -2751,7 +2753,9 @@ function normalizeTodos() {
     allCategories = await sync.getCategories();
     // v1.0.70: Initialisiere Defaults SOFORT, dann lade vom GitHub
     initializeDefaultColors();
-    loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
+    // v1.7.20: loadCategoryColors() NICHT während Init!
+    // initializeDefaultColors() reicht aus - GitHub-Load kommt später!
+    // loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
     
     console.log(`[DEBUG] ✅ ${allTodos.length} Aufgaben geladen`);
     console.log(`[DEBUG] ✅ ${allCategories.length} Kategorien geladen`);
@@ -2776,6 +2780,9 @@ function normalizeTodos() {
     
     // v1.7.13: Signalisiere dass App-Init fertig ist (kein UI-Loop mehr!)
     isAppInitializing = false;
+    
+    // v1.7.20: JETZT Farben von GitHub laden (NACH Init!)
+    loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
     
     // v1.7.19: JETZT rendern - nach Init!
     renderTodos();
