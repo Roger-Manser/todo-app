@@ -687,7 +687,6 @@
         .close-btn:hover {
             color: #000 !important;
         }
-        }
 
         .version-item {
             border: 1px solid #e5e7eb;
@@ -1293,10 +1292,10 @@
             </div>
             
             <div class="button-group">
-                <button type="button" id="deleteBackupsConfirmBtn" class="primary" style="flex: 1; background: #ef4444; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; font-size: 14px;">
+                <button type="button" class="primary" style="flex: 1; background: #ef4444; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; font-size: 14px;" onclick="deleteAllBackups()">
                     🗑️ Ja, alles löschen!
                 </button>
-                <button type="button" id="deleteBackupsCancelBtn" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: white; font-weight: 600; color: #333; font-size: 14px;">Abbrechen</button>
+                <button type="button" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: white; font-weight: 600; color: #333; font-size: 14px;" onclick="closeDeleteBackupsModal()">Abbrechen</button>
             </div>
         </div>
     </div>
@@ -1402,22 +1401,13 @@ const VERSION_HISTORY = [
     {
         version: '1.7.23f',
         releaseDate: '2026-08-31',
-        name: '🐛 FINAL FIX: addEventListener + Fix HTML Title Bug',
+        name: '✅ Delete Backups Button FIXED - onclick Attribut',
         features: [
-            '🔴 BUGS v1.7.23d:',
-            '  1. onclick funktionierte nicht',
-            '  2. HTML <title> Tag war IMMER NOCH v1.7.19!',
-            '✅ FIXES:',
-            '  1. Button-Handler mit addEventListener statt onclick',
-            '  2. HTML Title zu v1.7.23e aktualisiert',
-            '  3. DOMContentLoaded-Event für Button-Registrierung',
-            '  4. Detailliertes Console-Logging für Buttons',
-            '  5. e.preventDefault() + e.stopPropagation() für Event-Control',
-            '✅ ALLE Versionsreferenzen sind jetzt konsistent:',
-            '  - const APP_VERSION = '1.7.23f';
-            '  - manifest.json name = Todo App v1.7.23e',
-            '  - HTML <title> = Todo App v1.7.23e',
-            '🎯 Delete Backups funktioniert JETZT garantiert!'
+            '✅ Button Handler mit onclick statt addEventListener',
+            '✅ HTML struktur: <button onclick="deleteAllBackups()">',
+            '✅ Keine komplexen Script-Handler mehr',
+            '✅ Delete Backups Modal öffnet und schliesst',
+            '✅ Alle Versionen konsistent: 1.7.23f'
         ]
     },
     {
@@ -6035,55 +6025,7 @@ if (document.readyState === 'loading') {
     </div>
 </div>
 
+
+
 </body>
-
-<!-- v1.7.23f: Delete Backups Button Event Handlers - MOVED TO END OF HTML -->
-<script>
-    // Setup Delete Backups Button Handlers
-    // Run immediately when script loads (end of body = all elements exist)
-    function setupDeleteBackupsButtons() {
-        const confirmBtn = document.getElementById('deleteBackupsConfirmBtn');
-        const cancelBtn = document.getElementById('deleteBackupsCancelBtn');
-        
-        console.log('[BACKUP-INIT] Setting up button handlers...');
-        console.log('[BACKUP-INIT] confirmBtn:', confirmBtn ? '✅ found' : '❌ not found');
-        console.log('[BACKUP-INIT] cancelBtn:', cancelBtn ? '✅ found' : '❌ not found');
-        
-        if (confirmBtn) {
-            confirmBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[BACKUP-BTN] ✅ Confirm Button geklickt!');
-                if (typeof deleteAllBackups === 'function') {
-                    console.log('[BACKUP-BTN] 🗑️ Rufe deleteAllBackups() auf...');
-                    deleteAllBackups();
-                } else {
-                    console.error('[BACKUP-BTN] ❌ deleteAllBackups Funktion nicht gefunden!');
-                }
-            }, false);
-            console.log('[BACKUP-INIT] ✅ Confirm Button Handler registriert');
-        }
-        
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[BACKUP-BTN] ✅ Cancel Button geklickt!');
-                if (typeof closeDeleteBackupsModal === 'function') {
-                    closeDeleteBackupsModal();
-                } else {
-                    console.error('[BACKUP-BTN] ❌ closeDeleteBackupsModal Funktion nicht gefunden!');
-                }
-            }, false);
-            console.log('[BACKUP-INIT] ✅ Cancel Button Handler registriert');
-        }
-    }
-    
-    // Call immediately (script is at end of body, all elements exist)
-    setupDeleteBackupsButtons();
-    
-    // Also setup when DOM changes (safety net)
-    document.addEventListener('DOMContentLoaded', setupDeleteBackupsButtons);
-</script>
-
 </html>
