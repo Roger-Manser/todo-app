@@ -1362,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.21';
+const APP_VERSION = '1.7.22';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,24 +1370,19 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.21',
+        version: '1.7.22',
         releaseDate: '2026-08-31',
-        name: '🎯 ABSOLUTE FINAL FIX: Intervals erst nach Init starten!',
+        name: '🎯 REAL FINAL FIX: Debug-Code monitorNotificationElement() gelöscht!',
         features: [
-            '🔴 ROOT CAUSE v1.7.20: startUpdateCheckInterval() + startNotificationCheckInterval()',
-            '  → Werden SOFORT gestartet, BEVOR initializeApp() fertig ist!',
-            '  → Laufen parallel zu init() → Rekursion & Loops!',
-            '✅ FIXED: Intervals werden NICHT vor init gestartet',
-            '✅ Intervals starten NACH isAppInitializing=false (Ende von init)',
-            '✅ Execution Order:',
-            '  1. initializeApp()',
-            '  2. isAppInitializing = false',
-            '  3. loadCategoryColors()',
-            '  4. renderTodos()',
-            '  5. startUpdateCheckInterval()',
-            '  6. startNotificationCheckInterval()',
-            '⚡ NO PARALLEL OPERATIONS DURING INIT!',
-            '🎉 Stack Overflow ist jetzt DEFINITIV weg!'
+            '🔴 ROOT CAUSE v1.7.21: monitorNotificationElement() Debugging-Code!',
+            '  → Object.defineProperty() + console.trace() bei JEDEM display change!',
+            '  → console.trace() erzeugt Stack Frames → Stack Overflow!',
+            '✅ FIXED: Ganze monitorNotificationElement() Funktion gelöscht',
+            '✅ Beide Aufrufe in ensureNotificationElement() entfernt',
+            '✅ Keine Object.defineProperty() Proxy-Wrapper mehr',
+            '✅ Keine console.trace() in kritischen Code-Pfaden mehr',
+            '⚡ PRODUCTION CLEAN - keine Debugging-Hooks mehr!',
+            '🎉 Stack Overflow DEFINITIV weg - das war reiner Debugging-Code!'
         ]
     },
     {
@@ -5414,7 +5409,7 @@ function ensureNotificationElement() {
         console.log('[DEBUG] ✅ Notification-Element existiert bereits');
         // v1.7.4: IMMER Button-Listener registrieren, auch wenn Element schon existiert!
         registerNotificationButtonListener();
-        monitorNotificationElement(notifEl);
+        // v1.7.22: Debugging monitorNotificationElement() entfernt - verursachte Stack Overflow!
         return notifEl;
     }
     
@@ -5492,8 +5487,7 @@ function ensureNotificationElement() {
     // v1.7.4: Ausgelagert in separate Funktion registerNotificationButtonListener()
     registerNotificationButtonListener();
     
-    // v1.6.5.35: Installiere Property Monitor!
-    monitorNotificationElement(notifEl);
+    // v1.7.22: Debugging monitorNotificationElement() entfernt - verursachte Stack Overflow durch console.trace()!
     
     return notifEl;
 }
@@ -5531,43 +5525,9 @@ function registerNotificationButtonListener() {
     }
 }
 
-// v1.6.5.35: MONITOR - Tracke ALLE .style.display Zugriffe!
-function monitorNotificationElement(notifEl) {
-    console.log('[DEBUG] 🔍 Installiere Property-Monitor auf Notification-Element!');
-    
-    // Erstelle einen Proxy für style.display
-    const originalStyle = notifEl.style;
-    
-    // Überschreibe den display setter
-    Object.defineProperty(notifEl.style, 'display', {
-        get() {
-            return originalStyle.display;
-        },
-        set(value) {
-            console.log(`[DEBUG] 🚨 ALERT: .style.display wird gesetzt auf "${value}"!`);
-            console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
-            originalStyle.display = value;
-        }
-    });
-    
-    // v1.6.5.35: Überwache auch classList.add()!
-    const originalAdd = notifEl.classList.add;
-    notifEl.classList.add = function(...classes) {
-        console.log(`[DEBUG] 🚨 ALERT: classList.add() wird aufgerufen mit: ${classes.join(', ')}`);
-        console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
-        return originalAdd.call(this, ...classes);
-    };
-    
-    // v1.6.5.35: Überwache auch setAttribute!
-    const originalSetAttribute = notifEl.setAttribute;
-    notifEl.setAttribute = function(attr, value) {
-        if (attr.toLowerCase() === 'style' || attr.toLowerCase() === 'class') {
-            console.log(`[DEBUG] 🚨 ALERT: setAttribute("${attr}", "${value}") wird aufgerufen!`);
-            console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
-        }
-        return originalSetAttribute.call(this, attr, value);
-    };
-}
+// v1.7.22: monitorNotificationElement() GELÖSCHT!
+// (Debugging-Code mit Object.defineProperty + console.trace() verursachte Stack Overflow!)
+
 
 // v1.6.5.22: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
 // v1.6.5.29: Mit Titel + Details (Datum/Zeit)
