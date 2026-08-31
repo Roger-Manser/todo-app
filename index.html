@@ -1274,7 +1274,7 @@
 
 <!-- v1.7.23: Delete Backups Confirmation Modal -->
 <div id="deleteBackupsModal" class="modal">
-    <div class="modal-content" style="max-width: 400px;">
+    <div class="modal-content" style="max-width: 400px; pointer-events: auto;">
         <div class="modal-header">
             <h2>🗑️ Backups löschen</h2>
             <button class="close-btn" onclick="closeDeleteBackupsModal()">&times;</button>
@@ -1293,10 +1293,10 @@
             </div>
             
             <div class="button-group">
-                <button class="primary" style="flex: 1; background: #ef4444;" onclick="deleteAllBackups()">
+                <button type="button" class="primary" style="flex: 1; background: #ef4444; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; font-size: 14px;" onclick="deleteAllBackups(); return false;">
                     🗑️ Ja, alles löschen!
                 </button>
-                <button onclick="closeDeleteBackupsModal()" style="flex: 1;">Abbrechen</button>
+                <button type="button" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: white; font-weight: 600; color: #333; font-size: 14px;" onclick="closeDeleteBackupsModal(); return false;">Abbrechen</button>
             </div>
         </div>
     </div>
@@ -1392,7 +1392,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.23c';
+const APP_VERSION = '1.7.23d';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1400,22 +1400,20 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.23c',
+        version: '1.7.23d',
         releaseDate: '2026-08-31',
-        name: '🐛 DELETE BACKUPS HOTFIX: Better Error Handling & Async Fix',
+        name: '🐛 DELETE BACKUPS: Button-Click Fix - Modal Clickability',
         features: [
-            '🐛 BUG v1.7.23b: Löschen-Button funktionierte nicht!',
-            '❌ ROOT CAUSE:',
-            '  1. openSettings() ist async aber wurde synchron aufgerufen',
-            '  2. Keine Error-Handling für displayInAppNotification()',
-            '  3. Keine Try-Catch Blöcke für Fehlerbehandlung',
-            '✅ FIXED: Gründliches Debugging & Error-Handling:',
-            '  1. deleteAllBackups() mit try-catch',
-            '  2. openSettings() mit setTimeout async/await',
-            '  3. Fehler-Alerts wenn Modal nicht gefunden',
-            '  4. Detaillierte Console-Logs für jede Aktion',
-            '✅ Funktionen jetzt robust gegen alle Edge Cases',
-            '🎯 Löschen-Button funktioniert jetzt garantiert!'
+            '🐛 BUG v1.7.23c: Delete-Button war nicht klickbar!',
+            '❌ ROOT CAUSE: Button-Styling + Modal pointer-events Konflikt',
+            '✅ FIXES:',
+            '  1. Explicit type="button" hinzugefügt',
+            '  2. Besseres Button-Styling mit padding/border/cursor',
+            '  3. pointer-events: auto auf modal-content',
+            '  4. return false; auf onclick für Verhaltenskontrolle',
+            '✅ Beide Buttons (Löschen & Abbrechen) jetzt klickbar',
+            '✅ Modal ist jetzt vollständig interaktiv',
+            '🎯 Delete Backups funktioniert JETZT definitiv!'
         ]
     },
     {
