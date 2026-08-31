@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.18 - GitHub Sync - Stop autoGenerateCategoryColors Loop During Init</title>
+    <title>Todo App v1.7.19 - GitHub Sync - renderTodos After Init Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1362,7 +1362,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.18';
+const APP_VERSION = '1.7.19';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1370,16 +1370,17 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.18',
+        version: '1.7.19',
         releaseDate: '2026-08-31',
-        name: '🔴 CRITICAL: Stop localStorage Loop - autoGenerateCategoryColors während Init!',
+        name: '🔴 CRITICAL FINAL FIX: renderTodos NACH Init aufrufen!',
         features: [
-            '🔴 STILL BROKEN v1.7.17: Stack Overflow beim Start der App',
-            '❌ ROOT CAUSE: tryLocalStorageCategoryColors() → autoGenerateCategoryColors()',
-            '  → autoGenerateCategoryColors() versucht localStorage.setItem() während Init!',
-            '✅ FIXED: Nicht mehr autoGenerateCategoryColors() aufrufen',
-            '✅ STATTDESSEN: Nur initializeDefaultColors() verwenden (lokal, kein GitHub)',
-            '⚡ Stack Overflow beim App-Start sollte endlich behoben sein'
+            '🔴 STILL BROKEN v1.7.18: Stack Overflow beim App-Start',
+            '❌ ROOT CAUSE: renderTodos() wird WÄHREND Init aufgerufen',
+            '  → renderTodos() kann andere Funktionen triggern → Rekursion!',
+            '✅ FIXED: renderTodos() wird NACH isAppInitializing=false aufgerufen',
+            '  → isAppInitializing = false zuerst',
+            '  → DANN renderTodos()',
+            '⚡ NO LOOPS DURING INIT! Stack Overflow final behoben!'
         ]
     },
     {
@@ -2768,12 +2769,16 @@ function normalizeTodos() {
     updateCategoryTabs();
     updateCategorySelects();
     updateStats();
-    renderTodos();
+    // v1.7.19: renderTodos() NICHT während Init! Zu riskant!
+    // renderTodos();  ← GELÖSCHT!
     updateSyncStatus('GitHub Sync');
     console.log('[DEBUG] ✅ App bereit!');
     
     // v1.7.13: Signalisiere dass App-Init fertig ist (kein UI-Loop mehr!)
     isAppInitializing = false;
+    
+    // v1.7.19: JETZT rendern - nach Init!
+    renderTodos();
 }
 
 // ===== v1.4.1: WIEDERKEHRENDE TODOS =====
