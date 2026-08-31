@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.11 - GitHub Sync - Auto-Generate Category-Colors</title>
+    <title>Todo App v1.7.12 - GitHub Sync - Infinite Recursion Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1352,7 +1352,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.11';
+const APP_VERSION = '1.7.12';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,17 +1360,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.11',
+        version: '1.7.12',
         releaseDate: '2026-08-31',
-        name: '🎨 AUTO-GENERATE: Category-Colors Wiederherstellung!',
+        name: '🔧 CRITICAL HOTFIX: Infinite Recursion Stack Overflow gefixt!',
         features: [
-            '🎨 CRITICAL FIX: GitHub category-colors.json ist kaputt',
-            '✅ Auto-Generate Default-Farben für alle Kategorien',
-            '📌 autoGenerateCategoryColors() - intelligente Farbzuweisung',
-            '💾 Generierte Farben werden automatisch zu GitHub gespeichert',
-            '🎯 10 vordefinierte Farben (Blau, Rot, Grün, Orange, Violett...)',
-            '🛡️ Fallback: initializeDefaultColors() speichert auch zu GitHub',
-            '⚡ App funktioniert IMMER - mit oder ohne GitHub-Daten'
+            '🔴 CRITICAL: Stack Overflow in v1.7.11 (Maximum call stack size exceeded)',
+            '❌ ROOT CAUSE: initializeDefaultColors() rief saveCategoryColors() auf → Infinite Loop',
+            '✅ FIXED: isInitializingColors Guard-Flag verhindert Rekursion',
+            '🛡️ Beide Functions: initializeDefaultColors() & autoGenerateCategoryColors() geschützt',
+            '📌 saveCategoryColors() wird nur aufgerufen wenn nicht bereits initialisierend',
+            '⚡ App lädt wieder normal ohne Stack Overflow'
         ]
     },
     {
@@ -3237,11 +3236,14 @@ function autoGenerateCategoryColors() {
     }
     
     // v1.7.11: Speichere die generierten Farben zu GitHub
-    console.log('[DEBUG] 💾 Speichere Auto-Generated Farben zu GitHub...');
-    saveCategoryColors().catch(e => {
-        console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
-        // Aber kein kritischer Fehler - Farben funktionieren lokal
-    });
+    // v1.7.12: Nur wenn githubConfig existiert + nicht rekursiv
+    if (githubConfig && !isInitializingColors) {
+        console.log('[DEBUG] 💾 Speichere Auto-Generated Farben zu GitHub...');
+        saveCategoryColors().catch(e => {
+            console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
+            // Aber kein kritischer Fehler - Farben funktionieren lokal
+        });
+    }
 }
 
 async function saveCategoryColors() {
@@ -3517,25 +3519,41 @@ const DEFAULT_CATEGORY_COLORS = {
     'Sonstiges': { bg: '#fffde7', border: '#fdd835' }
 };
 
+// v1.7.12: Guard gegen Infinite Recursion
+let isInitializingColors = false;
+
 function initializeDefaultColors() {
-    categoryColors = {};
-    // Standard-Kategorien mit Default-Farben
-    for (const [cat, colors] of Object.entries(DEFAULT_CATEGORY_COLORS)) {
-        categoryColors[cat] = colors.bg;
-    }
-    // Neue Kategorien: falls nicht vorhanden → Random Pastel zuweisen
-    for (const cat of allCategories) {
-        if (!categoryColors[cat]) {
-            categoryColors[cat] = generateRandomPastelColor();
-        }
+    // v1.7.12: Guard gegen Recursive Call
+    if (isInitializingColors) {
+        console.log('[DEBUG] ⚠️ initializeDefaultColors() bereits in Ausführung - skip Rekursion');
+        return;
     }
     
-    // v1.7.11: Speichere initialisierte Farben auch zu GitHub
-    if (githubConfig) {
-        console.log('[DEBUG] 💾 Speichere initialisierte Farben zu GitHub...');
-        saveCategoryColors().catch(e => {
-            console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
-        });
+    isInitializingColors = true;
+    
+    try {
+        categoryColors = {};
+        // Standard-Kategorien mit Default-Farben
+        for (const [cat, colors] of Object.entries(DEFAULT_CATEGORY_COLORS)) {
+            categoryColors[cat] = colors.bg;
+        }
+        // Neue Kategorien: falls nicht vorhanden → Random Pastel zuweisen
+        for (const cat of allCategories) {
+            if (!categoryColors[cat]) {
+                categoryColors[cat] = generateRandomPastelColor();
+            }
+        }
+        
+        // v1.7.11: Speichere initialisierte Farben auch zu GitHub
+        // v1.7.12: NUR wenn wir nicht schon in initializeDefaultColors sind!
+        if (githubConfig && !isInitializingColors) {
+            console.log('[DEBUG] 💾 Speichere initialisierte Farben zu GitHub...');
+            saveCategoryColors().catch(e => {
+                console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
+            });
+        }
+    } finally {
+        isInitializingColors = false;
     }
 }
 
