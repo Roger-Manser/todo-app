@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.23f - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.24 - GitHub Sync - Delete Backups Feature Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1272,7 +1272,7 @@
 </div>
 
 <!-- v1.7.23: Delete Backups Confirmation Modal -->
-<div id="deleteBackupsModal" class="modal">
+<div id="deleteBackupsModal" class="modal" style="z-index: 1001 !important;">
     <div class="modal-content" style="max-width: 400px; pointer-events: auto;">
         <div class="modal-header">
             <h2>🗑️ Backups löschen</h2>
@@ -1391,7 +1391,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.23f';
+const APP_VERSION = '1.7.24';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1399,7 +1399,8 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.23f',
+        version: '1.7.24',
+        name: '✅ Z-INDEX FIX: Delete Backups Modal über Settings Modal',
         releaseDate: '2026-08-31',
         name: '✅ Delete Backups Button FIXED - onclick Attribut',
         features: [
