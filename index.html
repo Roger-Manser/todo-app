@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.5 - GitHub Sync - Button Listener Always Register Fix</title>
+    <title>Todo App v1.7.6 - GitHub Sync - Rotating Backup System (B1, B2, B3)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -2801,7 +2801,89 @@ function restoreBackup(backupKey) {
     }
 }
 
-async function saveTodos() {
+// v1.7.5: ROTATING BACKUP SYSTEM - 3 Backup-Dateien B1, B2, B3
+// Rotiert: B1 → B2 → B3 → B1 → ...
+let currentBackupIndex = 0;  // 0=B1, 1=B2, 2=B3
+const BACKUP_FILES = ['backup_b1', 'backup_b2', 'backup_b3'];
+
+function getNextBackupFile() {
+    const backupFile = BACKUP_FILES[currentBackupIndex];
+    currentBackupIndex = (currentBackupIndex + 1) % 3;  // Rotate: 0→1→2→0
+    console.log(`[BACKUP] 💾 Schreibe in ${backupFile.toUpperCase()} (nächstes: ${BACKUP_FILES[currentBackupIndex].toUpperCase()})`);
+    return backupFile;
+}
+
+function createBackup() {
+    const backupData = {
+        timestamp: new Date().toISOString(),
+        todos: allTodos,
+        categories: allCategories || [],
+        categoryColors: categoryColors || {},
+        notifiedTodos: notifiedTodos || {}
+    };
+    
+    const backupFile = getNextBackupFile();
+    localStorage.setItem(backupFile, JSON.stringify(backupData));
+    
+    console.log(`[BACKUP] ✅ Backup erstellt: ${backupFile}`);
+    console.log(`[BACKUP] 📊 ${allTodos.length} Todos, ${(allCategories || []).length} Kategorien`);
+    
+    return backupFile;
+}
+
+function listBackups() {
+    console.log('[BACKUP] 📋 Alle Backups:');
+    BACKUP_FILES.forEach(file => {
+        const data = localStorage.getItem(file);
+        if (data) {
+            const backup = JSON.parse(data);
+            console.log(`  ${file.toUpperCase()}: ${backup.todos.length} Todos, ${backup.timestamp}`);
+        } else {
+            console.log(`  ${file.toUpperCase()}: (leer)`);
+        }
+    });
+}
+
+function restoreFromBackup(backupFile) {
+    console.log(`[BACKUP] 🔄 Restore von ${backupFile}...`);
+    const data = localStorage.getItem(backupFile);
+    
+    if (!data) {
+        console.error(`[BACKUP] ❌ Backup ${backupFile} ist leer!`);
+        return false;
+    }
+    
+    try {
+        const backup = JSON.parse(data);
+        allTodos = backup.todos || [];
+        allCategories = backup.categories || [];
+        categoryColors = backup.categoryColors || {};
+        notifiedTodos = backup.notifiedTodos || {};
+        
+        // Speichere alle Daten
+        saveTodos();
+        saveCategories();
+        saveCategoryColors();
+        saveNotifiedTodos();
+        
+        console.log(`[BACKUP] ✅ Restore erfolgreich: ${allTodos.length} Todos wiederhergestellt`);
+        displayInAppNotification(
+            `✅ Backup wiederhergestellt`,
+            `${backup.todos.length} Todos von ${new Date(backup.timestamp).toLocaleString('de-CH')}`,
+            4000
+        );
+        
+        renderTodos();
+        updateCategoryTabs();
+        
+        return true;
+    } catch (error) {
+        console.error(`[BACKUP] ❌ Restore fehlgeschlagen:`, error);
+        return false;
+    }
+}
+
+
     if (!githubConfig) {
         console.warn('[DEBUG] saveTodos: Keine GitHub-Konfiguration');
         return;
@@ -2984,6 +3066,8 @@ async function saveCategoryColors() {
         await sync.saveFile('category-colors.json', colorData);
         console.log('[DEBUG] ✅ Kategorie-Farben zu GitHub gespeichert');
         alert('✅ Farben gespeichert!');
+        // v1.7.5: BACKUP nach Farben gespeichert
+        createBackup();
         updateCategoryTabs();  // v1.0.55: Aktualisiere Tab-Farben!
         renderTodos();  // Aktualisiere Anzeige
     } catch (error) {
@@ -4387,6 +4471,8 @@ function addNewCategory() {
     updateCategoryTabs();
     updateCategorySelects();
     saveCategories();
+    // v1.7.5: BACKUP nach Kategorie erstellt
+    createBackup();
     closeAddCategoryModal();
 }
 
@@ -4742,6 +4828,8 @@ function restoreAccordionState() {
 }
 
 function closeSettings() {
+    // v1.7.5: BACKUP nach Einstellungen "Fertig"
+    createBackup();
     document.getElementById('settingsModal').classList.remove('show');
 }
 
