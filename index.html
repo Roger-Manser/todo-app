@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.23e - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.23f - GitHub Sync - Delete Backups Feature Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1298,38 +1298,6 @@
                 </button>
                 <button type="button" id="deleteBackupsCancelBtn" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: white; font-weight: 600; color: #333; font-size: 14px;">Abbrechen</button>
             </div>
-            
-            <script>
-                // v1.7.23e: Delete Backups Button Handler
-                document.addEventListener('DOMContentLoaded', function() {
-                    const confirmBtn = document.getElementById('deleteBackupsConfirmBtn');
-                    const cancelBtn = document.getElementById('deleteBackupsCancelBtn');
-                    
-                    if (confirmBtn) {
-                        confirmBtn.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log('[BACKUP-BTN] Confirm Button geklickt!');
-                            if (typeof deleteAllBackups === 'function') {
-                                deleteAllBackups();
-                            } else {
-                                console.error('[BACKUP-BTN] deleteAllBackups Funktion nicht gefunden!');
-                            }
-                        }, false);
-                    }
-                    
-                    if (cancelBtn) {
-                        cancelBtn.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log('[BACKUP-BTN] Cancel Button geklickt!');
-                            if (typeof closeDeleteBackupsModal === 'function') {
-                                closeDeleteBackupsModal();
-                            }
-                        }, false);
-                    }
-                });
-            </script>
         </div>
     </div>
 </div>
@@ -1424,7 +1392,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.23e';
+const APP_VERSION = '1.7.23f';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1432,7 +1400,7 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.23e',
+        version: '1.7.23f',
         releaseDate: '2026-08-31',
         name: '🐛 FINAL FIX: addEventListener + Fix HTML Title Bug',
         features: [
@@ -1446,7 +1414,7 @@ const VERSION_HISTORY = [
             '  4. Detailliertes Console-Logging für Buttons',
             '  5. e.preventDefault() + e.stopPropagation() für Event-Control',
             '✅ ALLE Versionsreferenzen sind jetzt konsistent:',
-            '  - const APP_VERSION = 1.7.23e',
+            '  - const APP_VERSION = '1.7.23f';
             '  - manifest.json name = Todo App v1.7.23e',
             '  - HTML <title> = Todo App v1.7.23e',
             '🎯 Delete Backups funktioniert JETZT garantiert!'
@@ -6068,4 +6036,54 @@ if (document.readyState === 'loading') {
 </div>
 
 </body>
+
+<!-- v1.7.23f: Delete Backups Button Event Handlers - MOVED TO END OF HTML -->
+<script>
+    // Setup Delete Backups Button Handlers
+    // Run immediately when script loads (end of body = all elements exist)
+    function setupDeleteBackupsButtons() {
+        const confirmBtn = document.getElementById('deleteBackupsConfirmBtn');
+        const cancelBtn = document.getElementById('deleteBackupsCancelBtn');
+        
+        console.log('[BACKUP-INIT] Setting up button handlers...');
+        console.log('[BACKUP-INIT] confirmBtn:', confirmBtn ? '✅ found' : '❌ not found');
+        console.log('[BACKUP-INIT] cancelBtn:', cancelBtn ? '✅ found' : '❌ not found');
+        
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[BACKUP-BTN] ✅ Confirm Button geklickt!');
+                if (typeof deleteAllBackups === 'function') {
+                    console.log('[BACKUP-BTN] 🗑️ Rufe deleteAllBackups() auf...');
+                    deleteAllBackups();
+                } else {
+                    console.error('[BACKUP-BTN] ❌ deleteAllBackups Funktion nicht gefunden!');
+                }
+            }, false);
+            console.log('[BACKUP-INIT] ✅ Confirm Button Handler registriert');
+        }
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[BACKUP-BTN] ✅ Cancel Button geklickt!');
+                if (typeof closeDeleteBackupsModal === 'function') {
+                    closeDeleteBackupsModal();
+                } else {
+                    console.error('[BACKUP-BTN] ❌ closeDeleteBackupsModal Funktion nicht gefunden!');
+                }
+            }, false);
+            console.log('[BACKUP-INIT] ✅ Cancel Button Handler registriert');
+        }
+    }
+    
+    // Call immediately (script is at end of body, all elements exist)
+    setupDeleteBackupsButtons();
+    
+    // Also setup when DOM changes (safety net)
+    document.addEventListener('DOMContentLoaded', setupDeleteBackupsButtons);
+</script>
+
 </html>
