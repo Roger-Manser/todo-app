@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.27 - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.28 - GitHub Sync - Delete Backups Feature Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1391,7 +1391,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.27';
+const APP_VERSION = '1.7.28';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1399,7 +1399,7 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.27',
+        version: '1.7.28',
         name: '✅ Z-INDEX FIX: Delete Backups Modal über Settings Modal',
         releaseDate: '2026-08-31',
         name: '✅ Delete Backups Button FIXED - onclick Attribut',
@@ -5119,6 +5119,65 @@ function closeSettings() {
     document.getElementById('settingsModal').classList.remove('show');
 }
 
+// v1.7.28: Register button handlers for delete backups modal
+function registerDeleteBackupsButtons() {
+    console.log('[BACKUP-HANDLER] v1.7.28: Entering registerDeleteBackupsButtons()');
+    
+    try {
+        // Find the delete button by searching for text content
+        const allButtons = document.querySelectorAll('button');
+        console.log('[BACKUP-HANDLER] Found ' + allButtons.length + ' buttons total');
+        
+        let deleteBtn = null;
+        let cancelBtn = null;
+        
+        allButtons.forEach((btn, idx) => {
+            const text = btn.textContent || '';
+            console.log(`[BACKUP-HANDLER] Button ${idx}: "${text}"`);
+            
+            if (text.includes('alles löschen') && !deleteBtn) {
+                deleteBtn = btn;
+                console.log('[BACKUP-HANDLER] ✅ Found delete button!');
+            }
+            if (text.includes('Abbrechen') && btn.closest('#deleteBackupsModal') && !cancelBtn) {
+                cancelBtn = btn;
+                console.log('[BACKUP-HANDLER] ✅ Found cancel button!');
+            }
+        });
+        
+        if (deleteBtn) {
+            console.log('[BACKUP-HANDLER] Registering click handler on delete button');
+            deleteBtn.onclick = function(e) {
+                console.log('[BACKUP-HANDLER] 🔴 Delete button clicked! Calling deleteAllBackups()');
+                e.preventDefault();
+                e.stopPropagation();
+                deleteAllBackups();
+                return false;
+            };
+            console.log('[BACKUP-HANDLER] ✅ Delete button handler registered');
+        } else {
+            console.warn('[BACKUP-HANDLER] ❌ Delete button NOT found');
+        }
+        
+        if (cancelBtn) {
+            console.log('[BACKUP-HANDLER] Registering click handler on cancel button');
+            cancelBtn.onclick = function(e) {
+                console.log('[BACKUP-HANDLER] Cancel button clicked! Calling closeDeleteBackupsModal()');
+                e.preventDefault();
+                e.stopPropagation();
+                closeDeleteBackupsModal();
+                return false;
+            };
+            console.log('[BACKUP-HANDLER] ✅ Cancel button handler registered');
+        } else {
+            console.warn('[BACKUP-HANDLER] ❌ Cancel button NOT found');
+        }
+        
+    } catch (error) {
+        console.error('[BACKUP-HANDLER] ❌ Error registering buttons:', error);
+    }
+}
+
 // v1.7.23: Delete Backups Modal Functions
 function openDeleteBackupsModal() {
     try {
@@ -5153,6 +5212,12 @@ function openDeleteBackupsModal() {
         
         modal.classList.add('show');
         console.log('[BACKUP] ✅ Modal geöffnet');
+        
+        // v1.7.28: Register button handlers RIGHT AFTER modal opens
+        setTimeout(() => {
+            console.log('[BACKUP] v1.7.28: Registering button handlers...');
+            registerDeleteBackupsButtons();
+        }, 100);
         
     } catch (error) {
         console.error('[BACKUP] ❌ Fehler in openDeleteBackupsModal():', error);
