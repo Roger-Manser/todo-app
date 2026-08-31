@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.8 - GitHub Sync - Optimized 2-Backup System</title>
+    <title>Todo App v1.7.9 - GitHub Sync - Robust Category-Colors Loading</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1352,7 +1352,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.8';
+const APP_VERSION = '1.7.9';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,17 +1360,17 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.8',
+        version: '1.7.9',
         releaseDate: '2026-08-31',
-        name: '📦 OPTIMIZED: 2-Backup System (localStorage fix)!',
+        name: '🔧 ROBUST: Category-Colors mit 3-stufigem Fallback-System!',
         features: [
-            '📦 CRITICAL: localStorage VOLL → nur 2 Backups statt 3!',
-            '✅ NUR TODOS speichern (Categories/Colors in GitHub)',
-            '💾 B1→B2→B1→B2... (Rotation nur zwischen 2)',
-            '🛡️ Fehlerbehandlung für QuotaExceededError',
-            '🔧 Category-Colors.json Parse-Error gefixt (sicherere UTF-8 Dekodierung)',
-            '📊 ~50% Größenreduktion pro Backup',
-            '⚡ Schnellere Backups & Restores'
+            '🔧 CRITICAL FIX: GitHub category-colors.json Parse Error',
+            '📌 3-stufiges Fallback-System: GitHub → localStorage → Defaults',
+            '💾 categoryColors_backup in localStorage speichern',
+            '✅ Wenn GitHub kaputt → localStorage Backup verwenden',
+            '✅ Wenn auch localStorage leer → Default-Farben verwenden',
+            '🛡️ App funktioniert IMMER - keine Fehler mehr!',
+            '⚡ Bessere Error-Messages im Debug'
         ]
     },
     {
@@ -3116,6 +3116,8 @@ function updateCategoryColor(category, hexColor) {
 async function loadCategoryColors() {
     if (!githubConfig) {
         console.warn('[DEBUG] Keine GitHub-Verbindung - categoryColors bleibt leer');
+        // v1.7.9: Versuche localStorage Fallback
+        tryLocalStorageCategoryColors();
         return;
     }
     
@@ -3126,8 +3128,8 @@ async function loadCategoryColors() {
         );
         
         if (!response.ok) {
-            console.log('[DEBUG] category-colors.json nicht gefunden (404) - verwende Defaults');
-            initializeDefaultColors();
+            console.log('[DEBUG] category-colors.json nicht gefunden (404) - versuche localStorage Fallback');
+            tryLocalStorageCategoryColors();
             return;
         }
         
@@ -3135,13 +3137,13 @@ async function loadCategoryColors() {
         
         // Prüfe ob content existiert
         if (!data.content) {
-            console.warn('[DEBUG] category-colors.json hat kein content - verwende Defaults');
-            initializeDefaultColors();
+            console.warn('[DEBUG] category-colors.json hat kein content - versuche localStorage Fallback');
+            tryLocalStorageCategoryColors();
             return;
         }
         
         try {
-            // v1.7.8: Sicherere Base64 → UTF-8 Dekodierung
+            // v1.7.9: Sicherere Base64 → UTF-8 Dekodierung
             const binaryString = atob(data.content);
             const text = decodeURIComponent(
                 binaryString
@@ -3151,17 +3153,46 @@ async function loadCategoryColors() {
             );
             const parsed = JSON.parse(text);
             
-            if (parsed && typeof parsed === 'object') {
+            if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
                 categoryColors = parsed;
-                console.log('[DEBUG] ✅ Category-Farben geladen:', Object.keys(parsed).length, 'Kategorien');
+                console.log('[DEBUG] ✅ Category-Farben von GitHub geladen:', Object.keys(parsed).length, 'Kategorien');
+                // v1.7.9: Speichere auch in localStorage als Backup
+                localStorage.setItem('categoryColors_backup', JSON.stringify(parsed));
             } else {
-                throw new Error('Ungültiges Format: parsed ist kein Object');
+                throw new Error('GitHub JSON ist leer oder kein Object');
             }
         } catch (parseError) {
-            console.error('[DEBUG] Parse Error bei category-colors.json:', parseError);
-            console.error('[DEBUG] Fallback: verwende Default-Farben');
-            initializeDefaultColors();
+            console.error('[DEBUG] ❌ Parse Error bei GitHub category-colors.json:', parseError);
+            console.warn('[DEBUG] Fallback: versuche localStorage...');
+            tryLocalStorageCategoryColors();
         }
+    } catch (fetchError) {
+        console.error('[DEBUG] ❌ Fehler beim Laden von GitHub:', fetchError);
+        console.warn('[DEBUG] Fallback: versuche localStorage...');
+        tryLocalStorageCategoryColors();
+    }
+}
+
+// v1.7.9: NEW - Fallback zu localStorage
+function tryLocalStorageCategoryColors() {
+    const stored = localStorage.getItem('categoryColors_backup');
+    if (stored) {
+        try {
+            const parsed = JSON.parse(stored);
+            if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+                categoryColors = parsed;
+                console.log('[DEBUG] ✅ Category-Farben von localStorage geladen (Backup):', Object.keys(parsed).length, 'Kategorien');
+                return;
+            }
+        } catch (e) {
+            console.error('[DEBUG] localStorage Backup auch kaputt:', e);
+        }
+    }
+    
+    // v1.7.9: Letzter Ausweg - Default-Farben
+    console.log('[DEBUG] ⚠️ FALLBACK: Verwende Default-Farben');
+    initializeDefaultColors();
+}
     } catch (error) {
         console.error('[DEBUG] Fehler beim Laden von category-colors.json:', error);
         initializeDefaultColors();
