@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.14 - GitHub Sync - No GitHub Save During Init</title>
+    <title>Todo App v1.7.15 - GitHub Sync - Visible Close Button for Version History</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1268,7 +1268,8 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2>📋 Versionshistorie</h2>
-            <button class="close-btn" onclick="closeVersionHistory()">&times;</button>
+            <!-- v1.7.15: Vergrößerter Close-Button für bessere Sichtbarkeit -->
+            <button class="close-btn" onclick="closeVersionHistory()" style="font-size: 28px; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; background: none; border: none; color: #666;">&times;</button>
         </div>
         <div id="versionList"></div>
     </div>
@@ -1352,7 +1353,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.14';
+const APP_VERSION = '1.7.15';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1360,17 +1361,15 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.14',
+        version: '1.7.15',
         releaseDate: '2026-08-31',
-        name: '🛑 CRITICAL HOTFIX: localStorage Loop - Only Local Save During Init!',
+        name: '🔘 UX IMPROVEMENT: Close Button für Version History sichtbar machen!',
         features: [
-            '🔴 CRITICAL: Stack Overflow in v1.7.13 (localStorage.setItem Loop)',
-            '❌ ROOT CAUSE: saveCategoryColors() wird trotz Flag aufgerufen during Init',
-            '✅ FIXED: NUR lokales localStorage.setItem während App-Init - GitHub speichern NICHT!',
-            '📌 autoGenerateCategoryColors(): Speichert lokal, skippt GitHub während Init',
-            '📌 initializeDefaultColors(): Speichert lokal, skippt GitHub während Init',
-            '🎯 GitHub-Saves kommen später, nach App vollständig initialisiert',
-            '⚡ App lädt ohne localStorage Stack Overflow'
+            '🔘 BUG: Close-Button war zu klein/unsichtbar in Versionshistorie',
+            '✅ FIXED: Close-Button vergrößert (28px, 40px×40px)',
+            '✅ Besser sichtbar: weiße × auf grauem Hintergrund',
+            '✅ Bessere Usability: jetzt kann man die Versionshistorie schließen!',
+            '📋 Close-Button oben rechts im Modal (standard Platzierung)'
         ]
     },
     {
