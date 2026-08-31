@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.26 - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.27 - GitHub Sync - Delete Backups Feature Complete</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1391,7 +1391,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.26';
+const APP_VERSION = '1.7.27';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1399,7 +1399,7 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.26',
+        version: '1.7.27',
         name: '✅ Z-INDEX FIX: Delete Backups Modal über Settings Modal',
         releaseDate: '2026-08-31',
         name: '✅ Delete Backups Button FIXED - onclick Attribut',
@@ -6034,45 +6034,53 @@ if (document.readyState === 'loading') {
 
 
 
-<!-- v1.7.26: Delete Backups Button Event Listeners - Setup as Fallback -->
+<!-- v1.7.27: GLOBAL Click Handler for Delete Backups - works even if modal is recreated -->
 <script>
-    console.log('[BACKUP-SETUP] Setting up Delete Backups button listeners...');
+    console.log('[BACKUP-GLOBAL] Global click handler script loading...');
     
-    // Wait for DOM to be ready
-    function setupDeleteBackupsListeners() {
-        const deleteBtn = document.querySelector('button[onclick="deleteAllBackups()"]');
-        const cancelBtn = document.querySelector('button[onclick="closeDeleteBackupsModal()"]');
+    // Global click handler - fires for ANY click
+    document.addEventListener('click', function(e) {
+        const target = e.target;
         
-        console.log('[BACKUP-SETUP] Delete button found:', !!deleteBtn);
-        console.log('[BACKUP-SETUP] Cancel button found:', !!cancelBtn);
+        // Log all clicks in the modal area
+        if (target.closest('#deleteBackupsModal')) {
+            console.log('[BACKUP-GLOBAL] Click detected in deleteBackupsModal:', target.textContent);
+            console.log('[BACKUP-GLOBAL] Target:', target);
+            console.log('[BACKUP-GLOBAL] Parent button:', target.closest('button'));
+        }
         
-        if (deleteBtn) {
-            // Add event listener as backup to onclick
-            deleteBtn.addEventListener('click', function(e) {
-                console.log('[BACKUP-SETUP] Delete button clicked via addEventListener!');
-                e.preventDefault();
-                e.stopPropagation();
+        // Check if delete button was clicked
+        if (target.textContent.includes('alles löschen') || target.closest('button[onclick="deleteAllBackups()"]')) {
+            console.log('[BACKUP-GLOBAL] 🔴 DELETE BUTTON CLICK DETECTED!!!');
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (typeof deleteAllBackups === 'function') {
+                console.log('[BACKUP-GLOBAL] Calling deleteAllBackups()...');
                 deleteAllBackups();
-            }, false);
-            console.log('[BACKUP-SETUP] ✅ Delete button listener added');
+            } else {
+                console.error('[BACKUP-GLOBAL] deleteAllBackups is NOT a function!');
+            }
+            return false;
         }
         
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', function(e) {
-                console.log('[BACKUP-SETUP] Cancel button clicked via addEventListener!');
-                e.preventDefault();
-                e.stopPropagation();
+        // Check if cancel button was clicked
+        if (target.textContent.includes('Abbrechen') || target.closest('button[onclick="closeDeleteBackupsModal()"]')) {
+            console.log('[BACKUP-GLOBAL] CANCEL BUTTON CLICK DETECTED!');
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (typeof closeDeleteBackupsModal === 'function') {
+                console.log('[BACKUP-GLOBAL] Calling closeDeleteBackupsModal()...');
                 closeDeleteBackupsModal();
-            }, false);
-            console.log('[BACKUP-SETUP] ✅ Cancel button listener added');
+            } else {
+                console.error('[BACKUP-GLOBAL] closeDeleteBackupsModal is NOT a function!');
+            }
+            return false;
         }
-    }
+    }, true); // Use capture phase to catch before other handlers
     
-    // Setup immediately
-    setupDeleteBackupsListeners();
-    
-    // Also setup when DOM changes
-    document.addEventListener('DOMContentLoaded', setupDeleteBackupsListeners);
+    console.log('[BACKUP-GLOBAL] ✅ Global click handler registered on document');
 </script>
 
 </body>
