@@ -1,7 +1,7 @@
 {
-  "name": "Todo App v1.1",
+  "name": "Todo App v1.7.23c",
   "short_name": "Todo",
-  "description": "Swiss Minimalist Todo App mit GitHub Sync",
+  "description": "Swiss Minimalist Todo App with GitHub Sync, Notifications & Photo Attachments",
   "start_url": "/todo-app/",
   "scope": "/todo-app/",
   "display": "standalone",

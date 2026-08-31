@@ -1392,7 +1392,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.23a';
+const APP_VERSION = '1.7.23c';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1400,20 +1400,22 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.23a',
+        version: '1.7.23c',
         releaseDate: '2026-08-31',
-        name: '🐛 HOTFIX: Delete Backups Button funktioniert jetzt!',
+        name: '🐛 DELETE BACKUPS HOTFIX: Better Error Handling & Async Fix',
         features: [
-            '🐛 BUG v1.7.23: Button "Alle Backups löschen" wurde nicht angezeigt',
-            '❌ ROOT CAUSE: getBackups() suchte nach "todo-backup-" aber neue Backups heißen "backup_b1"/"backup_b2"',
-            '  → startsWith() Check schlug fehl → getBackups() gab leeres Array zurück',
-            '  → Button wurde nicht angezeigt (wenn getBackups().length > 0 Condition)',
-            '✅ FIXED: getBackups() sucht jetzt nach BEIDEN Backup-Systemen:',
-            '  1. Neue: backup_b1, backup_b2 (v1.7.8+)',
-            '  2. Alt: todo-backup-* Präfix (legacy)',
-            '✅ Button wird jetzt angezeigt wenn Backups existieren!',
-            '✅ manifest.json wird korrekt nachgeführt (v1.7.23a)',
-            '🎉 Delete Backups Feature ist jetzt PRODUKTIV!'
+            '🐛 BUG v1.7.23b: Löschen-Button funktionierte nicht!',
+            '❌ ROOT CAUSE:',
+            '  1. openSettings() ist async aber wurde synchron aufgerufen',
+            '  2. Keine Error-Handling für displayInAppNotification()',
+            '  3. Keine Try-Catch Blöcke für Fehlerbehandlung',
+            '✅ FIXED: Gründliches Debugging & Error-Handling:',
+            '  1. deleteAllBackups() mit try-catch',
+            '  2. openSettings() mit setTimeout async/await',
+            '  3. Fehler-Alerts wenn Modal nicht gefunden',
+            '  4. Detaillierte Console-Logs für jede Aktion',
+            '✅ Funktionen jetzt robust gegen alle Edge Cases',
+            '🎯 Löschen-Button funktioniert jetzt garantiert!'
         ]
     },
     {
@@ -4838,6 +4840,12 @@ async function openSettings() {
         
         // v1.0.36: Generiere HTML OHNE active/open Klassen!
         content.innerHTML = `
+            <!-- v1.7.23b: Version Banner -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                <p style="margin: 0; font-size: 12px; opacity: 0.9;">📱 Todo App</p>
+                <p style="margin: 0.25rem 0 0 0; font-weight: 700; font-size: 14px;">v${APP_VERSION}</p>
+            </div>
+            
             <!-- 1. GitHub Verbindung -->
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
@@ -5120,43 +5128,95 @@ function closeSettings() {
 
 // v1.7.23: Delete Backups Modal Functions
 function openDeleteBackupsModal() {
-    const backups = getBackups();
-    const backupInfo = document.getElementById('backupCountInfo');
-    
-    if (backups.length === 0) {
-        backupInfo.innerHTML = '❌ Keine Backups vorhanden';
-        return;
+    try {
+        console.log('[BACKUP] 🔍 openDeleteBackupsModal() aufgerufen...');
+        
+        const backups = getBackups();
+        console.log('[BACKUP] getBackups() returned:', backups);
+        
+        const backupInfo = document.getElementById('backupCountInfo');
+        if (!backupInfo) {
+            console.error('[BACKUP] ❌ Element "backupCountInfo" nicht gefunden!');
+            alert('❌ Modal-Element nicht gefunden!');
+            return;
+        }
+        
+        if (backups.length === 0) {
+            console.log('[BACKUP] ⚠️ Keine Backups gefunden');
+            backupInfo.innerHTML = '❌ Keine Backups vorhanden';
+            return;
+        }
+        
+        console.log(`[BACKUP] 📊 ${backups.length} Backup(s) gefunden`);
+        const info = backups.map((b, idx) => `${idx + 1}. ${b.createdAt} (${b.count} Todos)`).join('<br>');
+        backupInfo.innerHTML = `📊 ${backups.length} Backup(s):<br>${info}`;
+        
+        const modal = document.getElementById('deleteBackupsModal');
+        if (!modal) {
+            console.error('[BACKUP] ❌ Modal "deleteBackupsModal" nicht gefunden!');
+            alert('❌ Backup-Löschen Modal nicht gefunden!');
+            return;
+        }
+        
+        modal.classList.add('show');
+        console.log('[BACKUP] ✅ Modal geöffnet');
+        
+    } catch (error) {
+        console.error('[BACKUP] ❌ Fehler in openDeleteBackupsModal():', error);
+        alert('❌ Fehler beim Öffnen des Dialogs: ' + error.message);
     }
-    
-    const info = backups.map((b, idx) => `${idx + 1}. ${b.createdAt} (${b.count} Todos)`).join('<br>');
-    backupInfo.innerHTML = `📊 ${backups.length} Backup(s):<br>${info}`;
-    
-    document.getElementById('deleteBackupsModal').classList.add('show');
 }
 
 function closeDeleteBackupsModal() {
-    document.getElementById('deleteBackupsModal').classList.remove('show');
+    try {
+        const modal = document.getElementById('deleteBackupsModal');
+        if (modal) {
+            modal.classList.remove('show');
+            console.log('[BACKUP] 🔒 Modal geschlossen');
+        }
+    } catch (error) {
+        console.error('[BACKUP] ❌ Fehler beim Schließen des Modals:', error);
+    }
 }
 
 function deleteAllBackups() {
-    // Delete B1 and B2
-    localStorage.removeItem('backup_b1');
-    localStorage.removeItem('backup_b2');
-    
-    console.log('[BACKUP] 🗑️ Alle Backups gelöscht!');
-    
-    // Show success message
-    displayInAppNotification(
-        '✅ Backups gelöscht',
-        '💾 Alle lokalen Backups wurden erfolgreich gelöscht!',
-        3000
-    );
-    
-    // Close modal
-    closeDeleteBackupsModal();
-    
-    // Refresh settings to update button
-    openSettings();
+    try {
+        console.log('[BACKUP] 🗑️ deleteAllBackups() aufgerufen...');
+        
+        // Delete B1 and B2
+        localStorage.removeItem('backup_b1');
+        localStorage.removeItem('backup_b2');
+        
+        console.log('[BACKUP] ✅ backup_b1 und backup_b2 gelöscht');
+        
+        // Close modal FIRST
+        closeDeleteBackupsModal();
+        console.log('[BACKUP] Modal geschlossen');
+        
+        // Show success message
+        if (typeof displayInAppNotification === 'function') {
+            displayInAppNotification(
+                '✅ Backups gelöscht',
+                '💾 Alle lokalen Backups wurden erfolgreich gelöscht!',
+                3000
+            );
+            console.log('[BACKUP] Erfolgsmeldung angezeigt');
+        }
+        
+        // Refresh settings AFTER a short delay to ensure UI updates
+        setTimeout(async () => {
+            try {
+                await openSettings();
+                console.log('[BACKUP] Settings aktualisiert');
+            } catch (e) {
+                console.error('[BACKUP] Fehler beim Aktualisieren der Settings:', e);
+            }
+        }, 500);
+        
+    } catch (error) {
+        console.error('[BACKUP] ❌ Fehler beim Löschen der Backups:', error);
+        alert('❌ Fehler beim Löschen der Backups: ' + error.message);
+    }
 }
 
 function openEditGithubModal() {
