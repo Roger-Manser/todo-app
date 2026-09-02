@@ -439,5 +439,22 @@
     "order": 25,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtk1bhdk9hh8id6u5wo",
+    "title": "Kralicez Verbindertausch FME? Auftragsnummer? mit Fisnik besprechen",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-02T11:50:36.728Z",
+    "updatedAt": "2026-09-02T11:50:36.728Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 26,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
