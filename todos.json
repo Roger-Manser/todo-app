@@ -492,5 +492,22 @@
     "order": 27,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtspq3ck1qs307zk7jz",
+    "title": "First Call Franzosenmaschinen LM",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-08T13:35:58.580Z",
+    "updatedAt": "2026-09-08T13:35:58.580Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 28,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
