@@ -526,5 +526,22 @@
     "order": 29,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtstr5lstdsoxyfcyuf",
+    "title": "Zeitpläne an CCL senden für RCS430638 und LM440714",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-08T15:28:46.624Z",
+    "updatedAt": "2026-09-08T15:28:46.624Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 30,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
