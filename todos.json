@@ -578,5 +578,22 @@
     "order": 32,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtu13p17c2lyd7pbiua",
+    "title": "Interner Ablauf abgleichen - Diskussion mit Christian Schmidt",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-09T11:42:15.163Z",
+    "updatedAt": "2026-09-09T11:42:15.163Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 33,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
