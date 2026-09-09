@@ -543,5 +543,22 @@
     "order": 30,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtto4v81t3lq2pdy6xj",
+    "title": "OPL Issue löschen verhindern möglich - mit Christian Schmidt besprechen",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-09T05:39:14.833Z",
+    "updatedAt": "2026-09-09T05:39:14.833Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 31,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
