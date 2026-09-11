@@ -612,5 +612,22 @@
     "order": 34,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mtwghykkk5fws7f9gl",
+    "title": "OPL - Neuen Punkt Salesforce Case?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-11T04:28:47.300Z",
+    "updatedAt": "2026-09-11T04:28:47.300Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 34,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
