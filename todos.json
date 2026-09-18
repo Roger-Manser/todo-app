@@ -646,5 +646,22 @@
     "order": 35,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mu72m5dx9ccgcnbs80j",
+    "title": "offerter Blumer Techno Fenster an Kevin",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-18T14:45:36.069Z",
+    "updatedAt": "2026-09-18T14:45:36.069Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 34,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
