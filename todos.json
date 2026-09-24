@@ -680,5 +680,22 @@
     "order": 35,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mufeyubjily7w4jvc6o",
+    "title": "Maschinen in Deutschland aufräumen",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-24T10:53:33.055Z",
+    "updatedAt": "2026-09-24T10:53:33.055Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 36,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
