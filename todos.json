@@ -697,5 +697,22 @@
     "order": 36,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mujuyaitfjhwt3pu166",
+    "title": "Privathaftpflicht anrufen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-27T13:32:05.957Z",
+    "updatedAt": "2026-09-27T13:32:05.957Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 37,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
