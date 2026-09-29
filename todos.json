@@ -731,5 +731,22 @@
     "order": 37,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mumn0e8snz0a54jznqm",
+    "title": "mit Fisnik oder Schmidi - Innenauftrag für erstellen für Ausbildung?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-29T12:13:05.692Z",
+    "updatedAt": "2026-09-29T12:13:05.692Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 38,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
