@@ -714,5 +714,22 @@
     "order": 37,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mum98xevnwn1vvz4lrq",
+    "title": "Schmitz kontaktieren - Johannes länger bei GDM",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-29T05:47:49.159Z",
+    "updatedAt": "2026-09-29T05:47:49.159Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 37,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
