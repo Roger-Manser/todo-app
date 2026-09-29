@@ -748,5 +748,22 @@
     "order": 38,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mump96v7xo5x2tmqlsn",
+    "title": "GX71 first Call - Ukrainie",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-09-29T13:15:55.266Z",
+    "updatedAt": "2026-09-29T13:15:55.266Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 39,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
