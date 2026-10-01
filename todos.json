@@ -782,5 +782,22 @@
     "order": 40,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mupjel0j0htku5gvmmfe",
+    "title": "Software for Retrofit LM440501 - Helpdesk",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-01T12:55:27.715Z",
+    "updatedAt": "2026-10-01T12:55:27.715Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 41,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
