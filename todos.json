@@ -765,5 +765,22 @@
     "order": 39,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mupje13o0ruhho70ablm",
+    "title": "Vogues 715 - Schematas for Retrofit 440501",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-01T12:55:01.908Z",
+    "updatedAt": "2026-10-01T12:55:01.908Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 40,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
