@@ -799,5 +799,22 @@
     "order": 41,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "muwi7xgdpf9ksa1032b",
+    "title": "ccl Dänemark Rechnungen gestellt?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-06T09:56:40.861Z",
+    "updatedAt": "2026-10-06T09:56:40.861Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 42,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
