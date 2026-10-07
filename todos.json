@@ -816,5 +816,22 @@
     "order": 42,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "muy6eon2e5eteebtsdg",
+    "title": "LQ Termin verschieben auf 15.10 mit zusätzlicher einladeliste",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-07T14:01:32.990Z",
+    "updatedAt": "2026-10-07T14:01:32.990Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 42,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
