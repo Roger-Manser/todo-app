@@ -833,5 +833,22 @@
     "order": 42,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mv0hpj8w472fu3qxlxs",
+    "title": "Michel Fragen wie es aussieht mit dem Anschluss für die LM440501",
+    "category": "Geschäft",
+    "notes": "Hallo Roger, \n\nOK da müssen Harting Stecker in den PE__ Schaltschrank eingebaut werden.\n-\tDie Stecker müssen voll konfektioniert kommen.\n-\tIn welche Schaltschränke wird das eingebaut ? (DW Bereich oder Stanze Bereich)\n-\tAuf jeden Fall muß softupdate durchgeführt werden ?\n\nDanke dir\n_ Gruß\nThomas",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-09T04:53:27.344Z",
+    "updatedAt": "2026-10-09T04:53:27.344Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 42,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
