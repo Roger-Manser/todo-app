@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.0 - GitHub Sync</title>
+    <title>Todo App v1.7.31 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -1026,41 +1026,7 @@
     </div>
 
     <div class="content" id="main-content">
-        <!-- v1.6.5.22: HYBRID In-App Notification System -->
-        <div id="in-app-notification" style="
-            display: none;
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 12px 16px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-            z-index: 4000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.4s ease-out;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        ">
-            <span id="notification-text">🔔 Benachrichtigung!</span>
-            <button id="notification-close-btn" onclick="closeNotification()" style="
-                background: rgba(255,255,255,0.2);
-                color: white;
-                border: none;
-                border-radius: 4px;
-                padding: 6px 10px;
-                cursor: pointer;
-                font-weight: 600;
-                font-size: 16px;
-                hover: background rgba(255,255,255,0.3);
-                white-space: nowrap;
-            ">✓ OK</button>
-        </div>
+        <!-- v1.7.31: REMOVED static incomplete notification element - ensureNotificationElement() creates the complete one -->
 
         <style>
             @keyframes slideDown {
@@ -1384,7 +1350,7 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.7.31';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
@@ -1392,16 +1358,16 @@ const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
     {
-        version: '1.7.0',
-        releaseDate: '2026-08-28',
-        name: '🔥 MAJOR FIX: Guard gegen closeNotification() Loop!',
+        version: '1.7.31',
+        releaseDate: '2026-10-09',
+        name: '🔪 CRITICAL: Entferne Duplikat statisches Notification-Element!',
         features: [
-            '🔥 GEFUNDEN: closeNotification() wurde MEHRMALS aufgerufen!',
-            '🛡️ Guard: isClosingNotification Flag verhindert mehrfache Aufrufe!',
-            '✅ Property-Monitor von v1.6.5.35 zeigt echte Quelle!',
-            '📊 Notifications zeigen jetzt keinen LOOP mehr!',
-            '🎯 Banner erscheint jetzt KORREKT ohne LEER-Text!',
-            '🚀 v1.7.0 - Der Major-Fix für Notification-Bug!'
+            '🎯 PROBLEM GELÖST: Es gab zwei in-app-notification Elemente!',
+            '🔪 Das statische Element (Line 1030) war UNVOLLSTÄNDIG — ENTFERNT!',
+            '✅ ensureNotificationElement() erstellt jetzt das RICHTIGE Element!',
+            '📊 Mit notification-text UND notification-detail Sub-Elementen!',
+            '🚀 Toast schließt jetzt SOFORT mit OK Button!',
+            '✨ Kein Toast-Loop mehr nach Ctrl+R!'
         ]
     },
     {
@@ -5287,11 +5253,11 @@ function displayInAppNotification(message, detailText, duration = 0) {
 }
 
 // v1.6.5.24: Neue Funktion zum Schließen der Notification
-// v1.7.0: Guard gegen mehrfache Aufrufe
+// v1.7.31: Guard gegen mehrfache Aufrufe
 let isClosingNotification = false;
 
 function closeNotification() {
-    // v1.7.0: Verhindere mehrfache Aufrufe!
+    // v1.7.31: Verhindere mehrfache Aufrufe!
     if (isClosingNotification) {
         console.log('[DEBUG] ⚠️ closeNotification() wurde bereits aufgerufen - ignoriere!');
         return;
@@ -5306,7 +5272,7 @@ function closeNotification() {
     notifEl.style.animation = 'slideUp 0.4s ease-out';
     setTimeout(() => {
         notifEl.style.display = 'none';
-        // v1.7.0: Reset nach Animation
+        // v1.7.31: Reset nach Animation
         setTimeout(() => {
             isClosingNotification = false;
             console.log('[DEBUG] ✅ closeNotification() fertig - isClosingNotification = false');
