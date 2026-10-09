@@ -736,7 +736,7 @@
     "id": "mumn0e8snz0a54jznqm",
     "title": "mit Fisnik oder Schmidi - Innenauftrag für erstellen für Ausbildung?",
     "category": "Geschäft",
-    "notes": "",
+    "notes": "Hat sich erledigt immer auf KST 15080 buchen",
     "attachments": [],
     "completed": false,
     "createdAt": "2026-09-29T12:13:05.692Z",
@@ -747,7 +747,8 @@
     "nextDueDate": null,
     "order": 38,
     "dueDate": null,
-    "dueTime": null
+    "dueTime": null,
+    "updated": "2026-10-09T04:54:33.048Z"
   },
   {
     "id": "mump96v7xo5x2tmqlsn",
