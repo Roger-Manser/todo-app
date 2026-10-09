@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App v1.7.29 - GitHub Sync - Delete Backups Feature Complete</title>
+    <title>Todo App v1.7.0 - GitHub Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -662,30 +662,22 @@
         }
 
         .close-btn {
-            display: inline-flex !important;      /* v1.7.16: Sichtbar! */
-            visibility: visible !important;        /* v1.7.16: Nicht versteckt! */
-            opacity: 1 !important;                /* v1.7.16: Vollständig sichtbar */
-            width: 40px !important;               /* v1.7.16: Hat Größe */
-            height: 40px !important;
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
             margin: 0 !important;
             padding: 0 !important;
             border: none !important;
             background: none !important;
-            pointer-events: auto !important;      /* v1.7.16: Klickbar! */
-            font-size: 28px !important;           /* v1.7.16: Großes Symbol */
-            color: #666 !important;
-            text-indent: 0 !important;            /* v1.7.16: Text normal */
-            position: relative !important;        /* v1.7.16: Nicht versteckt positioniert */
-            left: auto !important;
-            top: auto !important;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        
-        .close-btn:hover {
-            color: #000 !important;
+            pointer-events: none !important;
+            font-size: 0 !important;
+            color: transparent !important;
+            text-indent: -9999px !important;
+            position: absolute !important;
+            left: -9999px !important;
+            top: -9999px !important;
         }
 
         .version-item {
@@ -1035,8 +1027,40 @@
 
     <div class="content" id="main-content">
         <!-- v1.6.5.22: HYBRID In-App Notification System -->
-        <!-- v1.7.3: REMOVED - wird dynamisch via ensureNotificationElement() eingefügt -->
-        <!-- Das statische Element hat `onclick` das sich mit addEventListener() Events verwirrt -->
+        <div id="in-app-notification" style="
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 4000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        ">
+            <span id="notification-text">🔔 Benachrichtigung!</span>
+            <button id="notification-close-btn" onclick="closeNotification()" style="
+                background: rgba(255,255,255,0.2);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 10px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                hover: background rgba(255,255,255,0.3);
+                white-space: nowrap;
+            ">✓ OK</button>
+        </div>
 
         <style>
             @keyframes slideDown {
@@ -1271,43 +1295,12 @@
     </div>
 </div>
 
-<!-- v1.7.23: Delete Backups Confirmation Modal -->
-<div id="deleteBackupsModal" class="modal" style="z-index: 1001 !important; pointer-events: auto !important;">
-    <div class="modal-content" style="max-width: 400px; pointer-events: auto !important;">
-        <div class="modal-header">
-            <h2>🗑️ Backups löschen</h2>
-            <button class="close-btn" onclick="closeDeleteBackupsModal()">&times;</button>
-        </div>
-        <div style="padding: 1rem;">
-            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; border-radius: 6px; margin-bottom: 1rem;">
-                <p style="margin: 0; color: #991b1b; font-weight: 600;">⚠️ Warnung</p>
-                <p style="margin: 0.5rem 0 0 0; color: #7f1d1d; font-size: 14px;">
-                    Möchtest du wirklich <strong>ALLE</strong> Backups löschen? Diese Aktion kann nicht rückgängig gemacht werden!
-                </p>
-            </div>
-            
-            <div style="background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 1.5rem;">
-                <p style="margin: 0 0 0.5rem 0; font-weight: 600; color: #333;">Betroffene Backups:</p>
-                <p id="backupCountInfo" style="margin: 0; color: #666; font-size: 13px;"></p>
-            </div>
-            
-            <div class="button-group">
-                <button type="button" class="primary" style="flex: 1; background: #ef4444; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; font-size: 14px; pointer-events: auto !important;" onclick="deleteAllBackups()">
-                    🗑️ Ja, alles löschen!
-                </button>
-                <button type="button" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: white; font-weight: 600; color: #333; font-size: 14px; pointer-events: auto !important;" onclick="closeDeleteBackupsModal()">Abbrechen</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Version History Modal -->
 <div id="versionModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h2>📋 Versionshistorie</h2>
-            <!-- v1.7.15: Vergrößerter Close-Button für bessere Sichtbarkeit -->
-            <button class="close-btn" onclick="closeVersionHistory()" style="font-size: 28px; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; background: none; border: none; color: #666;">&times;</button>
+            <button class="close-btn" onclick="closeVersionHistory()">&times;</button>
         </div>
         <div id="versionList"></div>
     </div>
@@ -1391,110 +1384,13 @@
 </div>
 
 <script>
-const APP_VERSION = '1.7.29';
+const APP_VERSION = '1.7.0';
 // v1.0.18: IndexedDB für GitHub-Config (funktioniert auch mit file:///)
 const DB_NAME = 'todo-app-storage';
 const DB_VERSION = 1;
 const STORE_NAME = 'config';
 
 const VERSION_HISTORY = [
-    {
-        version: '1.7.29',
-        name: '✅ Z-INDEX FIX: Delete Backups Modal über Settings Modal',
-        releaseDate: '2026-08-31',
-        name: '✅ Delete Backups Button FIXED - onclick Attribut',
-        features: [
-            '✅ Button Handler mit onclick statt addEventListener',
-            '✅ HTML struktur: <button onclick="deleteAllBackups()">',
-            '✅ Keine komplexen Script-Handler mehr',
-            '✅ Delete Backups Modal öffnet und schliesst',
-            '✅ Alle Versionen konsistent: 1.7.23f'
-        ]
-    },
-    {
-        version: '1.7.9',
-        releaseDate: '2026-08-31',
-        name: '🔧 ROBUST: Category-Colors mit 3-stufigem Fallback-System!',
-        features: [
-            '🔧 Parse Error bei category-colors.json',
-            '📌 3-stufiges Fallback: GitHub → localStorage → Defaults',
-            '💾 categoryColors_backup in localStorage',
-            '✅ App funktioniert IMMER',
-            '⚠️ BUG: Syntax Error (Zeilen 3196-3200) - verwende v1.7.10!'
-        ]
-    },
-    {
-        version: '1.7.6',
-        releaseDate: '2026-08-28',
-        name: '🔄 FEATURE: Rotierendes 3-Backup-System (B1, B2, B3)!',
-        features: [
-            '🔄 CRITICAL: 3-faches rotierendes Backup-System!',
-            '✅ Automatisch bei: Todo erledigt, Edit speichern, Kategorie erstellen, Settings fertig',
-            '💾 Backups: B1→B2→B3→B1 (nie alle gleichzeitig überschrieben)',
-            '⏰ Timestamp in jedem Backup für Nachverfolgung',
-            '📋 listBackups() zeigt alle 3 Backup-Versionen',
-            '↩️ restoreFromBackup() stellt beliebiges Backup her',
-            '🛡️ Schutz vor Totalverlust der Daten auf dem Handy'
-        ]
-    },
-    {
-        version: '1.7.5',
-        releaseDate: '2026-08-28',
-        name: '🔵 FIXED: Button-Listener wird IMMER registriert!',
-        features: [
-            '🔵 CRITICAL: registerNotificationButtonListener() in ensureNotificationElement()',
-            '✅ Button funktioniert auch bei 2+ Notifications',
-            '🔨 cloneNode() entfernt alte Listener bevor neue registriert werden',
-            '📌 Listener wird bei JEDEM ensureNotificationElement() aufgerufen',
-            '✅ DOMContentLoaded Fallback als Sicherheit',
-            '🐛 Verhindert: "Button funktioniert beim 2. Mal nicht"'
-        ]
-    },
-    {
-        version: '1.7.4',
-        releaseDate: '2026-08-28',
-        name: '🔴 FIXED: Button-Listener wird IMMER registriert!',
-        features: [
-            '🔴 ROOT CAUSE: Wenn Element schon existiert, wurde Listener NICHT registriert',
-            '✅ registerNotificationButtonListener() separate Funktion',
-            '📌 ensureNotificationElement() ruft IMMER registerNotificationButtonListener() auf',
-            '🎯 Verhindert dass Button bei 2. Notification nicht funktioniert'
-        ]
-    },
-    {
-        version: '1.7.3',
-        releaseDate: '2026-08-28',
-        name: '🔴 FIXED: Statisches Notification-Element entfernt!',
-        features: [
-            '🔴 ROOT CAUSE: 2 Button-Elemente (statisch + dynamisch) verwirren sich',
-            '✅ Nur noch EINE Notification-Element-Quelle (dynamisch)',
-            '📝 closeNotification() robuster: Prüft ob schon versteckt',
-            '🎯 Keine Event-Konflikte mehr'
-        ]
-    },
-    {
-        version: '1.7.2',
-        releaseDate: '2026-08-28',
-        name: '🔵 FIXED: Close-Button funktioniert jetzt!',
-        features: [
-            '🔵 addEventListener statt onclick für robustes Event-Handling',
-            '✅ e.stopPropagation() + e.preventDefault() für Sicherheit',
-            '📌 Button-Listener an 2 Stellen: DOMContentLoaded + ensureNotificationElement()',
-            '⏱️ 1500ms Cooldown nach Schließen'
-        ]
-    },
-    {
-        version: '1.7.1',
-        releaseDate: '2026-08-28',
-        name: '🔥 CRITICAL FIX: Notification Loop Prevention!',
-        features: [
-            '🔥 PROBLEM: Benachrichtigungsbalken kommt immer wieder!',
-            '🛡️ activeNotificationId tracking + 1000ms cooldown',
-            '📊 Duplicate-Protection verhindert Loop',
-            '⏱️ Längerer Flag-Reset verhindert Race Conditions',
-            '📌 Smart Retry-System wartet 500ms'
-        ]
-    },
     {
         version: '1.7.0',
         releaseDate: '2026-08-28',
@@ -2287,12 +2183,6 @@ window.addEventListener('DOMContentLoaded', () => {
         console.warn('[DEBUG] ⚠️  localStorage funktioniert nicht! Daten könnten verloren gehen!');
     }
     
-    // v1.7.4: Button-Listener wird jetzt von ensureNotificationElement() registriert
-    // Falls sich das HTML ändert, registriere nochmal hier
-    setTimeout(() => {
-        registerNotificationButtonListener();
-    }, 500);
-    
     // v1.0.21: Event-Listener für Connect Button
     const connectBtn = document.getElementById('connect-btn');
     if (connectBtn) {
@@ -2779,9 +2669,7 @@ function normalizeTodos() {
     allCategories = await sync.getCategories();
     // v1.0.70: Initialisiere Defaults SOFORT, dann lade vom GitHub
     initializeDefaultColors();
-    // v1.7.20: loadCategoryColors() NICHT während Init!
-    // initializeDefaultColors() reicht aus - GitHub-Load kommt später!
-    // loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
+    loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
     
     console.log(`[DEBUG] ✅ ${allTodos.length} Aufgaben geladen`);
     console.log(`[DEBUG] ✅ ${allCategories.length} Kategorien geladen`);
@@ -2799,24 +2687,9 @@ function normalizeTodos() {
     updateCategoryTabs();
     updateCategorySelects();
     updateStats();
-    // v1.7.19: renderTodos() NICHT während Init! Zu riskant!
-    // renderTodos();  ← GELÖSCHT!
+    renderTodos();
     updateSyncStatus('GitHub Sync');
     console.log('[DEBUG] ✅ App bereit!');
-    
-    // v1.7.13: Signalisiere dass App-Init fertig ist (kein UI-Loop mehr!)
-    isAppInitializing = false;
-    
-    // v1.7.20: JETZT Farben von GitHub laden (NACH Init!)
-    loadCategoryColors().catch(e => console.error('[DEBUG] Fehler beim Laden der Farben:', e));
-    
-    // v1.7.19: JETZT rendern - nach Init!
-    renderTodos();
-    
-    // v1.7.21: JETZT Intervals starten - NACH Init!
-    console.log('[DEBUG] Starte Background-Intervals (nach Init)...');
-    startUpdateCheckInterval();  // v1.6.5.10
-    startNotificationCheckInterval();  // v1.6.5.17
 }
 
 // ===== v1.4.1: WIEDERKEHRENDE TODOS =====
@@ -2864,31 +2737,37 @@ function calculateNextDueDate(intervalDays) {
 const BACKUP_KEY_PREFIX = 'todo-backup-';
 const MAX_BACKUPS = 10;
 
-// v1.7.17: GELÖSCHTE DOPPELLUNG - Nur v1.7.8 createBackup() bleibt!
-// (Alte v1.6.5.25 Funktion entfernt - verursachte Verwirrung)
+function createBackup() {
+    try {
+        const timestamp = new Date().toISOString();
+        const backupKey = `${BACKUP_KEY_PREFIX}${timestamp}`;
+        
+        // Speichere Backup im localStorage
+        localStorage.setItem(backupKey, JSON.stringify({
+            timestamp: timestamp,
+            todos: allTodos,
+            count: allTodos.length,
+            createdAt: new Date().toLocaleString('de-CH')
+        }));
+        
+        console.log(`[DEBUG] 💾 Backup erstellt: ${timestamp} (${allTodos.length} Todos)`);
+        
+        // Räume alte Backups auf - nur letzte 10 behalten
+        deleteOldBackups();
+        
+        return true;
+    } catch (error) {
+        console.error('[DEBUG] ❌ Backup-Fehler:', error.message);
+        return false;
+    }
+}
 
 function getBackups() {
     try {
         const backups = [];
-        // v1.7.23 FIX: Suche nach beiden Backup-Systemen
-        // Alt: 'todo-backup-' Präfix (legacy)
-        // Neu: 'backup_b1', 'backup_b2' (v1.7.8+)
-        
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            
-            // Prüfe auf NEUES Backup-System (v1.7.8+)
-            if (key && (key === 'backup_b1' || key === 'backup_b2')) {
-                const data = JSON.parse(localStorage.getItem(key));
-                backups.push({
-                    key: key,
-                    timestamp: data.timestamp || new Date().toISOString(),
-                    count: data.todos ? data.todos.length : 0,
-                    createdAt: data.timestamp ? new Date(data.timestamp).toLocaleString('de-CH') : 'Unbekannt'
-                });
-            }
-            // Prüfe auch auf ALTES Backup-System (legacy)
-            else if (key && key.startsWith(BACKUP_KEY_PREFIX)) {
+            if (key && key.startsWith(BACKUP_KEY_PREFIX)) {
                 const data = JSON.parse(localStorage.getItem(key));
                 backups.push({
                     key: key,
@@ -2947,114 +2826,6 @@ function restoreBackup(backupKey) {
         return false;
     }
 }
-
-// v1.7.8: OPTIMIERTES BACKUP-SYSTEM - Nur 2 Backups (B1, B2), nur Todos!
-// Reduziert localStorage-Größe auf ~50% (Categories & Colors sind in GitHub!)
-let currentBackupIndex = 0;  // 0=B1, 1=B2
-const BACKUP_FILES = ['backup_b1', 'backup_b2'];  // v1.7.8: Nur 2 statt 3!
-
-function getNextBackupFile() {
-    const backupFile = BACKUP_FILES[currentBackupIndex];
-    currentBackupIndex = (currentBackupIndex + 1) % 2;  // v1.7.8: Rotate zwischen 2 (nicht 3)
-    console.log(`[BACKUP] 💾 Schreibe in ${backupFile.toUpperCase()} (nächstes: ${BACKUP_FILES[currentBackupIndex].toUpperCase()})`);
-    return backupFile;
-}
-
-function createBackup() {
-    // v1.7.8: NUR TODOS speichern (nicht Categories/Colors - die sind in GitHub!)
-    const backupData = {
-        timestamp: new Date().toISOString(),
-        todos: allTodos
-        // REMOVED: categories (in GitHub)
-        // REMOVED: categoryColors (in GitHub)
-        // REMOVED: notifiedTodos (nicht kritisch für Backup)
-    };
-    
-    const backupFile = getNextBackupFile();
-    try {
-        localStorage.setItem(backupFile, JSON.stringify(backupData));
-        console.log(`[BACKUP] ✅ Backup erstellt: ${backupFile}`);
-        console.log(`[BACKUP] 📊 ${allTodos.length} Todos gespeichert (optimiert: nur Todos, kein Categories/Colors)`);
-        return backupFile;
-    } catch (error) {
-        // v1.7.8: QuotaExceededError abfangen
-        if (error.name === 'QuotaExceededError') {
-            console.error(`[BACKUP] ❌ localStorage VOLL! Backup konnte nicht gespeichert werden!`);
-            displayInAppNotification(
-                `⚠️ Backup fehlgeschlagen`,
-                `localStorage ist voll - bitte alte Backups löschen`,
-                4000
-            );
-        } else {
-            console.error(`[BACKUP] ❌ Fehler beim Backup:`, error);
-        }
-        return null;
-    }
-}
-
-function listBackups() {
-    console.log('[BACKUP] 📋 Alle Backups:');
-    BACKUP_FILES.forEach(file => {
-        const data = localStorage.getItem(file);
-        if (data) {
-            try {
-                const backup = JSON.parse(data);
-                console.log(`  ${file.toUpperCase()}: ${backup.todos.length} Todos, ${backup.timestamp}`);
-            } catch (e) {
-                console.log(`  ${file.toUpperCase()}: (Fehler beim Lesen)`);
-            }
-        } else {
-            console.log(`  ${file.toUpperCase()}: (leer)`);
-        }
-    });
-}
-
-function restoreFromBackup(backupFile) {
-    console.log(`[BACKUP] 🔄 Restore von ${backupFile}...`);
-    const data = localStorage.getItem(backupFile);
-    
-    if (!data) {
-        console.error(`[BACKUP] ❌ Backup ${backupFile} ist leer!`);
-        displayInAppNotification(
-            `❌ Backup nicht gefunden`,
-            `${backupFile} ist leer`,
-            4000
-        );
-        return false;
-    }
-    
-    try {
-        const backup = JSON.parse(data);
-        allTodos = backup.todos || [];
-        
-        // v1.7.8: Categories & Colors NICHT aus Backup laden
-        // Diese werden von GitHub geladen oder sind noch lokal vorhanden
-        
-        // Speichere Todos zu GitHub
-        saveTodos();
-        
-        console.log(`[BACKUP] ✅ Restore erfolgreich: ${allTodos.length} Todos wiederhergestellt`);
-        displayInAppNotification(
-            `✅ Todos wiederhergestellt`,
-            `${backup.todos.length} Todos von ${new Date(backup.timestamp).toLocaleString('de-CH')}`,
-            4000
-        );
-        
-        renderTodos();
-        updateStats();
-        
-        return true;
-    } catch (error) {
-        console.error(`[BACKUP] ❌ Restore fehlgeschlagen:`, error);
-        displayInAppNotification(
-            `❌ Restore fehlgeschlagen`,
-            `Fehler beim Lesen des Backups`,
-            4000
-        );
-        return false;
-    }
-}
-
 
 async function saveTodos() {
     if (!githubConfig) {
@@ -3177,8 +2948,6 @@ function updateCategoryColor(category, hexColor) {
 async function loadCategoryColors() {
     if (!githubConfig) {
         console.warn('[DEBUG] Keine GitHub-Verbindung - categoryColors bleibt leer');
-        // v1.7.9: Versuche localStorage Fallback
-        tryLocalStorageCategoryColors();
         return;
     }
     
@@ -3189,8 +2958,8 @@ async function loadCategoryColors() {
         );
         
         if (!response.ok) {
-            console.log('[DEBUG] category-colors.json nicht gefunden (404) - versuche localStorage Fallback');
-            tryLocalStorageCategoryColors();
+            console.log('[DEBUG] category-colors.json nicht gefunden (404) - verwende Defaults');
+            initializeDefaultColors();
             return;
         }
         
@@ -3198,102 +2967,33 @@ async function loadCategoryColors() {
         
         // Prüfe ob content existiert
         if (!data.content) {
-            console.warn('[DEBUG] category-colors.json hat kein content - versuche localStorage Fallback');
-            tryLocalStorageCategoryColors();
+            console.warn('[DEBUG] category-colors.json hat kein content - verwende Defaults');
+            initializeDefaultColors();
             return;
         }
         
         try {
-            // v1.7.9: Sicherere Base64 → UTF-8 Dekodierung
             const binaryString = atob(data.content);
-            const text = decodeURIComponent(
-                binaryString
-                    .split('')
-                    .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                    .join('')
-            );
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const text = new TextDecoder('utf-8').decode(bytes);
             const parsed = JSON.parse(text);
             
-            if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+            if (parsed && typeof parsed === 'object') {
                 categoryColors = parsed;
-                console.log('[DEBUG] ✅ Category-Farben von GitHub geladen:', Object.keys(parsed).length, 'Kategorien');
-                // v1.7.9: Speichere auch in localStorage als Backup
-                localStorage.setItem('categoryColors_backup', JSON.stringify(parsed));
+                console.log('[DEBUG] ✅ Category-Farben geladen:', categoryColors);
             } else {
-                throw new Error('GitHub JSON ist leer oder kein Object');
+                throw new Error('Ungültiges Format');
             }
         } catch (parseError) {
-            console.error('[DEBUG] ❌ Parse Error bei GitHub category-colors.json:', parseError);
-            console.warn('[DEBUG] Fallback: versuche localStorage...');
-            tryLocalStorageCategoryColors();
+            console.error('[DEBUG] Parse Error bei category-colors.json:', parseError);
+            initializeDefaultColors();
         }
-    } catch (fetchError) {
-        console.error('[DEBUG] ❌ Fehler beim Laden von GitHub:', fetchError);
-        console.warn('[DEBUG] Fallback: versuche localStorage...');
-        tryLocalStorageCategoryColors();
-    }
-}
-
-// v1.7.9: NEW - Fallback zu localStorage
-function tryLocalStorageCategoryColors() {
-    const stored = localStorage.getItem('categoryColors_backup');
-    if (stored) {
-        try {
-            const parsed = JSON.parse(stored);
-            if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
-                categoryColors = parsed;
-                console.log('[DEBUG] ✅ Category-Farben von localStorage geladen (Backup):', Object.keys(parsed).length, 'Kategorien');
-                return;
-            }
-        } catch (e) {
-            console.error('[DEBUG] localStorage Backup auch kaputt:', e);
-        }
-    }
-    
-    // v1.7.18: NICHT autoGenerateCategoryColors() während App-Init!
-    // Das verursacht localStorage.setItem() Loop!
-    // Stattdessen nur initializeDefaultColors() aufrufen
-    console.log('[DEBUG] ⚠️ FALLBACK: Verwende initializeDefaultColors()...');
-    initializeDefaultColors();  // ← Lokal, kein GitHub-Save während Init!
-}
-
-// v1.7.11: NEW - Auto-Generate Farben für alle Kategorien
-function autoGenerateCategoryColors() {
-    const defaultColorPalette = [
-        '#3498db', // Blau
-        '#e74c3c', // Rot
-        '#2ecc71', // Grün
-        '#f39c12', // Orange
-        '#9b59b6', // Violett
-        '#1abc9c', // Türkis
-        '#34495e', // Dunkelgrau
-        '#d35400', // Dunkel-Orange
-        '#16a085', // Dunkel-Türkis
-        '#27ae60'  // Dunkel-Grün
-    ];
-    
-    categoryColors = {};
-    
-    if (allCategories && allCategories.length > 0) {
-        console.log(`[DEBUG] 🎨 Generiere Farben für ${allCategories.length} Kategorien...`);
-        allCategories.forEach((category, index) => {
-            if (!categoryColors[category]) {
-                categoryColors[category] = defaultColorPalette[index % defaultColorPalette.length];
-                console.log(`[DEBUG] 🎨 ${category} → ${categoryColors[category]}`);
-            }
-        });
-    } else {
-        console.log('[DEBUG] ⚠️ Keine Kategorien vorhanden - verwende leere categoryColors');
-        categoryColors = {};
-    }
-    
-    // v1.7.14: NICHT zu GitHub speichern während App-Init!
-    // Speichere nur lokal in localStorage als Backup
-    if (!isAppInitializing) {
-        localStorage.setItem('categoryColors_backup', JSON.stringify(categoryColors));
-        console.log('[DEBUG] 💾 Farben lokal gespeichert');
-    } else {
-        console.log('[DEBUG] ⏸️ GitHub-Save übersprungen (App initialisiert sich noch)');
+    } catch (error) {
+        console.error('[DEBUG] Fehler beim Laden von category-colors.json:', error);
+        initializeDefaultColors();
     }
 }
 
@@ -3310,8 +3010,6 @@ async function saveCategoryColors() {
         await sync.saveFile('category-colors.json', colorData);
         console.log('[DEBUG] ✅ Kategorie-Farben zu GitHub gespeichert');
         alert('✅ Farben gespeichert!');
-        // v1.7.5: BACKUP nach Farben gespeichert
-        createBackup();
         updateCategoryTabs();  // v1.0.55: Aktualisiere Tab-Farben!
         renderTodos();  // Aktualisiere Anzeige
     } catch (error) {
@@ -3570,46 +3268,17 @@ const DEFAULT_CATEGORY_COLORS = {
     'Sonstiges': { bg: '#fffde7', border: '#fdd835' }
 };
 
-// v1.7.12: Guard gegen Infinite Recursion
-let isInitializingColors = false;
-
-// v1.7.13: Guard gegen UI-Loop während App-Init
-let isAppInitializing = true;  // Start = true, wird false wenn App fertig ist
-
 function initializeDefaultColors() {
-    // v1.7.12: Guard gegen Recursive Call
-    if (isInitializingColors) {
-        console.log('[DEBUG] ⚠️ initializeDefaultColors() bereits in Ausführung - skip Rekursion');
-        return;
+    categoryColors = {};
+    // Standard-Kategorien mit Default-Farben
+    for (const [cat, colors] of Object.entries(DEFAULT_CATEGORY_COLORS)) {
+        categoryColors[cat] = colors.bg;
     }
-    
-    isInitializingColors = true;
-    
-    try {
-        categoryColors = {};
-        // Standard-Kategorien mit Default-Farben
-        for (const [cat, colors] of Object.entries(DEFAULT_CATEGORY_COLORS)) {
-            categoryColors[cat] = colors.bg;
+    // Neue Kategorien: falls nicht vorhanden → Random Pastel zuweisen
+    for (const cat of allCategories) {
+        if (!categoryColors[cat]) {
+            categoryColors[cat] = generateRandomPastelColor();
         }
-        // Neue Kategorien: falls nicht vorhanden → Random Pastel zuweisen
-        for (const cat of allCategories) {
-            if (!categoryColors[cat]) {
-                categoryColors[cat] = generateRandomPastelColor();
-            }
-        }
-        
-        // v1.7.11: Speichere initialisierte Farben auch zu GitHub
-        // v1.7.14: NUR lokal speichern während App-Init! GitHub später!
-        localStorage.setItem('categoryColors_backup', JSON.stringify(categoryColors));
-        
-        if (!isAppInitializing && githubConfig) {
-            console.log('[DEBUG] 💾 Speichere Farben zu GitHub (Post-Init)...');
-            saveCategoryColors().catch(e => {
-                console.error('[DEBUG] ⚠️ Fehler beim Speichern zu GitHub:', e);
-            });
-        }
-    } finally {
-        isInitializingColors = false;
     }
 }
 
@@ -4744,8 +4413,6 @@ function addNewCategory() {
     updateCategoryTabs();
     updateCategorySelects();
     saveCategories();
-    // v1.7.5: BACKUP nach Kategorie erstellt
-    createBackup();
     closeAddCategoryModal();
 }
 
@@ -4833,12 +4500,6 @@ async function openSettings() {
         
         // v1.0.36: Generiere HTML OHNE active/open Klassen!
         content.innerHTML = `
-            <!-- v1.7.23b: Version Banner -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
-                <p style="margin: 0; font-size: 12px; opacity: 0.9;">📱 Todo App</p>
-                <p style="margin: 0.25rem 0 0 0; font-weight: 700; font-size: 14px;">v${APP_VERSION}</p>
-            </div>
-            
             <!-- 1. GitHub Verbindung -->
             <div class="accordion-section">
                 <button class="accordion-header" onclick="toggleAccordion(this)">
@@ -5003,13 +4664,6 @@ async function openSettings() {
                         </ul>
                     `}
                     <p style="font-size: 11px; color: #9ca3af; margin-top: 1rem;">💡 Backups werden automatisch nach jeder Änderung erstellt und lokal gespeichert.</p>
-                    
-                    <!-- v1.7.23: Delete All Backups Button -->
-                    ${getBackups().length > 0 ? `
-                        <button class="primary" style="width: 100%; margin-top: 1rem; background: #ef4444;" onclick="openDeleteBackupsModal()">
-                            🗑️ Alle Backups löschen
-                        </button>
-                    ` : ''}
                 </div>
             </div>
 
@@ -5114,203 +4768,7 @@ function restoreAccordionState() {
 }
 
 function closeSettings() {
-    // v1.7.5: BACKUP nach Einstellungen "Fertig"
-    createBackup();
     document.getElementById('settingsModal').classList.remove('show');
-}
-
-// v1.7.28: Register button handlers for delete backups modal
-function registerDeleteBackupsButtons() {
-    console.log('[BACKUP-HANDLER] v1.7.28: Entering registerDeleteBackupsButtons()');
-    
-    try {
-        // Find the delete button by searching for text content
-        const allButtons = document.querySelectorAll('button');
-        console.log('[BACKUP-HANDLER] Found ' + allButtons.length + ' buttons total');
-        
-        let deleteBtn = null;
-        let cancelBtn = null;
-        
-        allButtons.forEach((btn, idx) => {
-            const text = btn.textContent || '';
-            console.log(`[BACKUP-HANDLER] Button ${idx}: "${text}"`);
-            
-            if (text.includes('alles löschen') && !deleteBtn) {
-                deleteBtn = btn;
-                console.log('[BACKUP-HANDLER] ✅ Found delete button!');
-            }
-            if (text.includes('Abbrechen') && btn.closest('#deleteBackupsModal') && !cancelBtn) {
-                cancelBtn = btn;
-                console.log('[BACKUP-HANDLER] ✅ Found cancel button!');
-            }
-        });
-        
-        if (deleteBtn) {
-            console.log('[BACKUP-HANDLER] Registering click handler on delete button');
-            deleteBtn.onclick = function(e) {
-                console.log('[BACKUP-HANDLER] 🔴 Delete button clicked! Calling deleteAllBackups()');
-                e.preventDefault();
-                e.stopPropagation();
-                deleteAllBackups();
-                return false;
-            };
-            console.log('[BACKUP-HANDLER] ✅ Delete button handler registered');
-        } else {
-            console.warn('[BACKUP-HANDLER] ❌ Delete button NOT found');
-        }
-        
-        if (cancelBtn) {
-            console.log('[BACKUP-HANDLER] Registering click handler on cancel button');
-            cancelBtn.onclick = function(e) {
-                console.log('[BACKUP-HANDLER] Cancel button clicked! Calling closeDeleteBackupsModal()');
-                e.preventDefault();
-                e.stopPropagation();
-                closeDeleteBackupsModal();
-                return false;
-            };
-            console.log('[BACKUP-HANDLER] ✅ Cancel button handler registered');
-        } else {
-            console.warn('[BACKUP-HANDLER] ❌ Cancel button NOT found');
-        }
-        
-    } catch (error) {
-        console.error('[BACKUP-HANDLER] ❌ Error registering buttons:', error);
-    }
-}
-
-// v1.7.23: Delete Backups Modal Functions
-function openDeleteBackupsModal() {
-    try {
-        console.log('[BACKUP] 🔍 openDeleteBackupsModal() aufgerufen...');
-        
-        const backups = getBackups();
-        console.log('[BACKUP] getBackups() returned:', backups);
-        
-        const backupInfo = document.getElementById('backupCountInfo');
-        if (!backupInfo) {
-            console.error('[BACKUP] ❌ Element "backupCountInfo" nicht gefunden!');
-            alert('❌ Modal-Element nicht gefunden!');
-            return;
-        }
-        
-        if (backups.length === 0) {
-            console.log('[BACKUP] ⚠️ Keine Backups gefunden');
-            backupInfo.innerHTML = '❌ Keine Backups vorhanden';
-            return;
-        }
-        
-        console.log(`[BACKUP] 📊 ${backups.length} Backup(s) gefunden`);
-        const info = backups.map((b, idx) => `${idx + 1}. ${b.createdAt} (${b.count} Todos)`).join('<br>');
-        backupInfo.innerHTML = `📊 ${backups.length} Backup(s):<br>${info}`;
-        
-        const modal = document.getElementById('deleteBackupsModal');
-        if (!modal) {
-            console.error('[BACKUP] ❌ Modal "deleteBackupsModal" nicht gefunden!');
-            alert('❌ Backup-Löschen Modal nicht gefunden!');
-            return;
-        }
-        
-        modal.classList.add('show');
-        console.log('[BACKUP] ✅ Modal geöffnet');
-        
-        // v1.7.28: Register button handlers RIGHT AFTER modal opens
-        setTimeout(() => {
-            console.log('[BACKUP] v1.7.28: Registering button handlers...');
-            registerDeleteBackupsButtons();
-        }, 100);
-        
-    } catch (error) {
-        console.error('[BACKUP] ❌ Fehler in openDeleteBackupsModal():', error);
-        alert('❌ Fehler beim Öffnen des Dialogs: ' + error.message);
-    }
-}
-
-function closeDeleteBackupsModal() {
-    console.log('[BACKUP] closeDeleteBackupsModal() aufgerufen');
-    try {
-        const modal = document.getElementById('deleteBackupsModal');
-        console.log('[BACKUP] Modal Element:', !!modal);
-        if (modal) {
-            console.log('[BACKUP] Modal hat show class:', modal.classList.contains('show'));
-            modal.classList.remove('show');
-            console.log('[BACKUP] 🔒 Modal geschlossen - show class entfernt');
-        }
-    } catch (error) {
-        console.error('[BACKUP] ❌ Fehler beim Schließen des Modals:', error);
-    }
-}
-
-function deleteAllBackups() {
-    console.log('[BACKUP-CLICK] 🔴 deleteAllBackups() WURDE AUFGERUFEN!!!');
-    console.log('[BACKUP-CLICK] Function startet jetzt...');
-    
-    try {
-        console.log('[BACKUP] 🗑️ deleteAllBackups() aufgerufen...');
-        
-        // v1.7.29: Aggressive cleanup - delete ALL backup-related keys
-        const keysToDelete = [];
-        
-        // Check all localStorage keys
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            
-            // Delete new format backups
-            if (key === 'backup_b1' || key === 'backup_b2') {
-                keysToDelete.push(key);
-                console.log('[BACKUP] Found new format backup:', key);
-            }
-            
-            // Delete old format backups
-            if (key && key.startsWith('todo-backup-')) {
-                keysToDelete.push(key);
-                console.log('[BACKUP] Found old format backup:', key);
-            }
-        }
-        
-        console.log('[BACKUP] Keys to delete:', keysToDelete);
-        
-        // Delete all found keys
-        let deleted = 0;
-        keysToDelete.forEach(key => {
-            try {
-                localStorage.removeItem(key);
-                console.log('[BACKUP] ✅ Deleted:', key);
-                deleted++;
-            } catch (e) {
-                console.error('[BACKUP] ❌ Failed to delete ' + key + ':', e);
-            }
-        });
-        
-        console.log('[BACKUP] ✅ Insgesamt ' + deleted + ' Backups gelöscht');
-        
-        // Close modal FIRST
-        closeDeleteBackupsModal();
-        console.log('[BACKUP] Modal geschlossen');
-        
-        // Show success message
-        if (typeof displayInAppNotification === 'function') {
-            displayInAppNotification(
-                '✅ Backups gelöscht',
-                '💾 ' + deleted + ' lokale Backups wurden erfolgreich gelöscht!',
-                3000
-            );
-            console.log('[BACKUP] Erfolgsmeldung angezeigt');
-        }
-        
-        // Refresh settings AFTER a short delay to ensure UI updates
-        setTimeout(async () => {
-            try {
-                await openSettings();
-                console.log('[BACKUP] Settings aktualisiert');
-            } catch (e) {
-                console.error('[BACKUP] Fehler beim Aktualisieren der Settings:', e);
-            }
-        }, 500);
-        
-    } catch (error) {
-        console.error('[BACKUP] ❌ Fehler beim Löschen der Backups:', error);
-        alert('❌ Fehler beim Löschen der Backups: ' + error.message);
-    }
 }
 
 function openEditGithubModal() {
@@ -5656,9 +5114,8 @@ function ensureNotificationElement() {
     
     if (notifEl) {
         console.log('[DEBUG] ✅ Notification-Element existiert bereits');
-        // v1.7.4: IMMER Button-Listener registrieren, auch wenn Element schon existiert!
-        registerNotificationButtonListener();
-        // v1.7.22: Debugging monitorNotificationElement() entfernt - verursachte Stack Overflow!
+        // v1.6.5.35: Installiere Monitor auch wenn Element bereits existiert!
+        monitorNotificationElement(notifEl);
         return notifEl;
     }
     
@@ -5705,7 +5162,7 @@ function ensureNotificationElement() {
                         line-height: 1.2;
                     "></div>
                 </div>
-                <button id="notification-close-btn" style="
+                <button id="notification-close-btn" onclick="closeNotification()" style="
                     background: rgba(255,255,255,0.2);
                     color: white;
                     border: none;
@@ -5732,75 +5189,63 @@ function ensureNotificationElement() {
     notifEl = document.getElementById('in-app-notification');
     console.log(`[DEBUG] ✅ Notification-Element erstellt!`);
     
-    // v1.7.2: Binde Button-Click mit addEventListener statt onclick!
-    // v1.7.4: Ausgelagert in separate Funktion registerNotificationButtonListener()
-    registerNotificationButtonListener();
-    
-    // v1.7.22: Debugging monitorNotificationElement() entfernt - verursachte Stack Overflow durch console.trace()!
+    // v1.6.5.35: Installiere Property Monitor!
+    monitorNotificationElement(notifEl);
     
     return notifEl;
 }
 
-// v1.7.4: Separate Funktion zur Button-Listener-Registrierung (kann mehrmals aufgerufen werden)
-function registerNotificationButtonListener() {
-    const notifEl = document.getElementById('in-app-notification');
-    if (!notifEl) {
-        console.log('[DEBUG] ⚠️ Notification-Element nicht gefunden - Button-Listener kann nicht registriert werden');
-        return;
-    }
+// v1.6.5.35: MONITOR - Tracke ALLE .style.display Zugriffe!
+function monitorNotificationElement(notifEl) {
+    console.log('[DEBUG] 🔍 Installiere Property-Monitor auf Notification-Element!');
     
-    const closeBtn = document.getElementById('notification-close-btn');
-    if (closeBtn) {
-        console.log('[DEBUG] ✅ Close-Button gefunden - Registriere Event-Listener!');
-        
-        // v1.7.4: Entferne alte Listener durch cloneNode
-        // (cloneNode entfernt alle Listener von dem alten Element)
-        const newBtn = closeBtn.cloneNode(true);
-        closeBtn.parentNode.replaceChild(newBtn, closeBtn);
-        
-        // Jetzt registriere den Listener auf dem neuen Button
-        const freshBtn = document.getElementById('notification-close-btn');
-        if (freshBtn) {
-            freshBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[DEBUG] 🖱️ Close-Button geklickt!');
-                closeNotification();
-            });
-            console.log('[DEBUG] ✅ Close-Button Event-Listener registriert (neu)!');
+    // Erstelle einen Proxy für style.display
+    const originalStyle = notifEl.style;
+    
+    // Überschreibe den display setter
+    Object.defineProperty(notifEl.style, 'display', {
+        get() {
+            return originalStyle.display;
+        },
+        set(value) {
+            console.log(`[DEBUG] 🚨 ALERT: .style.display wird gesetzt auf "${value}"!`);
+            console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
+            originalStyle.display = value;
         }
-    } else {
-        console.log('[DEBUG] ⚠️ Close-Button (#notification-close-btn) nicht gefunden');
-    }
+    });
+    
+    // v1.6.5.35: Überwache auch classList.add()!
+    const originalAdd = notifEl.classList.add;
+    notifEl.classList.add = function(...classes) {
+        console.log(`[DEBUG] 🚨 ALERT: classList.add() wird aufgerufen mit: ${classes.join(', ')}`);
+        console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
+        return originalAdd.call(this, ...classes);
+    };
+    
+    // v1.6.5.35: Überwache auch setAttribute!
+    const originalSetAttribute = notifEl.setAttribute;
+    notifEl.setAttribute = function(attr, value) {
+        if (attr.toLowerCase() === 'style' || attr.toLowerCase() === 'class') {
+            console.log(`[DEBUG] 🚨 ALERT: setAttribute("${attr}", "${value}") wird aufgerufen!`);
+            console.trace('[DEBUG] 🔗 Stack-Trace von wem das kommt:');
+        }
+        return originalSetAttribute.call(this, attr, value);
+    };
 }
-
-// v1.7.22: monitorNotificationElement() GELÖSCHT!
-// (Debugging-Code mit Object.defineProperty + console.trace() verursachte Stack Overflow!)
-
 
 // v1.6.5.22: HYBRID Notification System - Zeige In-App Notification (BLEIBT BIS QUITTIERUNG!)
 // v1.6.5.29: Mit Titel + Details (Datum/Zeit)
 // v1.6.5.32: Mit Debugging!
 // v1.6.5.33: Mit STACK-TRACE um zu sehen WO das aufgerufen wird!
-// v1.7.1: Mit Duplicate-Protection über activeNotificationId!
-function displayInAppNotification(message, detailText, duration = 0, notificationId = null) {
+function displayInAppNotification(message, detailText, duration = 0) {
     console.log(`[DEBUG] 📢 displayInAppNotification aufgerufen!`);
     console.log(`[DEBUG]   message: "${message}"`);
     console.log(`[DEBUG]   detailText: "${detailText}"`);
-    console.log(`[DEBUG]   notificationId: ${notificationId}`);
+    console.log(`[DEBUG]   duration: ${duration}`);
     
-    // v1.7.1: Wenn gerade eine Notification geschlossen wird, WARTE!
-    if (isClosingNotification) {
-        console.log('[DEBUG] ⚠️ Gerade eine Notification am Schließen - warte 500ms...');
-        setTimeout(() => displayInAppNotification(message, detailText, duration, notificationId), 500);
-        return;
-    }
-    
-    // v1.7.1: Wenn die gleiche Notification gerade aktiv ist, zeige sie nicht nochmal!
-    if (activeNotificationId === notificationId && notificationId) {
-        console.log(`[DEBUG] ⚠️ Notification #${notificationId} ist bereits aktiv - skip!`);
-        return;
-    }
+    // v1.6.5.33: STACK-TRACE um zu sehen WER das aufruft!
+    console.log('[DEBUG] 🔗 STACK-TRACE:');
+    console.trace();  // Zeigt exakt wo die Funktion aufgerufen wird!
     
     // v1.6.5.28: ENSURE Element existiert!
     let notifEl = ensureNotificationElement();
@@ -5825,9 +5270,6 @@ function displayInAppNotification(message, detailText, duration = 0, notificatio
         console.log(`[DEBUG] ✅ detailEl gesetzt: "${detailText}"`);
     }
     
-    // v1.7.1: Setze aktive Notification ID
-    activeNotificationId = notificationId;
-    
     notifEl.style.display = 'block';
     notifEl.style.animation = 'slideDown 0.4s ease-out';
     console.log('[DEBUG] ✅ Notification angezeigt!');
@@ -5846,10 +5288,7 @@ function displayInAppNotification(message, detailText, duration = 0, notificatio
 
 // v1.6.5.24: Neue Funktion zum Schließen der Notification
 // v1.7.0: Guard gegen mehrfache Aufrufe
-// v1.7.1: NOTIFICATION LOOP FIX - Verhindere dass die gleiche Benachrichtigung sofort nochmal gezeigt wird!
 let isClosingNotification = false;
-let activeNotificationId = null;  // v1.7.1: Welche Notification ist gerade aktiv?
-let lastNotificationCloseTime = 0;  // v1.7.1: Wann wurde zuletzt geschlossen?
 
 function closeNotification() {
     // v1.7.0: Verhindere mehrfache Aufrufe!
@@ -5859,35 +5298,19 @@ function closeNotification() {
     }
     
     const notifEl = document.getElementById('in-app-notification');
-    if (!notifEl) {
-        console.log('[DEBUG] ❌ Notification-Element nicht gefunden!');
-        return;
-    }
-    
-    // v1.7.3: Wenn bereits versteckt, nichts tun
-    if (notifEl.style.display === 'none') {
-        console.log('[DEBUG] ⚠️ Notification ist bereits versteckt - ignore!');
-        return;
-    }
+    if (!notifEl) return;
     
     console.log('[DEBUG] ✅ closeNotification() ausgeführt - setze isClosingNotification = true');
     isClosingNotification = true;
-    lastNotificationCloseTime = Date.now();
     
-    // v1.7.2: Vermeide Animations-Konflikte
-    notifEl.style.animation = 'none';
-    setTimeout(() => {
-        notifEl.style.animation = 'slideUp 0.4s ease-out';
-    }, 10);
-    
+    notifEl.style.animation = 'slideUp 0.4s ease-out';
     setTimeout(() => {
         notifEl.style.display = 'none';
-        activeNotificationId = null;
-        
+        // v1.7.0: Reset nach Animation
         setTimeout(() => {
             isClosingNotification = false;
             console.log('[DEBUG] ✅ closeNotification() fertig - isClosingNotification = false');
-        }, 1500);
+        }, 100);
     }, 400);
 }
 
@@ -5980,10 +5403,9 @@ function checkNotifications() {
                 tag: `${notifKey}_1day`
             });
             // v1.6.5.29: Zeige Titel + Details!
-            // v1.7.1: Übergebe notificationId für Duplicate-Protection!
             const el = document.getElementById('in-app-notification');
             if (el) {
-                displayInAppNotification(notifMsg, detailMsg, 0, `${notifKey}_1day`);
+                displayInAppNotification(notifMsg, detailMsg);
             }
             notifiedTodos[`${notifKey}_1day`] = true;
             saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
@@ -6001,10 +5423,9 @@ function checkNotifications() {
                 tag: `${notifKey}_1hour`
             });
             // v1.6.5.29: Zeige Titel + Details!
-            // v1.7.1: Übergebe notificationId für Duplicate-Protection!
             const el = document.getElementById('in-app-notification');
             if (el) {
-                displayInAppNotification(notifMsg, detailMsg, 0, `${notifKey}_1hour`);
+                displayInAppNotification(notifMsg, detailMsg);
             }
             notifiedTodos[`${notifKey}_1hour`] = true;
             saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
@@ -6023,10 +5444,9 @@ function checkNotifications() {
                 requireInteraction: true  // Bleibt bis benutzer reagiert
             });
             // v1.6.5.29: Zeige Titel + Details!
-            // v1.7.1: Übergebe notificationId für Duplicate-Protection!
             const el = document.getElementById('in-app-notification');
             if (el) {
-                displayInAppNotification(notifMsg, detailMsg, 0, `${notifKey}_10min`);
+                displayInAppNotification(notifMsg, detailMsg);
             }
             notifiedTodos[`${notifKey}_10min`] = true;
             saveNotifiedTodos();  // v1.6.5.31: Speichere Notification-Historie!
@@ -6086,10 +5506,11 @@ async function autoInitializeApp() {
         if (loaded && githubConfig) {
             console.log('[DEBUG] ✅ GitHub-Config gefunden - starte App!');
             
-            // v1.7.21: Intervals NICHT vor init!
-            // startUpdateCheckInterval();
-            // startNotificationCheckInterval();
-            // → Werden NACH isAppInitializing=false gestartet!
+            // v1.6.5.10: Starte Update-Checker
+            startUpdateCheckInterval();
+            
+            // v1.6.5.17: Starte Notification-Checker
+            startNotificationCheckInterval();
             
             setTimeout(() => {
                 console.log('[DEBUG] Initialisiere App mit GitHub-Config...');
@@ -6126,57 +5547,6 @@ if (document.readyState === 'loading') {
         <button onclick="closePhotoLightbox()" style="background: #6b7280; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">✕ Schließen</button>
     </div>
 </div>
-
-
-
-<!-- v1.7.27: GLOBAL Click Handler for Delete Backups - works even if modal is recreated -->
-<script>
-    console.log('[BACKUP-GLOBAL] Global click handler script loading...');
-    
-    // Global click handler - fires for ANY click
-    document.addEventListener('click', function(e) {
-        const target = e.target;
-        
-        // Log all clicks in the modal area
-        if (target.closest('#deleteBackupsModal')) {
-            console.log('[BACKUP-GLOBAL] Click detected in deleteBackupsModal:', target.textContent);
-            console.log('[BACKUP-GLOBAL] Target:', target);
-            console.log('[BACKUP-GLOBAL] Parent button:', target.closest('button'));
-        }
-        
-        // Check if delete button was clicked
-        if (target.textContent.includes('alles löschen') || target.closest('button[onclick="deleteAllBackups()"]')) {
-            console.log('[BACKUP-GLOBAL] 🔴 DELETE BUTTON CLICK DETECTED!!!');
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (typeof deleteAllBackups === 'function') {
-                console.log('[BACKUP-GLOBAL] Calling deleteAllBackups()...');
-                deleteAllBackups();
-            } else {
-                console.error('[BACKUP-GLOBAL] deleteAllBackups is NOT a function!');
-            }
-            return false;
-        }
-        
-        // Check if cancel button was clicked
-        if (target.textContent.includes('Abbrechen') || target.closest('button[onclick="closeDeleteBackupsModal()"]')) {
-            console.log('[BACKUP-GLOBAL] CANCEL BUTTON CLICK DETECTED!');
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (typeof closeDeleteBackupsModal === 'function') {
-                console.log('[BACKUP-GLOBAL] Calling closeDeleteBackupsModal()...');
-                closeDeleteBackupsModal();
-            } else {
-                console.error('[BACKUP-GLOBAL] closeDeleteBackupsModal is NOT a function!');
-            }
-            return false;
-        }
-    }, true); // Use capture phase to catch before other handlers
-    
-    console.log('[BACKUP-GLOBAL] ✅ Global click handler registered on document');
-</script>
 
 </body>
 </html>
