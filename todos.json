@@ -885,5 +885,22 @@
     "order": 44,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvlpu9dpu59dpyfpqac",
+    "title": "Basilikum umtopfen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-24T01:24:14.461Z",
+    "updatedAt": "2026-10-24T01:24:14.461Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 45,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
