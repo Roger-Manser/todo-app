@@ -902,5 +902,22 @@
     "order": 45,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvlpumk9wytiub04wuo",
+    "title": "Terrasse winterfest machen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-24T01:24:31.545Z",
+    "updatedAt": "2026-10-24T01:24:31.545Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 46,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
