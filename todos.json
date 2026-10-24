@@ -919,5 +919,22 @@
     "order": 46,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvlpvbal5hygnyhpxd",
+    "title": "Rechtsschutz kontaktieren",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-24T01:25:03.597Z",
+    "updatedAt": "2026-10-24T01:25:03.597Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 47,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
