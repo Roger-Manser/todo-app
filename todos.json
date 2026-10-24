@@ -868,5 +868,22 @@
     "order": 43,
     "dueDate": "2026-11-02",
     "dueTime": "09:00"
+  },
+  {
+    "id": "mvlpu0gnq4tzj0e3ihg",
+    "title": "waschen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-24T01:24:02.902Z",
+    "updatedAt": "2026-10-24T01:24:02.902Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 44,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
