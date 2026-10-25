@@ -953,5 +953,22 @@
     "order": 48,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvno6cpadt0hsfhztqr",
+    "title": "Blech für Heizung Balkon skizzieren",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-25T10:13:11.758Z",
+    "updatedAt": "2026-10-25T10:13:11.758Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 47,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
