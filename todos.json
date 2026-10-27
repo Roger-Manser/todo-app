@@ -1027,5 +1027,22 @@
     "order": 52,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvqrj7m25aj3en4ve0e",
+    "title": "EPL LM440709 Erweiterung - wieviel Zeit?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-27T14:10:29.066Z",
+    "updatedAt": "2026-10-27T14:10:29.066Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 53,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
