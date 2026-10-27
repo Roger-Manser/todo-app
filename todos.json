@@ -1061,5 +1061,22 @@
     "order": 54,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvqsmnqdzyrvuiny2s",
+    "title": "Retrofit Frankreich - wie geplant? Ev. doch Kurt",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-27T14:41:09.541Z",
+    "updatedAt": "2026-10-27T14:41:09.541Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 55,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
