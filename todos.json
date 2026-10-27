@@ -919,5 +919,27 @@
     "order": 46,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvq9oo0eqje9wzzu9m",
+    "title": "CDs bringen zu yesterday music",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [
+      {
+        "type": "document",
+        "name": "Re Eine Nachricht von deinem Yesterday's Music-Kontaktformular-1793080250202.eml"
+      }
+    ],
+    "completed": false,
+    "createdAt": "2026-10-27T05:50:50.510Z",
+    "updatedAt": "2026-10-27T05:50:50.510Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 47,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
