@@ -45,14 +45,14 @@
     "category": "Privat",
     "notes": "",
     "attachments": [],
-    "completed": true,
+    "completed": false,
     "createdAt": "2026-08-28T04:51:43.470Z",
-    "updatedAt": "2026-09-29T05:09:23.256Z",
-    "completedAt": "2026-09-29T05:09:23.256Z",
+    "updatedAt": "2026-10-27T05:01:43.861Z",
+    "completedAt": null,
     "recurring": true,
     "recurringInterval": 14,
     "nextDueDate": "2026-10-12",
-    "order": 3
+    "order": 1
   },
   {
     "id": "mtch5t7x0ynper308ad",
@@ -105,13 +105,13 @@
     "category": "Privat",
     "notes": "",
     "attachments": [],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-08-28T04:52:40.876Z",
-    "updatedAt": "2026-08-28T04:52:40.876Z",
-    "completedAt": null,
+    "updatedAt": "2026-10-27T05:01:39.222Z",
+    "completedAt": "2026-10-27T05:01:39.222Z",
     "recurring": true,
     "recurringInterval": 7,
-    "nextDueDate": "2026-09-03",
+    "nextDueDate": "2026-11-02",
     "order": 7
   },
   {
@@ -900,6 +900,23 @@
     "recurringInterval": null,
     "nextDueDate": null,
     "order": 45,
+    "dueDate": null,
+    "dueTime": null
+  },
+  {
+    "id": "mvq904a8r6gaqvjpd7e",
+    "title": "anrufen Rabatt fragen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-27T05:31:45.200Z",
+    "updatedAt": "2026-10-27T05:31:45.200Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 46,
     "dueDate": null,
     "dueTime": null
   }
