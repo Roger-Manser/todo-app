@@ -941,5 +941,22 @@
     "order": 47,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvqenv2ob94hpt09s6",
+    "title": "Digital LX Meeting vorbereiten",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-27T08:10:11.088Z",
+    "updatedAt": "2026-10-27T08:10:11.088Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 48,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
