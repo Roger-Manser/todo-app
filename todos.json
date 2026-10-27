@@ -90,13 +90,13 @@
     "category": "Privat",
     "notes": "",
     "attachments": [],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-08-28T04:52:26.605Z",
-    "updatedAt": "2026-08-28T04:52:26.605Z",
-    "completedAt": null,
+    "updatedAt": "2026-10-27T05:01:36.982Z",
+    "completedAt": "2026-10-27T05:01:36.982Z",
     "recurring": true,
     "recurringInterval": 7,
-    "nextDueDate": "2026-09-03",
+    "nextDueDate": "2026-11-02",
     "order": 6
   },
   {
