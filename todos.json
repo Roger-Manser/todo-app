@@ -976,5 +976,22 @@
     "order": 49,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvqnm9i3voe2spmzmtl",
+    "title": "RCS430638 - OPL Fehlermeldungen eröffnen",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-27T12:20:53.019Z",
+    "updatedAt": "2026-10-27T12:20:53.019Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 50,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
