@@ -885,5 +885,22 @@
     "order": 44,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvq7x3aem4qeseycunh",
+    "title": "Judith coiffure beliza Termine ausmachen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-27T05:01:24.326Z",
+    "updatedAt": "2026-10-27T05:01:24.326Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 45,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
