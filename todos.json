@@ -1095,5 +1095,22 @@
     "order": 56,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvsa65c86n3hz3ktxeu",
+    "title": "HMX wegen Angebot Taining mit Jesus Mendez",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-28T15:39:58.472Z",
+    "updatedAt": "2026-10-28T15:39:58.472Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 56,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
