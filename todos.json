@@ -1146,5 +1146,22 @@
     "order": 57,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvux67hll93nc2wa2j9",
+    "title": "Wellauer Tabak holen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-30T11:59:24.777Z",
+    "updatedAt": "2026-10-30T11:59:24.777Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 58,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
