@@ -1112,5 +1112,22 @@
     "order": 56,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvux5qnudvnzkyw3vu6",
+    "title": "Gräser binden",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-30T11:59:02.970Z",
+    "updatedAt": "2026-10-30T11:59:02.970Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 56,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
