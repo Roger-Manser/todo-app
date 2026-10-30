@@ -1129,5 +1129,22 @@
     "order": 56,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mvux601i0co3sufp7uvv",
+    "title": "Sitzplatz bereitstellen",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-10-30T11:59:15.126Z",
+    "updatedAt": "2026-10-30T11:59:15.126Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 57,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
