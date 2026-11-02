@@ -90,14 +90,14 @@
     "category": "Privat",
     "notes": "",
     "attachments": [],
-    "completed": true,
+    "completed": false,
     "createdAt": "2026-08-28T04:52:26.605Z",
-    "updatedAt": "2026-10-27T05:01:36.982Z",
-    "completedAt": "2026-10-27T05:01:36.982Z",
+    "updatedAt": "2026-11-02T14:22:55.663Z",
+    "completedAt": null,
     "recurring": true,
     "recurringInterval": 7,
     "nextDueDate": "2026-11-02",
-    "order": 6
+    "order": 1
   },
   {
     "id": "mtch6re4vd86itpn8a",
@@ -105,13 +105,13 @@
     "category": "Privat",
     "notes": "",
     "attachments": [],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-08-28T04:52:40.876Z",
-    "updatedAt": "2026-11-02T14:22:53.335Z",
-    "completedAt": null,
+    "updatedAt": "2026-11-02T14:23:03.415Z",
+    "completedAt": "2026-11-02T14:23:03.415Z",
     "recurring": true,
     "recurringInterval": 7,
-    "nextDueDate": "2026-11-02",
+    "nextDueDate": "2026-11-08",
     "order": 1
   },
   {
