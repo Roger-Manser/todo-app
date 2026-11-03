@@ -1129,5 +1129,22 @@
     "order": 56,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mw0sjhpabxgloa50a5h",
+    "title": "07_Doku für Krämer GX...",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-03T14:36:23.518Z",
+    "updatedAt": "2026-11-03T14:36:23.518Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 57,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
