@@ -1146,5 +1146,22 @@
     "order": 57,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mw2596opdzjs0w038aj",
+    "title": "RCS430635 Corona über HMI? OPL Issue 04",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-04T13:20:03.865Z",
+    "updatedAt": "2026-11-04T13:20:03.865Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 58,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
