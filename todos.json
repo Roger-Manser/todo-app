@@ -1181,5 +1181,22 @@
     "order": 57,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mw4wrdgvku3hhigwtri",
+    "title": "IPPU Rumänien - FitCheck",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-06T11:45:34.447Z",
+    "updatedAt": "2026-11-06T11:45:34.447Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 58,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
