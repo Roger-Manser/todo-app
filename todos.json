@@ -1198,5 +1198,22 @@
     "order": 58,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mw99kgat7naxiu1lcp6",
+    "title": "LM440696 - Kunststoffrad am Antistatik - ändern auf Lager?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-09T12:55:11.237Z",
+    "updatedAt": "2026-11-09T12:55:11.237Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 58,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
