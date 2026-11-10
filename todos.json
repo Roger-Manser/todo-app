@@ -1221,7 +1221,7 @@
     "id": "mwasaff1epk2x40stx7",
     "title": "GX71 Folio+ first installation call",
     "category": "Geschäft",
-    "notes": "",
+    "notes": "kommt in der übersicht ist hier nicht mehr notwendig",
     "attachments": [],
     "completed": false,
     "createdAt": "2026-11-10T14:27:02.413Z",
@@ -1232,7 +1232,8 @@
     "nextDueDate": null,
     "order": 59,
     "dueDate": null,
-    "dueTime": null
+    "dueTime": null,
+    "updated": "2026-11-10T14:48:51.589Z"
   },
   {
     "id": "mwasfw1jqnoovnknbks",
