@@ -1233,5 +1233,22 @@
     "order": 59,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mwasfw1jqnoovnknbks",
+    "title": "Cotiplast - wie weiter",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-10T14:31:17.238Z",
+    "updatedAt": "2026-11-10T14:31:17.238Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 60,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
