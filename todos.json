@@ -1169,7 +1169,7 @@
     "id": "mw4r4oz6tonxfax43fp",
     "title": "Weinstadt - Bahnspannungsprobleme",
     "category": "Geschäft",
-    "notes": "",
+    "notes": "Ausserhalb der Spezifikation LM",
     "attachments": [],
     "completed": false,
     "createdAt": "2026-11-06T09:07:58.194Z",
@@ -1180,7 +1180,8 @@
     "nextDueDate": null,
     "order": 57,
     "dueDate": null,
-    "dueTime": null
+    "dueTime": null,
+    "updated": "2026-11-10T05:19:13.264Z"
   },
   {
     "id": "mw4wrdgvku3hhigwtri",
