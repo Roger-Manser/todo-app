@@ -1204,9 +1204,9 @@
     "id": "mw99kgat7naxiu1lcp6",
     "title": "LM440696 - Kunststoffrad am Antistatik - ändern auf Lager?",
     "category": "Geschäft",
-    "notes": "",
+    "notes": "Kugellager sollte InnenD 5mm AussenD 26mm Breite 9mm\n\nGibt es nicht!",
     "attachments": [],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-11-09T12:55:11.237Z",
     "updatedAt": "2026-11-09T12:55:11.237Z",
     "completedAt": null,
@@ -1215,7 +1215,8 @@
     "nextDueDate": null,
     "order": 58,
     "dueDate": null,
-    "dueTime": null
+    "dueTime": null,
+    "updated": "2026-11-11T15:35:35.079Z"
   },
   {
     "id": "mwasaff1epk2x40stx7",
