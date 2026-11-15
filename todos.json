@@ -1252,5 +1252,22 @@
     "order": 60,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mwhpr83taz5t3lqcpi6",
+    "title": "holt sie mit Inauen kontaktieren wegen Terrassentüren",
+    "category": "Privat",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-15T10:50:30.473Z",
+    "updatedAt": "2026-11-15T10:50:30.473Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 57,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
