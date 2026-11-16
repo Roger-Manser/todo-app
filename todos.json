@@ -931,10 +931,10 @@
         "name": "Re Eine Nachricht von deinem Yesterday's Music-Kontaktformular-1793080250202.eml"
       }
     ],
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-10-27T05:50:50.510Z",
-    "updatedAt": "2026-10-27T05:50:50.510Z",
-    "completedAt": null,
+    "updatedAt": "2026-11-16T12:20:36.444Z",
+    "completedAt": "2026-11-16T12:20:36.444Z",
     "recurring": false,
     "recurringInterval": null,
     "nextDueDate": null,
