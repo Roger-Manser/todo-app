@@ -1270,5 +1270,22 @@
     "dueDate": null,
     "dueTime": null,
     "updated": "2026-11-16T10:02:12.627Z"
+  },
+  {
+    "id": "mwopc8147dhrf0xogtq",
+    "title": "Mit Lars klären Probleme mit 1250 Ständer klären",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-20T08:13:13.768Z",
+    "updatedAt": "2026-11-20T08:13:13.768Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 58,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
