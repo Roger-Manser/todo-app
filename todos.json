@@ -1304,5 +1304,22 @@
     "order": 57,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mwxgog1ysetbo8f111f",
+    "title": "wenn E4 wieder richtigläuft Mail von Miro an Auftrag GX64 anhängen, Mail wegen Schulung Alexandros anhängen.",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-26T11:20:43.078Z",
+    "updatedAt": "2026-11-26T11:20:43.078Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 58,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
