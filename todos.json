@@ -1287,5 +1287,22 @@
     "order": 58,
     "dueDate": null,
     "dueTime": null
+  },
+  {
+    "id": "mwxe2927k07lk9mcn8s",
+    "title": "Permapack und BMZ - OPL und Links im SP erstellt?",
+    "category": "Geschäft",
+    "notes": "",
+    "attachments": [],
+    "completed": false,
+    "createdAt": "2026-11-26T10:07:28.351Z",
+    "updatedAt": "2026-11-26T10:07:28.351Z",
+    "completedAt": null,
+    "recurring": false,
+    "recurringInterval": null,
+    "nextDueDate": null,
+    "order": 57,
+    "dueDate": null,
+    "dueTime": null
   }
 ]
